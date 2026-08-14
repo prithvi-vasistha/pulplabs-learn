@@ -72,7 +72,12 @@ export function ExamRow({ exam, index }) {
 export function TechCell({ tech, index }) {
   return (
     <li className="lift stretch" data-r style={{ '--rd': `${Math.min(index, 5) * 55}ms` }}>
-      <p className="mono">{tech.category}</p>
+      <div className="card-top">
+        <p className="mono">{tech.category}</p>
+        {/* How much there is to read is the question a browser is actually
+            asking, so answer it on the card instead of behind a click. */}
+        <span className="mono tnum">{tech.materialCount}</span>
+      </div>
       <h3 className="h4">
         <Link href={`/technologies/${tech.slug}`} className="stretch-l">
           {tech.name}
@@ -94,7 +99,7 @@ export function ProjectCard({ project, index }) {
       </div>
 
       <h3 className="d3">
-        <Link href={`/builds/${project.slug}`} className="stretch-l">
+        <Link href={`/projects/${project.slug}`} className="stretch-l">
           {project.name}
         </Link>
       </h3>
@@ -103,8 +108,10 @@ export function ProjectCard({ project, index }) {
 
       <div className="card-foot">
         <span className="mono">{project.technologies.join(' · ')}</span>
-        <span className="link">
-          View project <Chevron />
+        {/* Source and documentation are facts about the project, so they belong
+            on the project's own card rather than in a parallel section. */}
+        <span className="mono tnum">
+          {project.docPageCount > 0 ? `${formatCount(project.docPageCount, 'doc page')}` : 'Repository only'}
         </span>
       </div>
     </li>
@@ -113,7 +120,7 @@ export function ProjectCard({ project, index }) {
 
 export function DocRow({ set, index }) {
   const first = set.groups[0]?.pages[0]
-  const href = first ? `/docs/${set.slug}/${first.slug}` : `/docs/${set.slug}`
+  const href = first ? `/projects/${set.slug}/${first.slug}` : `/projects/${set.slug}`
 
   return (
     <li data-r style={{ '--rd': `${index * 65}ms` }}>

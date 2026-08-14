@@ -26,8 +26,8 @@ export default function DocsPage({ data }) {
           <article className="reader-main">
             <Crumbs
               items={[
-                { label: 'Docs', href: '/docs' },
-                { label: set.name, href: `/docs/${set.slug}` },
+                { label: 'Projects', href: '/projects' },
+                { label: set.name, href: `/projects/${set.slug}` },
                 { label: page.group },
                 { label: page.title },
               ]}
@@ -55,14 +55,14 @@ export default function DocsPage({ data }) {
 
             <nav className="pager" aria-label="Documentation navigation">
               {previous ? (
-                <Link href={`/docs/${set.slug}/${previous.slug}`} className="pg-prev">
+                <Link href={`/projects/${set.slug}/${previous.slug}`} className="pg-prev">
                   <span className="mono">
                     <ChevronLeft /> Previous
                   </span>
                   <span className="h4">{previous.title}</span>
                 </Link>
               ) : (
-                <Link href={`/docs/${set.slug}`} className="pg-prev">
+                <Link href={`/projects/${set.slug}`} className="pg-prev">
                   <span className="mono">
                     <ChevronLeft /> Overview
                   </span>
@@ -71,25 +71,25 @@ export default function DocsPage({ data }) {
               )}
 
               {next ? (
-                <Link href={`/docs/${set.slug}/${next.slug}`} className="pg-next">
+                <Link href={`/projects/${set.slug}/${next.slug}`} className="pg-next">
                   <span className="mono">
                     Next <Chevron />
                   </span>
                   <span className="h4">{next.title}</span>
                 </Link>
               ) : (
-                <Link href="/docs" className="pg-next">
+                <Link href={`/projects/${set.slug}`} className="pg-next">
                   <span className="mono">
                     End of set <Chevron />
                   </span>
-                  <span className="h4">All documentation</span>
+                  <span className="h4">{set.name} overview</span>
                 </Link>
               )}
             </nav>
 
             {set.project && (
               <p className="mono" style={{ marginTop: 28 }}>
-                <Link href={`/builds/${set.project.slug}`} className="link-quiet">
+                <Link href={`/projects/${set.project.slug}`} className="link-quiet">
                   ← {set.project.name} project overview
                 </Link>
               </p>

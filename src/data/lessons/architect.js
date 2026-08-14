@@ -181,7 +181,7 @@ assert budget.total() < WINDOW, "trim retrieval or compress history"`,
       },
       {
         type: 'p',
-        text: 'The pattern that scales is to store every message verbatim in ordinary storage, compress hierarchically for recall, and pull only what the current turn needs back into the window. Context stays bounded while history stays complete. [OpenLCM](/builds/openlcm) is PulpLabs\' implementation of exactly this, and its documentation is a worked example of the trade-offs.',
+        text: 'The pattern that scales is to store every message verbatim in ordinary storage, compress hierarchically for recall, and pull only what the current turn needs back into the window. Context stays bounded while history stays complete. [OpenLCM](/projects/openlcm) is PulpLabs\' implementation of exactly this, and its documentation is a worked example of the trade-offs.',
       },
       {
         type: 'figure',

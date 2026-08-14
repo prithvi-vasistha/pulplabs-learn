@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${data.page.title} — ${data.set.name}`,
     description: data.page.summary,
-    alternates: { canonical: `/docs/${project}/${page.join('/')}` },
+    alternates: { canonical: `/projects/${project}/${page.join('/')}` },
   }
 }
 

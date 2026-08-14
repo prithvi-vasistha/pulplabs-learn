@@ -37,7 +37,7 @@ export default function DocsNav({ set, currentSlug }) {
       <div className="docs-proj">
         <p className="mono">Documentation</p>
         <p className="h4">
-          <Link href={`/docs/${set.slug}`} className="link-quiet">
+          <Link href={`/projects/${set.slug}`} className="link-quiet">
             {set.name}
           </Link>
         </p>
@@ -86,7 +86,7 @@ export default function DocsNav({ set, currentSlug }) {
                 {group.pages.map((page) => (
                   <li key={page.slug}>
                     <Link
-                      href={`/docs/${set.slug}/${page.slug}`}
+                      href={`/projects/${set.slug}/${page.slug}`}
                       aria-current={page.slug === currentSlug ? 'page' : undefined}
                     >
                       <span>{page.title}</span>

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   return {
     title: project.name,
     description: project.tagline,
-    alternates: { canonical: `/builds/${project.slug}` },
+    alternates: { canonical: `/projects/${project.slug}` },
   }
 }
 

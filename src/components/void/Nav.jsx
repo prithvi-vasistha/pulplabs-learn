@@ -2,27 +2,29 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useScrolled } from '@/lib/motion'
-import { Search } from '@/components/void/Icons'
+import CommandPalette from '@/components/learn/CommandPalette'
+import ThemeToggle from '@/components/void/ThemeToggle'
 
 /* Same shell as the marketing site — same mark, same material, same sheet.
-   Only the destinations differ. Adding a top-level route means adding one
-   entry here. */
+   Only the destinations differ.
+
+   Four, not six. Technologies is a way of browsing what is in Learn rather
+   than a sibling of it, and Builds/Docs were two names for the same four
+   objects. A stranger reading this row should be able to tell which one owns
+   the thing they came for without opening any of them. */
 const LINKS = [
-  { href: '/learn', label: 'Learn' },
-  { href: '/technologies', label: 'Technologies' },
-  { href: '/exams', label: 'Exams' },
-  { href: '/field', label: 'Field' },
-  { href: '/builds', label: 'Builds' },
-  { href: '/docs', label: 'Docs' },
+  { href: '/learn', label: 'Learn', hint: 'Tracks, lessons, technologies' },
+  { href: '/exams', label: 'Exams', hint: 'Mock papers, scored by topic' },
+  { href: '/projects', label: 'Projects', hint: 'Source and documentation' },
+  { href: '/field', label: 'Field', hint: 'Case studies and interviews' },
 ]
 
 export default function Nav() {
   const scrolled = useScrolled(10)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
 
   useEffect(() => setOpen(false), [pathname])
 
@@ -38,21 +40,12 @@ export default function Nav() {
     }
   }, [open])
 
-  // "/" jumps to search from anywhere that is not a text field.
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return
-      const el = document.activeElement
-      const tag = el?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable) return
-      e.preventDefault()
-      router.push('/search')
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [router])
-
-  const current = (href) => (pathname === href || pathname.startsWith(`${href}/`) ? 'page' : undefined)
+  // /technologies is part of Learn now, so it should light Learn up.
+  const current = (href) => {
+    if (pathname === href || pathname.startsWith(`${href}/`)) return 'page'
+    if (href === '/learn' && pathname.startsWith('/technologies')) return 'page'
+    return undefined
+  }
 
   return (
     <header className="nv" data-scrolled={scrolled || undefined} data-open={open || undefined}>
@@ -78,12 +71,8 @@ export default function Nav() {
         </ul>
 
         <div className="nv-end">
-          <Link href="/search" className="nv-search" aria-label="Search the Learn Lab">
-            <Search />
-            <span className="kbd" aria-hidden="true">
-              /
-            </span>
-          </Link>
+          <CommandPalette />
+          <ThemeToggle />
 
           <Link href="/dashboard" className="btn nv-cta">
             Dashboard
@@ -103,17 +92,24 @@ export default function Nav() {
         </div>
       </nav>
 
+      {/* The sheet has room the bar does not, so it says what each section is
+          for. On a phone that hint is the difference between four guesses and
+          one choice. */}
       <div className="nv-sheet" id="nv-sheet" hidden={!open}>
         <ul>
           {LINKS.map((l, i) => (
             <li key={l.href} style={{ '--i': i }}>
               <Link href={l.href} aria-current={current(l.href)}>
                 {l.label}
+                <span className="nv-hint mono">{l.hint}</span>
               </Link>
             </li>
           ))}
           <li style={{ '--i': LINKS.length }}>
-            <Link href="/search">Search</Link>
+            <Link href="/search">
+              Search
+              <span className="nv-hint mono">Everything, in one index</span>
+            </Link>
           </li>
         </ul>
         <Link href="/dashboard" className="btn nv-sheet-cta">

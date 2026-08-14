@@ -136,7 +136,7 @@ function resolveRelated(entry) {
   if (entry.type === 'project') {
     const project = projectBySlug[entry.ref]
     if (!project) return null
-    return { kind: 'Build', label: project.name, href: `/builds/${project.slug}` }
+    return { kind: 'Project', label: project.name, href: `/projects/${project.slug}` }
   }
   return null
 }
@@ -153,21 +153,66 @@ export async function getTechnologies() {
 
 export const technologyCategories = CATEGORIES
 
+/**
+ * Every content type that mentions a technology, counted once. This is what
+ * makes a technology page the "everything about X" hub rather than a subject
+ * blurb: the joins already existed in the data, they were just never surfaced.
+ */
+function technologyJoins(tech) {
+  const techPaths = tech.paths.map((s) => pathBySlug[s]).filter(Boolean)
+  const techExams = tech.exams.map((s) => examBySlug[s]).filter(Boolean)
+  const techProjects = tech.projects.map((s) => projectBySlug[s]).filter(Boolean)
+
+  // Documentation is reached through the project that owns it, and field
+  // entries declare their own technologies — both are reverse lookups.
+  const sets = techProjects.map((p) => (p.docs ? docBySlug[p.docs] : null)).filter(Boolean)
+  const field = fieldEntries.filter((entry) => (entry.technologies ?? []).includes(tech.slug))
+
+  const lessons = techPaths.flatMap((path) =>
+    orderedLessons(path)
+      .filter((lesson) => (lesson.topics ?? []).some((t) => matchesTechnology(t, tech)))
+      .map((lesson) => ({ ...toLessonSummary(lesson), pathSlug: path.slug, pathTitle: path.title }))
+  )
+
+  return { paths: techPaths, exams: techExams, projects: techProjects, docSets: sets, field, lessons }
+}
+
+/** Loose match between a lesson topic string and a technology. */
+function matchesTechnology(topic, tech) {
+  const t = topic.toLowerCase()
+  return t.includes(tech.name.toLowerCase()) || t.includes(tech.slug.replace(/-/g, ' '))
+}
+
 function summariseTechnology(tech) {
+  const joins = technologyJoins(tech)
   return {
     slug: tech.slug,
     name: tech.name,
     category: tech.category,
     level: tech.level,
     tagline: tech.tagline,
-    pathCount: tech.paths.length,
-    examCount: tech.exams.length,
+    pathCount: joins.paths.length,
+    examCount: joins.exams.length,
+    lessonCount: joins.lessons.length,
+    projectCount: joins.projects.length,
+    docCount: joins.docSets.length,
+    fieldCount: joins.field.length,
+    /** Total pieces of material that mention this subject, across every type. */
+    materialCount:
+      joins.paths.length +
+      joins.lessons.length +
+      joins.exams.length +
+      joins.projects.length +
+      joins.docSets.length +
+      joins.field.length,
   }
 }
 
 export async function getTechnology(slug) {
   const tech = technologyBySlug[slug]
   if (!tech) return null
+
+  const joins = technologyJoins(tech)
 
   return {
     ...summariseTechnology(tech),
@@ -177,9 +222,22 @@ export async function getTechnology(slug) {
     facts: tech.facts,
     prerequisites: tech.prerequisites.map((s) => pick(technologyBySlug[s], ['slug', 'name', 'tagline'])).filter(Boolean),
     related: tech.related.map((s) => pick(technologyBySlug[s], ['slug', 'name', 'category'])).filter(Boolean),
-    paths: tech.paths.map((s) => pathBySlug[s]).filter(Boolean).map(summarisePath),
-    exams: tech.exams.map((s) => examBySlug[s]).filter(Boolean).map(summariseExam),
-    projects: tech.projects.map((s) => projectBySlug[s]).filter(Boolean).map(summariseProject),
+    paths: joins.paths.map(summarisePath),
+    exams: joins.exams.map(summariseExam),
+    projects: joins.projects.map(summariseProject),
+    lessons: joins.lessons,
+    docSets: joins.docSets.map((set) => {
+      const owner = projects.find((p) => p.docs === set.slug)
+      return {
+        slug: set.slug,
+        name: set.name,
+        version: set.version,
+        tagline: set.tagline,
+        projectSlug: owner?.slug ?? set.slug,
+        pageCount: set.groups.reduce((total, group) => total + group.pages.length, 0),
+      }
+    }),
+    field: joins.field.map(summariseFieldEntry),
   }
 }
 
@@ -250,7 +308,14 @@ function summariseProject(project) {
 }
 
 export async function getProjects() {
-  return projects.map(summariseProject)
+  return projects.map((project) => {
+    const set = project.docs ? docBySlug[project.docs] : null
+    return {
+      ...summariseProject(project),
+      docPageCount: set ? set.groups.reduce((total, group) => total + group.pages.length, 0) : 0,
+      docGroups: set ? set.groups.map((g) => g.title) : [],
+    }
+  })
 }
 
 export async function getProject(slug) {
@@ -268,7 +333,13 @@ export async function getProject(slug) {
       .map((s) => pick(technologyBySlug[s], ['slug', 'name', 'category']))
       .filter(Boolean),
     exams: project.exams.map((s) => examBySlug[s]).filter(Boolean).map(summariseExam),
-    docSet: project.docs ? pick(docBySlug[project.docs], ['slug', 'name', 'version']) : null,
+    /** The full documentation table of contents, so the project page and its
+        docs are one destination rather than two parallel trees. */
+    docSet: project.docs ? summariseDocSet(docBySlug[project.docs]) : null,
+    field: fieldEntries
+      .filter((entry) => (entry.technologies ?? []).some((t) => project.technologies.includes(t)))
+      .slice(0, 3)
+      .map(summariseFieldEntry),
   }
 }
 
@@ -438,10 +509,10 @@ export async function getSearchIndex() {
   for (const project of projects) {
     entries.push({
       id: `project:${project.slug}`,
-      type: 'Builds',
+      type: 'Project',
       title: project.name,
       description: project.tagline,
-      href: `/builds/${project.slug}`,
+      href: `/projects/${project.slug}`,
       meta: `${project.category} · ${project.status}`,
       keywords: [project.description, ...project.technologies].join(' '),
     })
@@ -466,7 +537,7 @@ export async function getSearchIndex() {
         type: 'Documentation',
         title: page.title,
         description: page.summary,
-        href: `/docs/${set.slug}/${page.slug}`,
+        href: `/projects/${set.slug}/${page.slug}`,
         meta: `${set.name} · ${page.group}`,
         keywords: `${set.name} ${page.group}`,
       })

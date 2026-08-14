@@ -27,9 +27,13 @@ export default async function Field() {
             </>
           }
           lede="Client case studies, the shape of a PulpLabs engagement, and recorded conversations with the people who build these systems."
+          jump={[
+            { href: '#entries', label: 'All entries', count: entries.length },
+            { href: '#interviews', label: 'Interviews', count: interviews.length },
+          ]}
         />
 
-        <section className="sec-sm">
+        <section className="sec-sm" id="entries" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
           <div className="shell-wide">
             <FieldGrid entries={entries} kinds={fieldKinds} />
 
@@ -40,7 +44,7 @@ export default async function Field() {
         </section>
 
         <div className="flow">
-          <section className="sec">
+          <section className="sec" id="interviews" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
             <div className="shell">
               <SectionHead
                 eyebrow="Interviews"
@@ -82,7 +86,7 @@ export default async function Field() {
           </section>
         </div>
 
-        <NextPage href="/builds" title="Builds" />
+        <NextPage href="/projects" title="Projects" />
       </main>
 
       <Footer />

@@ -40,13 +40,13 @@ export default function Footer() {
             <p className="mono">Build</p>
             <ul>
               <li>
+                <Link href="/projects">Open-source projects</Link>
+              </li>
+              <li>
+                <Link href="/projects#documentation">Documentation</Link>
+              </li>
+              <li>
                 <Link href="/field">Field</Link>
-              </li>
-              <li>
-                <Link href="/builds">Open builds</Link>
-              </li>
-              <li>
-                <Link href="/docs">Documentation</Link>
               </li>
               <li>
                 <Link href="/search">Search</Link>

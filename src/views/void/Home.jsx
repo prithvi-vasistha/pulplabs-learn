@@ -231,20 +231,20 @@ export default async function Home() {
             </div>
           </section>
 
-          {/* ── Builds ─────────────────────────────────────────────────── */}
+          {/* ── Projects, documentation included ───────────────────────── */}
           <section className="sec">
             <div className="shell-wide">
               <SectionHead
-                eyebrow="Builds"
+                eyebrow="Projects"
                 title={
                   <>
                     What we ship <span className="dim">in the open.</span>
                   </>
                 }
-                lede="The open-source products and contributions PulpLabs works on — each one connected to the lessons that explain the ideas underneath it."
+                lede="Open-source products and contributions, each with its source and its documentation."
                 action={
-                  <Link href="/builds" className="link">
-                    All builds <Chevron />
+                  <Link href="/projects" className="link">
+                    All projects <Chevron />
                   </Link>
                 }
               />
@@ -254,23 +254,8 @@ export default async function Home() {
                   <ProjectCard key={project.slug} project={project} index={i} />
                 ))}
               </ul>
-            </div>
-          </section>
 
-          {/* ── Documentation ──────────────────────────────────────────── */}
-          <section className="sec">
-            <div className="shell-wide">
-              <SectionHead
-                eyebrow="Documentation"
-                title="Reference, written for the person using it."
-                action={
-                  <Link href="/docs" className="link">
-                    All documentation <Chevron />
-                  </Link>
-                }
-              />
-
-              <ul className="index" role="list">
+              <ul className="index" role="list" style={{ marginTop: 'clamp(28px, 3vw, 40px)' }}>
                 {docSets.map((set, i) => (
                   <DocRow key={set.slug} set={set} index={i} />
                 ))}

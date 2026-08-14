@@ -4,6 +4,7 @@ import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import CourseCatalogue from '@/components/learn/CourseCatalogue'
+import { TechCell } from '@/components/learn/cards'
 import { PageHead, SectionHead } from '@/components/learn/ui'
 import { disclosure, getExams, getPaths, getProgressCatalogue, getTechnologies } from '@/lib/content'
 import { formatCount, formatMinutes } from '@/lib/format'
@@ -36,11 +37,16 @@ export default async function Learn() {
               <span className="dim">In order, for a reason.</span>
             </>
           }
-          lede="Each track is a sequence, not a catalogue. It states who it is for, what it assumes you already know, and what you will be able to do when you finish."
+          lede="Each track is a sequence, not a pile of videos — it says who it is for and what you will be able to do at the end."
+          jump={[
+            { href: '#start', label: 'Where to start' },
+            { href: '#catalogue', label: 'Tracks', count: paths.length },
+            { href: '#subjects', label: 'By subject', count: technologies.length },
+          ]}
         />
 
         {/* ── Not sure where to start ──────────────────────────────────── */}
-        <section className="sec-sm">
+        <section className="sec-sm" id="start" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
           <div className="shell-wide">
             <ul className="tiles tiles-2" role="list" style={{ marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <li>
@@ -104,24 +110,57 @@ export default async function Learn() {
               </li>
             </ul>
 
-            <SectionHead
-              eyebrow={`${paths.length} tracks · ${totalLessons} lessons · ${formatMinutes(totalMinutes)}`}
-              title="The catalogue."
-              lede="Filter by level, or search across every track and every individual lesson."
-              action={
-                <Link href="/exams" className="link">
-                  Mock exams <Chevron />
-                </Link>
-              }
-            />
+            <div id="catalogue" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
+              <SectionHead
+                eyebrow={`${paths.length} tracks · ${totalLessons} lessons · ${formatMinutes(totalMinutes)}`}
+                title="The catalogue."
+                lede="Filter by level, or search across every track and every individual lesson."
+                action={
+                  <Link href="/exams" className="link">
+                    Mock exams <Chevron />
+                  </Link>
+                }
+              />
 
-            <CourseCatalogue paths={paths} catalogue={catalogue} />
+              <CourseCatalogue paths={paths} catalogue={catalogue} />
+            </div>
 
             <p className="note" style={{ marginTop: 32 }}>
               {disclosure}
             </p>
           </div>
         </section>
+
+        {/* ── Technologies, as a way into Learn rather than a sibling of it ──
+            They were a sixth top-level destination competing with Learn and
+            Docs for the same question. They are an axis through this material,
+            so they live here, where someone is already choosing what to read. */}
+        <div className="flow">
+          <section className="sec" id="subjects" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
+            <div className="shell-wide">
+              <SectionHead
+                eyebrow={`${technologies.length} subjects`}
+                title={
+                  <>
+                    Or start from a subject, <span className="dim">not a track.</span>
+                  </>
+                }
+                lede="Each subject page gathers every lesson, exam, project, guide and case study that touches it — the number on each card is how many pieces that is."
+                action={
+                  <Link href="/technologies" className="link">
+                    All subjects <Chevron />
+                  </Link>
+                }
+              />
+
+              <ul className="grid-h grid-h-4" role="list">
+                {technologies.slice(0, 8).map((tech, i) => (
+                  <TechCell key={tech.slug} tech={tech} index={i} />
+                ))}
+              </ul>
+            </div>
+          </section>
+        </div>
 
         <NextPage href="/exams" title="Mock exams" />
       </main>

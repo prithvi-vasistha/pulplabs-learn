@@ -412,7 +412,7 @@ def mrr(cases: list[Case], retrieve, k: int = 10) -> float:
         type: 'callout',
         kind: 'note',
         title: 'Sweep as a table, not as impressions',
-        text: 'Chunk size, overlap, k, fusion weights and reranker are parameters of a run. Produce a comparison table across configurations — that is what [Corpusgraph-style harnesses](/builds) exist to automate.',
+        text: 'Chunk size, overlap, k, fusion weights and reranker are parameters of a run. Produce a comparison table across configurations — that is what [Corpusgraph-style harnesses](/projects) exist to automate.',
       },
       {
         type: 'h2',

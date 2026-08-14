@@ -7,8 +7,12 @@ import { levelRank } from '@/lib/format'
  * same way on every page, not to introduce a second layer of styling.
  */
 
-/** Page head with a corner light plate (§5). Same markup as the main site. */
-export function PageHead({ eyebrow, title, lede, plate = 'deep-field', wide = true, children }) {
+/** Page head with a corner light plate (§5). Same markup as the main site.
+ *
+ *  `jump` is the load-bearing addition: a reader should be able to see the
+ *  shape of a page — what is on it, how much of it there is — without reading
+ *  the lede first. Prose explains; the jump bar orients. */
+export function PageHead({ eyebrow, title, lede, plate = 'deep-field', wide = true, jump, actions, children }) {
   return (
     <section className="phead grid-bg">
       <div className="phead-light" aria-hidden="true">
@@ -18,9 +22,62 @@ export function PageHead({ eyebrow, title, lede, plate = 'deep-field', wide = tr
         {eyebrow && <p className="mono">{eyebrow}</p>}
         <h1 className="d1 phead-h">{title}</h1>
         {lede && <p className="lede phead-l">{lede}</p>}
+        {actions && <div className="btn-row phead-a">{actions}</div>}
         {children}
+        {jump && <JumpBar items={jump} />}
       </div>
     </section>
+  )
+}
+
+/**
+ * A compact row of in-page anchors. Every item carries a count, because "4
+ * guides" tells a reader whether to bother in a way that "Guides" does not.
+ */
+export function JumpBar({ items, label = 'On this page' }) {
+  const shown = (items ?? []).filter(Boolean)
+  if (shown.length === 0) return null
+
+  return (
+    <nav className="jump" aria-label={label}>
+      <ul role="list">
+        {shown.map((item) => (
+          <li key={item.href}>
+            <a href={item.href}>
+              {item.label}
+              {item.count != null && <span className="tnum">{item.count}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+/**
+ * One row of the cross-type material list used on technology pages. The whole
+ * point of the hub is that a lesson, an exam, a doc page and a case study can
+ * sit in the same list and still be told apart at a glance — so the type is
+ * the first thing in the row, not a badge hidden at the end.
+ */
+export function MaterialRow({ type, title, description, meta, href }) {
+  return (
+    <li>
+      <Link href={href} className="index-row">
+        <span className="index-n res-type">{type}</span>
+        <span className="index-b">
+          <span className="h4" style={{ display: 'block' }}>
+            {title}
+          </span>
+          {description && (
+            <span className="body" style={{ display: 'block' }}>
+              {description}
+            </span>
+          )}
+        </span>
+        <span className="index-m">{meta && <span className="mono">{meta}</span>}</span>
+      </Link>
+    </li>
   )
 }
 

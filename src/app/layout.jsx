@@ -1,5 +1,6 @@
 import Reveal from '@/components/void/Reveal'
 import { ProgressProvider } from '@/components/learn/ProgressProvider'
+import { THEME_SCRIPT } from '@/lib/theme'
 
 /* void.css is a byte-for-byte copy of the marketing site's stylesheet — the
    two are kept in sync by copying the file, never by editing this one.
@@ -34,12 +35,18 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [{ color: '#000000' }],
-  colorScheme: 'dark',
+  colorScheme: 'dark light',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Resolves the stored theme before the first paint. Anything later —
+            an effect, a provider — renders one frame of the wrong ground, and
+            a black flash is precisely what a light-theme reader is escaping. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {/* Keyboard users should never have to tab the whole nav on every page */}
         <a className="skip" href="#main">

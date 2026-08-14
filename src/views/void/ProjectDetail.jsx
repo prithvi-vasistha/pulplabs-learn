@@ -3,11 +3,21 @@ import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
-import { Badge, Crumbs, MetaRow, SectionHead } from '@/components/learn/ui'
+import { Badge, Crumbs, JumpBar, MetaRow, SectionHead } from '@/components/learn/ui'
 import { formatCount, padIndex } from '@/lib/format'
 
 export default function ProjectDetail({ project, next }) {
-  const docsHref = project.docSet ? `/docs/${project.docSet.slug}` : null
+  const set = project.docSet
+  const firstPage = set?.groups[0]?.pages[0]
+  const docsHref = firstPage ? `/projects/${set.slug}/${firstPage.slug}` : null
+
+  const jump = [
+    { href: '#what-it-is', label: 'Overview' },
+    { href: '#features', label: 'Features', count: project.features.length },
+    { href: '#architecture', label: 'Architecture', count: project.architecture.length },
+    set ? { href: '#documentation', label: 'Documentation', count: set.pageCount } : null,
+    { href: '#learn', label: 'Learn', count: project.learn.length },
+  ]
 
   return (
     <div className="grain">
@@ -20,7 +30,7 @@ export default function ProjectDetail({ project, next }) {
           </div>
 
           <div className="shell-wide phead-in">
-            <Crumbs items={[{ label: 'Open source', href: '/builds' }, { label: project.name }]} />
+            <Crumbs items={[{ label: 'Projects', href: '/projects' }, { label: project.name }]} />
 
             <h1 className="d1 phead-h" style={{ marginTop: 18 }}>
               {project.name}
@@ -33,25 +43,27 @@ export default function ProjectDetail({ project, next }) {
                 items={[
                   <span key="cat">{project.category}</span>,
                   <span key="status">{project.status}</span>,
-                  <span key="tech">{project.technologies.join(' · ')}</span>,
+                  <span key="docs" className="tnum">
+                    {set ? formatCount(set.pageCount, 'doc page') : 'No documentation yet'}
+                  </span>,
                 ]}
               />
             </div>
 
-            <div className="btn-row" style={{ marginTop: 28 }}>
-              {docsHref ? (
+            <div className="btn-row phead-a">
+              {docsHref && (
                 <Link href={docsHref} className="btn">
                   Read the docs <Chevron />
                 </Link>
-              ) : (
-                <Link href="/docs" className="btn btn-ghost">
-                  Browse published documentation
-                </Link>
               )}
-              <Link href="/builds" className="btn btn-ghost">
-                All projects
-              </Link>
+              {project.hasRepository && (
+                <a href={project.repository} className="btn btn-ghost" rel="noreferrer noopener" target="_blank">
+                  Open repository
+                </a>
+              )}
             </div>
+
+            <JumpBar items={jump} />
           </div>
         </section>
 
@@ -65,7 +77,7 @@ export default function ProjectDetail({ project, next }) {
                 <p>{project.problem}</p>
               </div>
 
-              <section style={{ marginTop: 'clamp(44px, 5vw, 68px)' }} aria-labelledby="features-h">
+              <section className="anchored" id="features" aria-labelledby="features-h">
                 <header className="sec-h" data-r>
                   <p className="mono" id="features-h">
                     Features
@@ -93,7 +105,7 @@ export default function ProjectDetail({ project, next }) {
                 </ul>
               </section>
 
-              <section style={{ marginTop: 'clamp(44px, 5vw, 68px)' }} aria-labelledby="arch-h">
+              <section className="anchored" id="architecture" aria-labelledby="arch-h">
                 <header className="sec-h" data-r>
                   <p className="mono" id="arch-h">
                     Architecture
@@ -111,7 +123,46 @@ export default function ProjectDetail({ project, next }) {
                 </ul>
               </section>
 
-              <section style={{ marginTop: 'clamp(44px, 5vw, 68px)' }} aria-labelledby="learn-h">
+              {/* Documentation is part of the project, not a separate section
+                  of the site. A reader who wants a specific page can see every
+                  page from here without a second index in between. */}
+              {set && (
+                <section className="anchored" id="documentation" aria-labelledby="docs-h">
+                  <header className="sec-h" data-r>
+                    <p className="mono" id="docs-h">
+                      Documentation · {set.version}
+                    </p>
+                    <h2 className="d2">
+                      Guides, <span className="dim">written for the person using it.</span>
+                    </h2>
+                  </header>
+
+                  <div className="doc-groups doc-groups-flat" data-r>
+                    {set.groups.map((group) => (
+                      <div key={group.title}>
+                        <h3 className="mono">{group.title}</h3>
+                        <ul role="list">
+                          {group.pages.map((page) => (
+                            <li key={page.slug}>
+                              <Link href={`/projects/${set.slug}/${page.slug}`} className="link-quiet">
+                                {page.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+
+                  {set.versionNote && (
+                    <p className="note" style={{ marginTop: 20 }}>
+                      {set.versionNote}
+                    </p>
+                  )}
+                </section>
+              )}
+
+              <section className="anchored" id="learn" aria-labelledby="learn-h">
                 <header className="sec-h" data-r>
                   <p className="mono" id="learn-h">
                     Learn the concepts behind this project
@@ -177,13 +228,7 @@ export default function ProjectDetail({ project, next }) {
                   <li>
                     <span className="k body">Docs</span>
                     <span className="v">
-                      {project.docSet ? (
-                        <Link href={`/docs/${project.docSet.slug}`} className="link-quiet">
-                          {project.docSet.version}
-                        </Link>
-                      ) : (
-                        'Not published'
-                      )}
+                      {set ? <a href="#documentation" className="link-quiet">{set.version}</a> : 'Not published'}
                     </span>
                   </li>
                 </ul>
@@ -222,6 +267,24 @@ export default function ProjectDetail({ project, next }) {
                   </ul>
                 </div>
               )}
+
+              {project.field.length > 0 && (
+                <div>
+                  <p className="mono" style={{ marginBottom: 12 }}>
+                    From the field
+                  </p>
+                  <ul className="rail-list" role="list">
+                    {project.field.map((entry) => (
+                      <li key={entry.slug}>
+                        <span className="k body">{entry.kind}</span>
+                        <Link href={`/field/${entry.slug}`} className="v link-quiet">
+                          {entry.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </aside>
           </div>
         </section>
@@ -234,7 +297,7 @@ export default function ProjectDetail({ project, next }) {
                   eyebrow="More from the catalogue"
                   title="Next project."
                   action={
-                    <Link href="/builds" className="link">
+                    <Link href="/projects" className="link">
                       All projects <Chevron />
                     </Link>
                   }
@@ -247,34 +310,34 @@ export default function ProjectDetail({ project, next }) {
                       <Badge quiet={next.status !== 'In development'}>{next.status}</Badge>
                     </div>
                     <h3 className="d3">
-                      <Link href={`/builds/${next.slug}`} className="stretch-l">
+                      <Link href={`/projects/${next.slug}`} className="stretch-l">
                         {next.name}
                       </Link>
                     </h3>
                     <p className="body trunc-3">{next.tagline}</p>
                     <div className="card-foot">
                       <span className="mono">{next.technologies.join(' · ')}</span>
-                      <span className="link">
-                        View project <Chevron />
+                      <span className="mono tnum">
+                        {next.docPageCount > 0 ? formatCount(next.docPageCount, 'doc page') : 'Repository only'}
                       </span>
                     </div>
                   </li>
 
                   <li className="lift stretch" data-r style={{ '--rd': '65ms' }}>
-                    <p className="mono">Documentation</p>
+                    <p className="mono">Prepare</p>
                     <h3 className="d3">
-                      <Link href="/docs" className="stretch-l">
-                        Read the reference
+                      <Link href="/learn" className="stretch-l">
+                        Learn the ideas underneath
                       </Link>
                     </h3>
                     <p className="body trunc-3">
-                      Installation, concepts, guides, API reference, and troubleshooting for the projects that
-                      have published documentation.
+                      Four preparation tracks covering the architecture, API, retrieval and agent work these
+                      projects are built on.
                     </p>
                     <div className="card-foot">
-                      <span className="mono">Written for the person using it</span>
+                      <span className="mono">Tracks and lessons</span>
                       <span className="link">
-                        Open docs <Chevron />
+                        Browse <Chevron />
                       </span>
                     </div>
                   </li>
@@ -284,11 +347,7 @@ export default function ProjectDetail({ project, next }) {
           </div>
         )}
 
-        <NextPage
-          href={docsHref ?? '/docs'}
-          title="Documentation"
-          label="Read on"
-        />
+        <NextPage href="/projects" title="Projects" label="Back to" />
       </main>
 
       <Footer />

@@ -36,6 +36,27 @@ Two rules shape the code:
 - **Every hover is gated** behind `@media (hover: hover) and (pointer: fine)`, and every animation
   has a `prefers-reduced-motion` branch.
 
+### Themes
+
+The system's colour comes entirely from spectral plates `screen`-blended onto
+black, which on a light ground produces nothing at all. So the light theme is
+not a palette inversion — it inverts the *mechanic*: the same photographs are
+read as pigment rather than light (`invert(1) hue-rotate(180deg)` under
+`multiply`), which is what `--plate-blend` and `--plate-filter` express.
+
+Three states, resolved in `src/lib/theme.js`: **System** (no attribute, CSS
+follows the OS), **Light** and **Dark** (`data-theme` on `<html>` wins in both
+directions). System is the default, because a two-state toggle silently ignores
+the OS preference of everyone who never touches it.
+
+`THEME_SCRIPT` is inlined in `<head>` ahead of any stylesheet. Resolving the
+theme in an effect instead would paint one frame of the wrong ground on every
+navigation, and a black flash is exactly what a light-theme reader is escaping.
+
+The palette lives in `void.css` and was authored in the marketing site, so both
+properties change together — a light-capable portal beside a dark-only site is
+the uniformity problem in a new form.
+
 ### Two deliberate deviations, both documented in the code
 
 **No webfont is loaded.** §12.1 of the design document notes that Inter Tight and Berkeley Mono are
@@ -63,6 +84,26 @@ src/
 ├── lib/          content API, exam engine, progress store, highlighting, motion
 └── styles/       void.css (copied) + learn.css (this product)
 ```
+
+### Four sections, not six
+
+Technologies is an axis through Learn rather than a sibling of it, and Builds
+and Docs were two names for the same four objects — which is why the old docs
+index had to list *absences* to explain why it was shorter. A project now owns
+its documentation (`/projects/<project>/<page>`), and `/builds/*` and `/docs/*`
+redirect permanently.
+
+A technology page is the cross-type hub: every lesson, exam, project, guide and
+case study that touches the subject, in one list, type first. Those joins always
+existed in the data; `technologyJoins()` in `src/lib/content.js` is what finally
+surfaces them.
+
+Search is navigation, not a shortcut. `CommandPalette` sits in the nav on every
+page, opens on `/` or `⌘K`, groups results by type and fetches the index once
+from `/api/search-index` — so visitors who never search pay nothing for it.
+
+Every index page carries a `JumpBar` under its head: what is on the page and how
+much of it there is, so a reader can choose without first reading the lede.
 
 ### Content is modelled, not duplicated
 
@@ -190,3 +231,12 @@ the marketing site at matching viewports:
 - Mobile navigation is the system's sheet: it locks scroll, closes on Escape, and returns focus.
 - The video facade contacts no video host before activation, is keyboard-operable, and loads a
   titled `youtube-nocookie.com` embed on demand — asserted in a browser, not assumed.
+- **Both themes**, across every route and viewport: the ground is actually painted, the toggle
+  cycles System → Light → Dark, the stored choice survives a reload, and `data-theme` is already
+  correct at first paint rather than corrected afterwards.
+- Light-theme contrast measured against the rendered ground with alpha composited: body 7.3:1,
+  mono and breadcrumbs 5.1:1 — `--w-3` was raised from 0.54 to 0.62 because it measured 3.94:1.
+- The command palette opens on `/` and `⌘K`, groups across content types, moves with the arrow
+  keys, opens with Enter, traps Tab, and closes on Escape from anywhere in the dialog.
+- The marketing site builds and renders in both themes with the same toggle, from the same
+  `void.css`.

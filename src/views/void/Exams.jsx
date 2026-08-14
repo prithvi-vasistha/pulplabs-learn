@@ -26,10 +26,14 @@ export default async function Exams() {
               <span className="dim">Then close them.</span>
             </>
           }
-          lede="Mock exams that do more than produce a number: every result breaks down by topic and links each weak area to the lesson that covers it. Independent practice papers, not official questions."
+          lede="Every result breaks down by topic and links each weak area to the lesson that covers it."
+          jump={[
+            { href: '#papers', label: 'Papers', count: exams.length },
+            { href: '#how', label: 'How grading works' },
+          ]}
         />
 
-        <section className="sec-sm">
+        <section className="sec-sm" id="papers" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
           <div className="shell-wide">
             <SectionHead
               eyebrow={`${exams.length} exams · ${questionCount} questions`}
@@ -46,7 +50,7 @@ export default async function Exams() {
         </section>
 
         <div className="flow">
-          <section className="sec">
+          <section className="sec" id="how" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
             <div className="shell">
               <SectionHead
                 eyebrow="How it works"
@@ -87,7 +91,7 @@ export default async function Exams() {
           </section>
         </div>
 
-        <NextPage href="/builds" title="Builds" />
+        <NextPage href="/projects" title="Projects" />
       </main>
 
       <Footer />

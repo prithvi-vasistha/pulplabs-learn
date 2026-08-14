@@ -3,11 +3,66 @@ import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
-import { Crumbs, Difficulty, MetaRow, SectionHead, StateBlock } from '@/components/learn/ui'
+import { Crumbs, Difficulty, JumpBar, MaterialRow, MetaRow, SectionHead, StateBlock } from '@/components/learn/ui'
 import { formatCount, formatMinutes, padIndex } from '@/lib/format'
 
 export default function TechnologyDetail({ tech, next }) {
   const hasPath = tech.paths.length > 0
+
+  /* Everything the Lab holds on this subject, in one list. The joins already
+     existed in the data — a lesson knows its topics, a field entry declares
+     its technologies, a doc set belongs to a project that declares its own.
+     Until now the page surfaced three of the six and a reader had to guess
+     that the rest existed. */
+  const material = [
+    ...tech.lessons.map((l) => ({
+      key: `lesson:${l.pathSlug}:${l.slug}`,
+      type: 'Lesson',
+      title: l.title,
+      description: l.summary,
+      meta: `${l.pathTitle} · ${formatMinutes(l.minutes)}`,
+      href: `/learn/${l.pathSlug}/${l.slug}`,
+    })),
+    ...tech.exams.map((e) => ({
+      key: `exam:${e.slug}`,
+      type: 'Mock exam',
+      title: e.title,
+      description: e.summary,
+      meta: `${formatCount(e.questionCount, 'question')} · ${e.minutes} min`,
+      href: `/exams/${e.slug}`,
+    })),
+    ...tech.docSets.map((d) => ({
+      key: `doc:${d.slug}`,
+      type: 'Documentation',
+      title: `${d.name} documentation`,
+      description: d.tagline,
+      meta: `${d.version} · ${formatCount(d.pageCount, 'page')}`,
+      href: `/projects/${d.projectSlug}#documentation`,
+    })),
+    ...tech.projects.map((pr) => ({
+      key: `project:${pr.slug}`,
+      type: 'Project',
+      title: pr.name,
+      description: pr.tagline,
+      meta: `${pr.category} · ${pr.status}`,
+      href: `/projects/${pr.slug}`,
+    })),
+    ...tech.field.map((f) => ({
+      key: `field:${f.slug}`,
+      type: 'Field',
+      title: f.title,
+      description: f.summary,
+      meta: `${f.kind}${f.client ? ` · ${f.client}` : ''}`,
+      href: `/field/${f.slug}`,
+    })),
+  ]
+
+  const jump = [
+    { href: '#what-it-is', label: 'Overview' },
+    { href: '#progression', label: 'Progression', count: tech.outline.length },
+    hasPath ? { href: '#paths', label: 'Tracks', count: tech.paths.length } : null,
+    material.length > 0 ? { href: '#material', label: 'Everything on this', count: material.length } : null,
+  ]
 
   return (
     <div className="grain">
@@ -40,16 +95,16 @@ export default function TechnologyDetail({ tech, next }) {
                 items={[
                   <span key="cat">{tech.category}</span>,
                   <Difficulty key="level" level={tech.level} />,
-                  tech.paths.length > 0 ? (
-                    <span key="paths" className="tnum">
-                      {tech.paths.length === 1 ? '1 learning path' : `${tech.paths.length} learning paths`}
-                    </span>
-                  ) : (
-                    <span key="paths">Overview only</span>
-                  ),
+                  <span key="material" className="tnum">
+                    {material.length > 0
+                      ? `${formatCount(material.length, 'piece')} of material`
+                      : 'Overview only'}
+                  </span>,
                 ]}
               />
             </div>
+
+            <JumpBar items={jump} />
           </div>
         </section>
 
@@ -63,7 +118,7 @@ export default function TechnologyDetail({ tech, next }) {
                 <p>{tech.why}</p>
               </div>
 
-              <section style={{ marginTop: 'clamp(44px, 5vw, 68px)' }} aria-labelledby="progression-h">
+              <section className="anchored" id="progression" aria-labelledby="progression-h">
                 <header className="sec-h" data-r>
                   <p className="mono" id="progression-h">
                     Progression
@@ -93,7 +148,7 @@ export default function TechnologyDetail({ tech, next }) {
                 </ul>
               </section>
 
-              <section style={{ marginTop: 'clamp(44px, 5vw, 68px)' }} aria-labelledby="paths-h">
+              <section className="anchored" id="paths" aria-labelledby="paths-h">
                 <header className="sec-h" data-r>
                   <p className="mono" id="paths-h">
                     Learning
@@ -150,6 +205,35 @@ export default function TechnologyDetail({ tech, next }) {
                   </div>
                 )}
               </section>
+
+              {/* The hub. One list, every content type, type first so a reader
+                  can tell a lesson from a case study without reading either. */}
+              {material.length > 0 && (
+                <section className="anchored" id="material" aria-labelledby="material-h">
+                  <header className="sec-h" data-r>
+                    <p className="mono" id="material-h">
+                      Everything on this subject
+                    </p>
+                    <h2 className="d2">
+                      {formatCount(material.length, 'piece')} of material,{' '}
+                      <span className="dim">across the Lab.</span>
+                    </h2>
+                  </header>
+
+                  <ul className="index index-search" role="list" data-r>
+                    {material.map((item) => (
+                      <MaterialRow
+                        key={item.key}
+                        type={item.type}
+                        title={item.title}
+                        description={item.description}
+                        meta={item.meta}
+                        href={item.href}
+                      />
+                    ))}
+                  </ul>
+                </section>
+              )}
             </div>
 
             <aside className="rail" aria-label="Technology details">
@@ -227,7 +311,7 @@ export default function TechnologyDetail({ tech, next }) {
                     {tech.projects.map((project) => (
                       <li key={project.slug}>
                         <span className="k body">{project.category}</span>
-                        <Link href={`/builds/${project.slug}`} className="v link-quiet">
+                        <Link href={`/projects/${project.slug}`} className="v link-quiet">
                           {project.name}
                         </Link>
                       </li>

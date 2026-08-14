@@ -730,7 +730,7 @@ a.panel {
   outline: none;
   background: var(--raise-2);
   border-color: var(--line-3);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-halo);
 }
 
 .search-box {
@@ -1675,7 +1675,7 @@ mark {
   position: sticky;
   top: var(--nav-h);
   z-index: 40;
-  background: rgba(0, 0, 0, 0.82);
+  background: var(--scrim-4);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line-1);
 }
@@ -2148,7 +2148,7 @@ mark {
   position: fixed;
   inset: 0;
   z-index: 120;
-  background: rgba(0, 0, 0, 0.74);
+  background: var(--scrim-3);
   backdrop-filter: blur(10px);
   display: grid;
   place-items: center;
@@ -2512,7 +2512,8 @@ mark {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.62;
   transform: scale(1.02);
   transition: transform 600ms var(--ease-out), opacity var(--t-hover) var(--ease-out);
@@ -2543,7 +2544,7 @@ mark {
   letter-spacing: 0.14em;
   color: var(--w-2);
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 12px var(--ink-halo-soft);
 }
 
 .tile-badge {
@@ -2654,7 +2655,8 @@ mark {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.55;
 }
 
@@ -2678,7 +2680,7 @@ mark {
   height: 68px;
   border-radius: 100px;
   border: 1px solid var(--line-2);
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--scrim-1);
   backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
@@ -2705,7 +2707,7 @@ mark {
   letter-spacing: -0.014em;
   color: var(--w-1);
   max-width: 34ch;
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 30px var(--ink-halo-soft);
 }
 
 .video-meta {
@@ -2792,4 +2794,365 @@ mark {
   letter-spacing: -0.006em;
   color: var(--w-3);
   max-width: 78ch;
+}
+
+/* ==========================================================================
+   19. Navigation surfaces
+
+   Search stops being a keyboard shortcut and becomes the fastest visible route
+   through the site. A stranger should never have to work out which of the four
+   sections owns the thing they came for.
+   ========================================================================== */
+
+.nv-find {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 10px 0 11px;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--w-3);
+  background: var(--raise-1);
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  cursor: pointer;
+  transition:
+    color var(--t-hover) var(--ease-out),
+    border-color var(--t-hover) var(--ease-out),
+    background-color var(--t-hover) var(--ease-out);
+}
+
+.nv-find svg {
+  display: block;
+  flex: none;
+}
+
+.nv-find-t {
+  min-width: 84px;
+  text-align: left;
+}
+
+.nv-find .kbd {
+  font-size: 0.6875rem;
+  min-width: 17px;
+  height: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  color: var(--w-4);
+}
+
+.nv-find:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nv-find:hover {
+    color: var(--w-1);
+    background: var(--raise-2);
+    border-color: var(--line-2);
+  }
+}
+
+/* Below the tablet breakpoint the label and shortcut go; the affordance stays
+   a tap target rather than collapsing into the sheet where it would be hidden
+   behind exactly the decision it exists to remove. */
+@media (max-width: 900px) {
+  .nv-find-t,
+  .nv-find .kbd {
+    display: none;
+  }
+  .nv-find {
+    padding: 0 9px;
+  }
+}
+
+/* Section hints in the mobile sheet. */
+.nv-hint {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.6875rem;
+  color: var(--w-4);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+/* ---- command palette ---- */
+
+.cmd-back {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--scrim-3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  padding: clamp(12px, 9vh, 96px) var(--gutter) 24px;
+  animation: cmd-in 160ms var(--ease-out);
+}
+
+@keyframes cmd-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.cmd {
+  width: min(640px, 100%);
+  max-height: min(560px, 80vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--void);
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px var(--dock-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmd-back {
+    animation: none;
+  }
+}
+
+.cmd-field {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line-1);
+  flex: none;
+}
+
+.cmd-field > svg {
+  flex: none;
+  color: var(--w-3);
+}
+
+.cmd-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--w-1);
+  background: transparent;
+  border: 0;
+  padding: 17px 0;
+}
+
+.cmd-input:focus {
+  outline: none;
+}
+
+.cmd-input::placeholder {
+  color: var(--w-4);
+}
+
+.cmd-esc {
+  flex: none;
+  font-size: 0.625rem;
+  color: var(--w-4);
+  background: transparent;
+  border: 1px solid var(--line-1);
+  border-radius: 5px;
+  padding: 3px 6px;
+  cursor: pointer;
+}
+
+.cmd-esc:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+.cmd-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 0;
+}
+
+.cmd-body ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cmd-group + .cmd-group {
+  margin-top: 6px;
+}
+
+.cmd-gh {
+  padding: 8px 16px 5px;
+  margin: 0;
+  color: var(--w-4);
+}
+
+.cmd-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 14px;
+  padding: 9px 16px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+}
+
+/* The starters row carries its type; search results are already grouped under
+   a heading that says it. */
+.cmd-row .res-type {
+  grid-row: 1;
+  grid-column: 1;
+  display: none;
+}
+
+.cmd-row[data-active='true'] {
+  background: var(--raise-2);
+  border-left-color: var(--w-1);
+}
+
+.cmd-t {
+  font-size: 0.9375rem;
+  letter-spacing: -0.011em;
+  color: var(--w-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmd-m {
+  font-size: 0.625rem;
+  color: var(--w-4);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cmd-empty {
+  padding: 28px 16px 32px;
+  text-align: center;
+}
+
+.cmd-empty .body {
+  margin-top: 8px;
+  color: var(--w-3);
+}
+
+.cmd-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--line-1);
+  font-size: 0.625rem;
+  color: var(--w-4);
+}
+
+.cmd-foot span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cmd-foot-c {
+  margin-left: auto;
+}
+
+.cmd-foot kbd {
+  font: inherit;
+  min-width: 15px;
+  height: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-1);
+  border-radius: 3px;
+}
+
+@media (max-width: 560px) {
+  .cmd-m {
+    display: none;
+  }
+  .cmd-foot span:not(.cmd-foot-c) {
+    display: none;
+  }
+  .cmd-foot-c {
+    margin-left: 0;
+  }
+}
+
+/* ==========================================================================
+   20. Jump bar
+
+   A page should be legible as a shape before it is legible as prose. This sits
+   under the page head and says what is on the page and how much of it there
+   is, so a reader can skip the lede and still choose correctly.
+   ========================================================================== */
+
+.jump {
+  margin-top: clamp(26px, 3vw, 38px);
+}
+
+.jump ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jump a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--w-2);
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  padding: 7px 13px;
+  background: var(--raise-1);
+  transition:
+    color var(--t-hover) var(--ease-out),
+    border-color var(--t-hover) var(--ease-out);
+}
+
+.jump a .tnum {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  color: var(--w-4);
+}
+
+.jump a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .jump a:hover {
+    color: var(--w-1);
+    border-color: var(--line-2);
+  }
+}
+
+/* Anything a jump link targets needs to clear the sticky nav when it lands. */
+.anchored {
+  margin-top: clamp(44px, 5vw, 68px);
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+
+.phead-a {
+  margin-top: clamp(22px, 2.6vw, 30px);
+}
+
+/* Documentation groups laid flat inside a project page rather than in their
+   own panel — the project *is* the panel now. */
+.doc-groups-flat {
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  padding: clamp(18px, 2.4vw, 26px);
 }

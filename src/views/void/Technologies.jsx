@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
@@ -14,14 +15,19 @@ export default async function Technologies() {
 
       <main id="main">
         <PageHead
-          eyebrow="Technologies"
+          eyebrow="Learn · Subjects"
           plate="deep-field"
           title={
             <>
               What should <span className="dim">I learn?</span>
             </>
           }
-          lede="Every subject here gets the same treatment: what it actually is, what learning it buys you, what it assumes, and where it connects to everything else in the Lab."
+          lede="Every subject page gathers each lesson, exam, project, guide and case study that touches it — one place per subject, whatever type the material happens to be."
+          actions={
+            <Link href="/learn" className="btn btn-ghost">
+              Preparation tracks
+            </Link>
+          }
         />
 
         <section className="sec-sm">
@@ -30,7 +36,7 @@ export default async function Technologies() {
           </div>
         </section>
 
-        <NextPage href="/exams" title="Mock exams" />
+        <NextPage href="/learn" title="Preparation tracks" label="Back to" />
       </main>
 
       <Footer />

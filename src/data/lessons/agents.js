@@ -266,7 +266,7 @@ facts = memory.get_all(prefix="billing.")`,
       },
       {
         type: 'p',
-        text: 'The pattern that scales: store every message verbatim, compress hierarchically for recall, and pull back only what the current turn needs. History stays complete and auditable while the window stays inside its budget. [OpenLCM](/builds/openlcm) implements this shape and its documentation walks through the compression structure.',
+        text: 'The pattern that scales: store every message verbatim, compress hierarchically for recall, and pull back only what the current turn needs. History stays complete and auditable while the window stays inside its budget. [OpenLCM](/projects/openlcm) implements this shape and its documentation walks through the compression structure.',
       },
       {
         type: 'h2',
@@ -527,7 +527,7 @@ while not run.finished and run.steps < MAX_STEPS:
       },
       {
         type: 'p',
-        text: 'The tractable approach is to extract the workflow into a neutral intermediate representation — steps, tools, transitions, conditions — and generate the target from that. It makes the correctness-critical parts deterministic and reserves model assistance for the genuinely ambiguous part: recovering intent from a design that never stated it. [Wheatear](/builds/wheatear) is PulpLabs\' accelerator for exactly this.',
+        text: 'The tractable approach is to extract the workflow into a neutral intermediate representation — steps, tools, transitions, conditions — and generate the target from that. It makes the correctness-critical parts deterministic and reserves model assistance for the genuinely ambiguous part: recovering intent from a design that never stated it. [Wheatear](/projects/wheatear) is PulpLabs\' accelerator for exactly this.',
       },
       {
         type: 'figure',

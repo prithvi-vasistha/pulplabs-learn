@@ -172,7 +172,7 @@ export default function PathDetail({ path, exams, projects, technologies, nextPa
                     {projects.map((project) => (
                       <li key={project.slug}>
                         <span className="k body">{project.category}</span>
-                        <Link href={`/builds/${project.slug}`} className="v link-quiet">
+                        <Link href={`/projects/${project.slug}`} className="v link-quiet">
                           {project.name}
                         </Link>
                       </li>

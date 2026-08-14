@@ -15,6 +15,8 @@
   /* --- Ground ----------------------------------------------------------
      True #000, not near-black: on an OLED panel those pixels are physically
      off, and the imagery appears to float in actual darkness. */
+  color-scheme: dark;
+
   --void: #000000;
   --raise-1: rgba(255, 255, 255, 0.035);
   --raise-2: rgba(255, 255, 255, 0.06);
@@ -34,6 +36,54 @@
 
   /* Used for focus rings and the live indicator only. Never for surfaces. */
   --signal: #ffffff;
+
+  /* --- Theme-dependent mechanics ---------------------------------------
+     Everything below has a light-theme counterpart. Nothing else in this
+     file may hard-code a colour: if a value needs to change between themes
+     it becomes a token here, or the light theme silently breaks. */
+
+  /* The light plate (§8). On black, `screen` means the image's black
+     contributes nothing and only emitted light shows. There is no way to
+     emit light onto white, so the light theme reads the same photograph as
+     pigment instead: inverted back to dark-on-white, hue-corrected, and
+     multiplied into the page. Same asset, same composition, opposite
+     physics. */
+  --plate-blend: screen;
+  --plate-filter: none;
+  --plate-hero-a: 0.85;
+
+  /* Scrims pull toward the ground, whichever ground that is. */
+  --scrim-1: rgba(0, 0, 0, 0.5);
+  --scrim-2: rgba(0, 0, 0, 0.66);
+  --scrim-3: rgba(0, 0, 0, 0.72);
+  --scrim-4: rgba(0, 0, 0, 0.92);
+
+  /* Type set over a plate needs a halo in the ground's colour. */
+  --ink-halo: rgba(0, 0, 0, 0.55);
+  --ink-halo-soft: rgba(0, 0, 0, 0.6);
+  --hero-dim: rgba(255, 255, 255, 0.72);
+
+  --focus-halo: rgba(255, 255, 255, 0.08);
+  --select-bg: rgba(255, 255, 255, 0.2);
+  --btn-hover: rgba(255, 255, 255, 0.86);
+  --sheen-1: rgba(255, 255, 255, 0.028);
+  --sheen-2: rgba(255, 255, 255, 0.022);
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --tint-1: rgba(255, 255, 255, 0.02);
+  --tint-2: rgba(255, 255, 255, 0.05);
+  --tint-3: rgba(255, 255, 255, 0.11);
+  --edge-lit: rgba(255, 255, 255, 0.16);
+  --edge-dim: rgba(255, 255, 255, 0.04);
+  --glow-w: rgba(255, 255, 255, 0.18);
+  --pulse: rgba(255, 255, 255, 0.5);
+  --panel-solid: #0b0b0c;
+  --bubble-solid: #1a1a1d;
+  --dock-grad-a: rgba(30, 30, 34, 0.5);
+  --dock-grad-b: rgba(12, 12, 14, 0.42);
+  --dock-shadow: rgba(0, 0, 0, 0.7);
+  --amb-1: rgba(70, 110, 190, 0.13);
+  --amb-2: rgba(190, 120, 60, 0.1);
+  --amb-3: rgba(60, 150, 140, 0.09);
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -78,7 +128,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--select-bg);
 }
 
 a {
@@ -299,7 +349,7 @@ canvas {
 
 @media (hover: hover) and (pointer: fine) {
   .btn:hover {
-    background: rgba(255, 255, 255, 0.86);
+    background: var(--btn-hover);
   }
 }
 
@@ -416,6 +466,191 @@ canvas {
 }
 
 /* ==========================================================================
+   Light theme
+
+   Not an inversion of the palette — an inversion of the *mechanic*. The whole
+   system's colour comes from spectral plates screened onto black, which on a
+   light ground would produce nothing at all. Here the same photographs are
+   read as pigment: inverted, hue-corrected, multiplied into paper.
+
+   Three states, resolved in this order:
+     no attribute      → follow the operating system
+     data-theme=light  → light, whatever the system says
+     data-theme=dark   → dark, whatever the system says
+
+   `:root:not([data-theme='dark'])` is what lets the toggle win in both
+   directions: without it, a reader on a light OS could never choose dark.
+   ========================================================================== */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+  /* --- Ground ----------------------------------------------------------
+     Not #fff. Pure white glares the way pure black crushes, and the hairline
+     grid needs a ground its opaque children can sit on and still read as
+     cells. */
+  color-scheme: light;
+
+  --void: #f2f2f3;
+  --raise-1: rgba(0, 0, 0, 0.03);
+  --raise-2: rgba(0, 0, 0, 0.05);
+  --raise-3: rgba(0, 0, 0, 0.08);
+
+  /* --- Ink -------------------------------------------------------------
+     Not #000, for the same reason. Body sits at 0.72 rather than the dark
+     theme's 0.62: white type on black blooms and has to be held back, dark
+     type on paper does not and can afford the contrast. */
+  --w-1: #101011;
+  --w-2: rgba(16, 16, 17, 0.72);
+  --w-3: rgba(16, 16, 17, 0.62);
+  --w-4: rgba(16, 16, 17, 0.42);
+
+  --line-1: rgba(0, 0, 0, 0.1);
+  --line-2: rgba(0, 0, 0, 0.16);
+  --line-3: rgba(0, 0, 0, 0.3);
+
+  --signal: #101011;
+
+  /* Pigment, not light. See --plate-blend above. */
+  --plate-blend: multiply;
+  --plate-filter: invert(1) hue-rotate(180deg) saturate(1.3) opacity(0.7);
+  /* The hero is a full-bleed video behind the headline, not a corner plate
+     beside it, so it carries its own weight. */
+  --plate-hero-a: 0.38;
+
+  --scrim-1: rgba(242, 242, 243, 0.62);
+  --scrim-2: rgba(242, 242, 243, 0.74);
+  --scrim-3: rgba(242, 242, 243, 0.8);
+  --scrim-4: rgba(242, 242, 243, 0.94);
+
+  --ink-halo: rgba(255, 255, 255, 0.8);
+  --ink-halo-soft: rgba(255, 255, 255, 0.85);
+  --hero-dim: rgba(16, 16, 17, 0.66);
+
+  --focus-halo: rgba(0, 0, 0, 0.1);
+  --select-bg: rgba(16, 16, 17, 0.14);
+  --btn-hover: rgba(16, 16, 17, 0.86);
+  --sheen-1: rgba(0, 0, 0, 0.022);
+  --sheen-2: rgba(0, 0, 0, 0.018);
+  --grid-line: rgba(0, 0, 0, 0.05);
+  --tint-1: rgba(0, 0, 0, 0.02);
+  --tint-2: rgba(0, 0, 0, 0.04);
+  --tint-3: rgba(0, 0, 0, 0.07);
+  --edge-lit: rgba(0, 0, 0, 0.14);
+  --edge-dim: rgba(0, 0, 0, 0.04);
+  --glow-w: rgba(0, 0, 0, 0.16);
+  --pulse: rgba(16, 16, 17, 0.4);
+  --panel-solid: #ffffff;
+  --bubble-solid: #e9e9ea;
+  --dock-grad-a: rgba(255, 255, 255, 0.72);
+  --dock-grad-b: rgba(245, 245, 246, 0.62);
+  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --amb-1: rgba(70, 110, 190, 0.1);
+  --amb-2: rgba(190, 120, 60, 0.08);
+  --amb-3: rgba(60, 150, 140, 0.07);
+  }
+}
+
+:root[data-theme='light'] {
+  /* --- Ground ----------------------------------------------------------
+     Not #fff. Pure white glares the way pure black crushes, and the hairline
+     grid needs a ground its opaque children can sit on and still read as
+     cells. */
+  color-scheme: light;
+
+  --void: #f2f2f3;
+  --raise-1: rgba(0, 0, 0, 0.03);
+  --raise-2: rgba(0, 0, 0, 0.05);
+  --raise-3: rgba(0, 0, 0, 0.08);
+
+  /* --- Ink -------------------------------------------------------------
+     Not #000, for the same reason. Body sits at 0.72 rather than the dark
+     theme's 0.62: white type on black blooms and has to be held back, dark
+     type on paper does not and can afford the contrast. */
+  --w-1: #101011;
+  --w-2: rgba(16, 16, 17, 0.72);
+  --w-3: rgba(16, 16, 17, 0.62);
+  --w-4: rgba(16, 16, 17, 0.42);
+
+  --line-1: rgba(0, 0, 0, 0.1);
+  --line-2: rgba(0, 0, 0, 0.16);
+  --line-3: rgba(0, 0, 0, 0.3);
+
+  --signal: #101011;
+
+  /* Pigment, not light. See --plate-blend above. */
+  --plate-blend: multiply;
+  --plate-filter: invert(1) hue-rotate(180deg) saturate(1.3) opacity(0.7);
+  /* The hero is a full-bleed video behind the headline, not a corner plate
+     beside it, so it carries its own weight. */
+  --plate-hero-a: 0.38;
+
+  --scrim-1: rgba(242, 242, 243, 0.62);
+  --scrim-2: rgba(242, 242, 243, 0.74);
+  --scrim-3: rgba(242, 242, 243, 0.8);
+  --scrim-4: rgba(242, 242, 243, 0.94);
+
+  --ink-halo: rgba(255, 255, 255, 0.8);
+  --ink-halo-soft: rgba(255, 255, 255, 0.85);
+  --hero-dim: rgba(16, 16, 17, 0.66);
+
+  --focus-halo: rgba(0, 0, 0, 0.1);
+  --select-bg: rgba(16, 16, 17, 0.14);
+  --btn-hover: rgba(16, 16, 17, 0.86);
+  --sheen-1: rgba(0, 0, 0, 0.022);
+  --sheen-2: rgba(0, 0, 0, 0.018);
+  --grid-line: rgba(0, 0, 0, 0.05);
+  --tint-1: rgba(0, 0, 0, 0.02);
+  --tint-2: rgba(0, 0, 0, 0.04);
+  --tint-3: rgba(0, 0, 0, 0.07);
+  --edge-lit: rgba(0, 0, 0, 0.14);
+  --edge-dim: rgba(0, 0, 0, 0.04);
+  --glow-w: rgba(0, 0, 0, 0.16);
+  --pulse: rgba(16, 16, 17, 0.4);
+  --panel-solid: #ffffff;
+  --bubble-solid: #e9e9ea;
+  --dock-grad-a: rgba(255, 255, 255, 0.72);
+  --dock-grad-b: rgba(245, 245, 246, 0.62);
+  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --amb-1: rgba(70, 110, 190, 0.1);
+  --amb-2: rgba(190, 120, 60, 0.08);
+  --amb-3: rgba(60, 150, 140, 0.07);
+}
+
+/* Dark-theme values that the media query above would otherwise leave behind
+   when a reader on a light system explicitly asks for dark. */
+@media (prefers-contrast: more) {
+  :root[data-theme='light'] {
+    --w-2: rgba(16, 16, 17, 0.9);
+    --w-3: rgba(16, 16, 17, 0.75);
+    --line-1: rgba(0, 0, 0, 0.3);
+    --line-2: rgba(0, 0, 0, 0.42);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --w-2: rgba(16, 16, 17, 0.9);
+    --w-3: rgba(16, 16, 17, 0.75);
+    --line-1: rgba(0, 0, 0, 0.3);
+    --line-2: rgba(0, 0, 0, 0.42);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme='light'] {
+    --raise-1: #eaeaeb;
+    --raise-2: #e2e2e3;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --raise-1: #eaeaeb;
+    --raise-2: #e2e2e3;
+  }
+}
+
+/* ==========================================================================
    Nav
    ========================================================================== */
 
@@ -433,7 +668,7 @@ canvas {
 
 .nv[data-scrolled],
 .nv[data-open] {
-  background: rgba(0, 0, 0, 0.72);
+  background: var(--scrim-3);
   backdrop-filter: saturate(160%) blur(18px);
   -webkit-backdrop-filter: saturate(160%) blur(18px);
   border-bottom-color: var(--line-1);
@@ -501,6 +736,65 @@ canvas {
   font-size: 0.8125rem;
   padding: 0.5em 1.05em;
   min-height: 34px;
+}
+
+/* ---- theme toggle ----
+   Cycles System → Light → Dark. The label is hidden below the breakpoint where
+   the bar gets tight, but the control keeps its full accessible name. */
+.nv-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--w-3);
+  background: transparent;
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  cursor: pointer;
+  transition:
+    color var(--t-hover) var(--ease-out),
+    border-color var(--t-hover) var(--ease-out);
+}
+
+.nv-theme svg {
+  display: block;
+  flex: none;
+}
+
+.nv-theme-t {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+/* Until the stored mode is known the icon would be a guess, so it is held
+   back rather than rendered and corrected a frame later. */
+.nv-theme:not([data-ready]) svg,
+.nv-theme:not([data-ready]) .nv-theme-t {
+  opacity: 0;
+}
+
+.nv-theme:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nv-theme:hover {
+    color: var(--w-1);
+    border-color: var(--line-2);
+  }
+}
+
+@media (max-width: 900px) {
+  .nv-theme-t {
+    display: none;
+  }
+  .nv-theme {
+    padding: 0 9px;
+  }
 }
 
 .nv-toggle {
@@ -607,8 +901,9 @@ canvas {
   inset: -10% -5% auto;
   z-index: -1;
   height: 120%;
-  mix-blend-mode: screen;
-  opacity: 0.85;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
+  opacity: var(--plate-hero-a);
   -webkit-mask-image: radial-gradient(70% 60% at 50% 55%, #000 20%, transparent 78%);
   mask-image: radial-gradient(70% 60% at 50% 55%, #000 20%, transparent 78%);
   animation: drift 26s var(--ease-in-out) infinite alternate;
@@ -777,7 +1072,8 @@ canvas {
   position: absolute;
   inset: 0;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.7;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
@@ -907,7 +1203,8 @@ canvas {
   position: absolute;
   inset: 0;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.9;
 }
 
@@ -1008,7 +1305,8 @@ canvas {
   width: 62%;
   height: 160%;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.55;
   -webkit-mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 76%);
   mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 76%);
@@ -1307,11 +1605,11 @@ canvas {
   outline: none;
   background: var(--raise-2);
   border-color: var(--line-3);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-halo);
 }
 
 .f [aria-invalid='true'] {
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: var(--w-2);
 }
 
 .f-err {
@@ -1396,16 +1694,16 @@ canvas {
    catching light from above rather than a flat tint. */
 .dock-composer,
 .dock-panel {
-  background: linear-gradient(165deg, rgba(30, 30, 34, 0.5) 0%, rgba(12, 12, 14, 0.42) 100%) !important;
+  background: linear-gradient(165deg, var(--dock-grad-a) 0%, var(--dock-grad-b) 100%) !important;
   backdrop-filter: saturate(190%) blur(44px) !important;
   -webkit-backdrop-filter: saturate(190%) blur(44px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid var(--edge-lit) !important;
   border-radius: 18px !important;
   box-shadow:
     /* lit top edge — the tell that this is a material, not a rectangle */
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
-    0 24px 70px rgba(0, 0, 0, 0.7) !important;
+    inset 0 1px 0 var(--edge-lit),
+    inset 0 -1px 0 var(--edge-dim),
+    0 24px 70px var(--dock-shadow) !important;
 }
 
 .dock-input {
@@ -1421,7 +1719,7 @@ canvas {
 .dock-dot {
   background: var(--w-1) !important;
   color: var(--void) !important;
-  box-shadow: 0 2px 18px rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 2px 18px var(--glow-w) !important;
 }
 
 .dock-dot svg {
@@ -1431,7 +1729,7 @@ canvas {
 .dock-chip {
   font-family: inherit !important;
   font-size: 0.8125rem !important;
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: var(--tint-2) !important;
   border-color: var(--line-2) !important;
   color: var(--w-2) !important;
   backdrop-filter: blur(12px) !important;
@@ -1439,7 +1737,7 @@ canvas {
 
 @media (hover: hover) and (pointer: fine) {
   .dock-chip:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: var(--tint-3) !important;
     border-color: var(--line-3) !important;
     color: var(--w-1) !important;
     transform: none !important;
@@ -1450,13 +1748,13 @@ canvas {
   /* Was 0.07, which disappeared once the panel became transparent — the
      bubble needs its own edge against a moving background, not just the
      panel's. */
-  background: rgba(255, 255, 255, 0.11) !important;
-  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  background: var(--tint-3) !important;
+  border: 1px solid var(--line-1) !important;
   border: 0 !important;
   color: var(--w-1) !important;
   border-radius: 16px 16px 16px 5px !important;
   backdrop-filter: blur(8px) !important;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 12px var(--ink-halo);
 }
 
 .dock-msg-user .dock-bubble {
@@ -1470,12 +1768,12 @@ canvas {
 }
 
 .dock-head {
-  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+  border-bottom-color: var(--line-2) !important;
 }
 
 .dock-head-id strong,
 .dock-log {
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 1px 14px var(--ink-halo);
 }
 
 .dock-head-id strong {
@@ -1537,12 +1835,12 @@ canvas {
    plate, where --w-3 (42%) loses legibility. It gets its own value plus a
    shadow that reads as the type occluding the glow rather than floating in it. */
 .hero-h .dim {
-  color: rgba(255, 255, 255, 0.72);
-  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.55);
+  color: var(--hero-dim);
+  text-shadow: 0 2px 40px var(--ink-halo);
 }
 
 .hero-l {
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 24px var(--ink-halo-soft);
 }
 
 /* ==========================================================================
@@ -1687,7 +1985,8 @@ canvas {
   width: 55%;
   height: 140%;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.4;
   -webkit-mask-image: radial-gradient(58% 58% at 50% 50%, #000, transparent 76%);
   mask-image: radial-gradient(58% 58% at 50% 50%, #000, transparent 76%);
@@ -1717,7 +2016,7 @@ canvas {
 }
 
 .formats li {
-  background: rgba(0, 0, 0, 0.72);
+  background: var(--scrim-3);
   backdrop-filter: blur(8px);
   padding: clamp(24px, 2.8vw, 34px);
   display: grid;
@@ -1858,7 +2157,7 @@ canvas {
 }
 
 .certs-grid li {
-  background: rgba(0, 0, 0, 0.66);
+  background: var(--scrim-2);
   backdrop-filter: blur(8px);
   padding: 18px 20px;
   display: grid;
@@ -1926,7 +2225,7 @@ canvas {
   padding: 12px 20px;
   border: 1px solid var(--line-2);
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--scrim-1);
   backdrop-filter: blur(10px);
   animation: rise 900ms var(--ease-out) both;
   animation-delay: var(--rd);
@@ -2066,7 +2365,7 @@ canvas {
   border-radius: 20px;
   overflow: hidden;
   isolation: isolate;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--tint-1);
 }
 
 .tel-img {
@@ -2076,7 +2375,8 @@ canvas {
   width: 60%;
   height: 180%;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.4;
   -webkit-mask-image: radial-gradient(55% 55% at 50% 50%, #000, transparent 78%);
   mask-image: radial-gradient(55% 55% at 50% 50%, #000, transparent 78%);
@@ -2115,11 +2415,11 @@ canvas {
 
 @keyframes pip {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 0 var(--pulse);
   }
   70%,
   100% {
-    box-shadow: 0 0 0 9px rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 9px transparent;
   }
 }
 
@@ -2172,7 +2472,7 @@ canvas {
 }
 
 .tel-grid li {
-  background: #000;
+  background: var(--void);
   padding: clamp(20px, 2.4vw, 28px);
   display: grid;
   gap: 8px;
@@ -2243,7 +2543,7 @@ canvas {
   gap: 6px;
   font-size: 1rem;
   color: var(--w-1);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), transparent);
+  background: linear-gradient(to top, var(--scrim-4), transparent);
 }
 
 @media (max-width: 700px) {
@@ -2264,7 +2564,8 @@ canvas {
   position: absolute;
   inset: 0;
   z-index: -1;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
   opacity: 0.75;
 }
 
@@ -2334,7 +2635,7 @@ canvas {
   font: inherit;
   font-size: 0.9375rem;
   color: var(--w-1);
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--scrim-1);
   border: 1px solid var(--line-2);
   border-radius: 100px;
   padding: 12px 18px;
@@ -2347,7 +2648,7 @@ canvas {
 .news-form input:focus {
   outline: none;
   border-color: var(--line-3);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px var(--focus-halo);
 }
 
 .news-form .btn {
@@ -2386,7 +2687,8 @@ canvas {
   display: block;
   /* Same rule as the still plates: screen means the black in the frame adds
      nothing and only the light shows, so the plate emits rather than covers. */
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
 }
 
 /* The hero plate is a video now; it keeps the mask and drift the still had */
@@ -2421,10 +2723,10 @@ canvas {
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(120% 40% at 12% 0%, rgba(70, 110, 190, 0.13), transparent 60%),
-    radial-gradient(100% 36% at 88% 34%, rgba(190, 120, 60, 0.1), transparent 62%),
-    radial-gradient(120% 44% at 30% 78%, rgba(60, 150, 140, 0.09), transparent 64%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.022));
+    radial-gradient(120% 40% at 12% 0%, var(--amb-1), transparent 60%),
+    radial-gradient(100% 36% at 88% 34%, var(--amb-2), transparent 62%),
+    radial-gradient(120% 44% at 30% 78%, var(--amb-3), transparent 64%),
+    linear-gradient(180deg, var(--sheen-1), transparent 22%, transparent 78%, var(--sheen-2));
 }
 
 /* A hairline grid over the whole run, fading at both ends so it has no start
@@ -2436,8 +2738,8 @@ canvas {
   z-index: -2;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 84px 84px;
   -webkit-mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
   mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent);
@@ -2615,13 +2917,13 @@ canvas {
 @media (prefers-reduced-transparency: reduce) {
   .dock-composer,
   .dock-panel {
-    background: #0b0b0c !important;
+    background: var(--panel-solid) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border-color: rgba(255, 255, 255, 0.22) !important;
+    border-color: var(--line-3) !important;
   }
   .dock-msg-bot .dock-bubble {
-    background: #1a1a1d !important;
+    background: var(--bubble-solid) !important;
     backdrop-filter: none !important;
     text-shadow: none;
   }
