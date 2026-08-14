@@ -44,6 +44,14 @@ not a palette inversion — it inverts the *mechanic*: the same photographs are
 read as pigment rather than light (`invert(1) hue-rotate(180deg)` under
 `multiply`), which is what `--plate-blend` and `--plate-filter` express.
 
+The light ground follows from that. It is **warm bone (`#f6f3ed`) with warm
+near-black ink (`#17150f`)**, not a neutral grey — if the plates are pigment,
+the surface they print onto has to behave like stock, and cold ink on warm
+stock reads as a printing error. Raises go *lighter*, toward white, exactly as
+they go lighter toward the light in the dark theme: raise always means nearer
+the source. Both themes share one set of layout rules; only colour, plate
+treatment and fills differ.
+
 Three states, resolved in `src/lib/theme.js`: **System** (no attribute, CSS
 follows the OS), **Light** and **Dark** (`data-theme` on `<html>` wins in both
 directions). System is the default, because a two-state toggle silently ignores
@@ -234,8 +242,9 @@ the marketing site at matching viewports:
 - **Both themes**, across every route and viewport: the ground is actually painted, the toggle
   cycles System → Light → Dark, the stored choice survives a reload, and `data-theme` is already
   correct at first paint rather than corrected afterwards.
-- Light-theme contrast measured against the rendered ground with alpha composited: body 7.3:1,
-  mono and breadcrumbs 5.1:1 — `--w-3` was raised from 0.54 to 0.62 because it measured 3.94:1.
+- Light-theme contrast measured against the rendered ground with alpha composited: headings
+  16.5:1, body 7.4:1, mono and breadcrumbs 5.3:1 — `--w-3` was raised after an earlier value
+  measured 3.94:1, under AA.
 - The command palette opens on `/` and `⌘K`, groups across content types, moves with the arrow
   keys, opens with Enter, traps Tab, and closes on Escape from anywhere in the dialog.
 - The marketing site builds and renders in both themes with the same toggle, from the same

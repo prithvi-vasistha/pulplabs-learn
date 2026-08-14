@@ -57,5 +57,5 @@ export function applyMode(mode) {
 
   // Mobile browser chrome should match the page ground, not lag a theme behind.
   const meta = document.querySelector('meta[name="theme-color"]')
-  if (meta) meta.setAttribute('content', resolve(mode) === 'light' ? '#f2f2f3' : '#000000')
+  if (meta) meta.setAttribute('content', resolve(mode) === 'light' ? '#f6f3ed' : '#000000')
 }

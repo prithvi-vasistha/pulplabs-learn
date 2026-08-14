@@ -485,30 +485,36 @@ canvas {
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
   /* --- Ground ----------------------------------------------------------
-     Not #fff. Pure white glares the way pure black crushes, and the hairline
-     grid needs a ground its opaque children can sit on and still read as
-     cells. */
+     Paper, not a grey card. The plates are read as pigment in this theme, so
+     the surface they print onto has to behave like stock: a warm bone that
+     white can float above. A neutral grey makes the same plates look muddy
+     and the whole page look unfinished rather than chosen.
+
+     Raises go *lighter*, toward white, exactly as they go lighter toward the
+     light in the dark theme. Raise always means nearer the source. */
   color-scheme: light;
 
-  --void: #f2f2f3;
-  --raise-1: rgba(0, 0, 0, 0.03);
-  --raise-2: rgba(0, 0, 0, 0.05);
-  --raise-3: rgba(0, 0, 0, 0.08);
+  --void: #f6f3ed;
+  --raise-1: rgba(255, 255, 255, 0.6);
+  --raise-2: rgba(255, 255, 255, 0.9);
+  --raise-3: #ffffff;
 
   /* --- Ink -------------------------------------------------------------
-     Not #000, for the same reason. Body sits at 0.72 rather than the dark
-     theme's 0.62: white type on black blooms and has to be held back, dark
-     type on paper does not and can afford the contrast. */
-  --w-1: #101011;
-  --w-2: rgba(16, 16, 17, 0.72);
-  --w-3: rgba(16, 16, 17, 0.62);
-  --w-4: rgba(16, 16, 17, 0.42);
+     Warm near-black. Cold ink on warm stock reads as a printing error. Body
+     sits at 0.74 rather than the dark theme's 0.62: white type on black
+     blooms and has to be held back, dark type on paper does not and can
+     afford the contrast. */
+  --w-1: #17150f;
+  --w-2: rgba(23, 21, 15, 0.74);
+  --w-3: rgba(23, 21, 15, 0.64);
+  --w-4: rgba(23, 21, 15, 0.44);
 
-  --line-1: rgba(0, 0, 0, 0.1);
-  --line-2: rgba(0, 0, 0, 0.16);
-  --line-3: rgba(0, 0, 0, 0.3);
+  /* Hairlines carry the same warmth, or they read as pencil on cream. */
+  --line-1: rgba(38, 32, 18, 0.1);
+  --line-2: rgba(38, 32, 18, 0.17);
+  --line-3: rgba(38, 32, 18, 0.3);
 
-  --signal: #101011;
+  --signal: #17150f;
 
   /* Pigment, not light. See --plate-blend above. */
   --plate-blend: multiply;
@@ -517,33 +523,33 @@ canvas {
      beside it, so it carries its own weight. */
   --plate-hero-a: 0.38;
 
-  --scrim-1: rgba(242, 242, 243, 0.62);
-  --scrim-2: rgba(242, 242, 243, 0.74);
-  --scrim-3: rgba(242, 242, 243, 0.8);
-  --scrim-4: rgba(242, 242, 243, 0.94);
+  --scrim-1: rgba(246, 243, 237, 0.62);
+  --scrim-2: rgba(246, 243, 237, 0.76);
+  --scrim-3: rgba(246, 243, 237, 0.82);
+  --scrim-4: rgba(246, 243, 237, 0.94);
 
-  --ink-halo: rgba(255, 255, 255, 0.8);
-  --ink-halo-soft: rgba(255, 255, 255, 0.85);
-  --hero-dim: rgba(16, 16, 17, 0.66);
+  --ink-halo: rgba(255, 253, 248, 0.82);
+  --ink-halo-soft: rgba(255, 253, 248, 0.88);
+  --hero-dim: rgba(23, 21, 15, 0.66);
 
-  --focus-halo: rgba(0, 0, 0, 0.1);
-  --select-bg: rgba(16, 16, 17, 0.14);
-  --btn-hover: rgba(16, 16, 17, 0.86);
-  --sheen-1: rgba(0, 0, 0, 0.022);
-  --sheen-2: rgba(0, 0, 0, 0.018);
-  --grid-line: rgba(0, 0, 0, 0.05);
-  --tint-1: rgba(0, 0, 0, 0.02);
-  --tint-2: rgba(0, 0, 0, 0.04);
-  --tint-3: rgba(0, 0, 0, 0.07);
-  --edge-lit: rgba(0, 0, 0, 0.14);
-  --edge-dim: rgba(0, 0, 0, 0.04);
-  --glow-w: rgba(0, 0, 0, 0.16);
-  --pulse: rgba(16, 16, 17, 0.4);
-  --panel-solid: #ffffff;
-  --bubble-solid: #e9e9ea;
-  --dock-grad-a: rgba(255, 255, 255, 0.72);
-  --dock-grad-b: rgba(245, 245, 246, 0.62);
-  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --focus-halo: rgba(38, 32, 18, 0.12);
+  --select-bg: rgba(23, 21, 15, 0.14);
+  --btn-hover: rgba(23, 21, 15, 0.86);
+  --sheen-1: rgba(38, 32, 18, 0.022);
+  --sheen-2: rgba(38, 32, 18, 0.018);
+  --grid-line: rgba(38, 32, 18, 0.05);
+  --tint-1: rgba(255, 255, 255, 0.5);
+  --tint-2: rgba(255, 255, 255, 0.66);
+  --tint-3: rgba(255, 255, 255, 0.86);
+  --edge-lit: rgba(38, 32, 18, 0.14);
+  --edge-dim: rgba(38, 32, 18, 0.04);
+  --glow-w: rgba(38, 32, 18, 0.16);
+  --pulse: rgba(23, 21, 15, 0.4);
+  --panel-solid: #fffdf9;
+  --bubble-solid: #ece7dd;
+  --dock-grad-a: rgba(255, 253, 249, 0.78);
+  --dock-grad-b: rgba(246, 243, 237, 0.66);
+  --dock-shadow: rgba(38, 32, 18, 0.14);
   --amb-1: rgba(70, 110, 190, 0.1);
   --amb-2: rgba(190, 120, 60, 0.08);
   --amb-3: rgba(60, 150, 140, 0.07);
@@ -552,30 +558,36 @@ canvas {
 
 :root[data-theme='light'] {
   /* --- Ground ----------------------------------------------------------
-     Not #fff. Pure white glares the way pure black crushes, and the hairline
-     grid needs a ground its opaque children can sit on and still read as
-     cells. */
+     Paper, not a grey card. The plates are read as pigment in this theme, so
+     the surface they print onto has to behave like stock: a warm bone that
+     white can float above. A neutral grey makes the same plates look muddy
+     and the whole page look unfinished rather than chosen.
+
+     Raises go *lighter*, toward white, exactly as they go lighter toward the
+     light in the dark theme. Raise always means nearer the source. */
   color-scheme: light;
 
-  --void: #f2f2f3;
-  --raise-1: rgba(0, 0, 0, 0.03);
-  --raise-2: rgba(0, 0, 0, 0.05);
-  --raise-3: rgba(0, 0, 0, 0.08);
+  --void: #f6f3ed;
+  --raise-1: rgba(255, 255, 255, 0.6);
+  --raise-2: rgba(255, 255, 255, 0.9);
+  --raise-3: #ffffff;
 
   /* --- Ink -------------------------------------------------------------
-     Not #000, for the same reason. Body sits at 0.72 rather than the dark
-     theme's 0.62: white type on black blooms and has to be held back, dark
-     type on paper does not and can afford the contrast. */
-  --w-1: #101011;
-  --w-2: rgba(16, 16, 17, 0.72);
-  --w-3: rgba(16, 16, 17, 0.62);
-  --w-4: rgba(16, 16, 17, 0.42);
+     Warm near-black. Cold ink on warm stock reads as a printing error. Body
+     sits at 0.74 rather than the dark theme's 0.62: white type on black
+     blooms and has to be held back, dark type on paper does not and can
+     afford the contrast. */
+  --w-1: #17150f;
+  --w-2: rgba(23, 21, 15, 0.74);
+  --w-3: rgba(23, 21, 15, 0.64);
+  --w-4: rgba(23, 21, 15, 0.44);
 
-  --line-1: rgba(0, 0, 0, 0.1);
-  --line-2: rgba(0, 0, 0, 0.16);
-  --line-3: rgba(0, 0, 0, 0.3);
+  /* Hairlines carry the same warmth, or they read as pencil on cream. */
+  --line-1: rgba(38, 32, 18, 0.1);
+  --line-2: rgba(38, 32, 18, 0.17);
+  --line-3: rgba(38, 32, 18, 0.3);
 
-  --signal: #101011;
+  --signal: #17150f;
 
   /* Pigment, not light. See --plate-blend above. */
   --plate-blend: multiply;
@@ -584,33 +596,33 @@ canvas {
      beside it, so it carries its own weight. */
   --plate-hero-a: 0.38;
 
-  --scrim-1: rgba(242, 242, 243, 0.62);
-  --scrim-2: rgba(242, 242, 243, 0.74);
-  --scrim-3: rgba(242, 242, 243, 0.8);
-  --scrim-4: rgba(242, 242, 243, 0.94);
+  --scrim-1: rgba(246, 243, 237, 0.62);
+  --scrim-2: rgba(246, 243, 237, 0.76);
+  --scrim-3: rgba(246, 243, 237, 0.82);
+  --scrim-4: rgba(246, 243, 237, 0.94);
 
-  --ink-halo: rgba(255, 255, 255, 0.8);
-  --ink-halo-soft: rgba(255, 255, 255, 0.85);
-  --hero-dim: rgba(16, 16, 17, 0.66);
+  --ink-halo: rgba(255, 253, 248, 0.82);
+  --ink-halo-soft: rgba(255, 253, 248, 0.88);
+  --hero-dim: rgba(23, 21, 15, 0.66);
 
-  --focus-halo: rgba(0, 0, 0, 0.1);
-  --select-bg: rgba(16, 16, 17, 0.14);
-  --btn-hover: rgba(16, 16, 17, 0.86);
-  --sheen-1: rgba(0, 0, 0, 0.022);
-  --sheen-2: rgba(0, 0, 0, 0.018);
-  --grid-line: rgba(0, 0, 0, 0.05);
-  --tint-1: rgba(0, 0, 0, 0.02);
-  --tint-2: rgba(0, 0, 0, 0.04);
-  --tint-3: rgba(0, 0, 0, 0.07);
-  --edge-lit: rgba(0, 0, 0, 0.14);
-  --edge-dim: rgba(0, 0, 0, 0.04);
-  --glow-w: rgba(0, 0, 0, 0.16);
-  --pulse: rgba(16, 16, 17, 0.4);
-  --panel-solid: #ffffff;
-  --bubble-solid: #e9e9ea;
-  --dock-grad-a: rgba(255, 255, 255, 0.72);
-  --dock-grad-b: rgba(245, 245, 246, 0.62);
-  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --focus-halo: rgba(38, 32, 18, 0.12);
+  --select-bg: rgba(23, 21, 15, 0.14);
+  --btn-hover: rgba(23, 21, 15, 0.86);
+  --sheen-1: rgba(38, 32, 18, 0.022);
+  --sheen-2: rgba(38, 32, 18, 0.018);
+  --grid-line: rgba(38, 32, 18, 0.05);
+  --tint-1: rgba(255, 255, 255, 0.5);
+  --tint-2: rgba(255, 255, 255, 0.66);
+  --tint-3: rgba(255, 255, 255, 0.86);
+  --edge-lit: rgba(38, 32, 18, 0.14);
+  --edge-dim: rgba(38, 32, 18, 0.04);
+  --glow-w: rgba(38, 32, 18, 0.16);
+  --pulse: rgba(23, 21, 15, 0.4);
+  --panel-solid: #fffdf9;
+  --bubble-solid: #ece7dd;
+  --dock-grad-a: rgba(255, 253, 249, 0.78);
+  --dock-grad-b: rgba(246, 243, 237, 0.66);
+  --dock-shadow: rgba(38, 32, 18, 0.14);
   --amb-1: rgba(70, 110, 190, 0.1);
   --amb-2: rgba(190, 120, 60, 0.08);
   --amb-3: rgba(60, 150, 140, 0.07);
@@ -620,33 +632,33 @@ canvas {
    when a reader on a light system explicitly asks for dark. */
 @media (prefers-contrast: more) {
   :root[data-theme='light'] {
-    --w-2: rgba(16, 16, 17, 0.9);
-    --w-3: rgba(16, 16, 17, 0.75);
-    --line-1: rgba(0, 0, 0, 0.3);
-    --line-2: rgba(0, 0, 0, 0.42);
+    --w-2: rgba(23, 21, 15, 0.9);
+    --w-3: rgba(23, 21, 15, 0.76);
+    --line-1: rgba(38, 32, 18, 0.32);
+    --line-2: rgba(38, 32, 18, 0.44);
   }
 }
 
 @media (prefers-contrast: more) and (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
-    --w-2: rgba(16, 16, 17, 0.9);
-    --w-3: rgba(16, 16, 17, 0.75);
-    --line-1: rgba(0, 0, 0, 0.3);
-    --line-2: rgba(0, 0, 0, 0.42);
+    --w-2: rgba(23, 21, 15, 0.9);
+    --w-3: rgba(23, 21, 15, 0.76);
+    --line-1: rgba(38, 32, 18, 0.32);
+    --line-2: rgba(38, 32, 18, 0.44);
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   :root[data-theme='light'] {
-    --raise-1: #eaeaeb;
-    --raise-2: #e2e2e3;
+    --raise-1: #fbf9f5;
+    --raise-2: #fffdf9;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
-    --raise-1: #eaeaeb;
-    --raise-2: #e2e2e3;
+    --raise-1: #fbf9f5;
+    --raise-2: #fffdf9;
   }
 }
 
