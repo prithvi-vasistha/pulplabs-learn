@@ -2,9 +2,11 @@ import { notFound } from 'next/navigation'
 import DocsPage from '@/views/void/DocsPage'
 import { getAllDocParams, getDocPage } from '@/lib/content'
 
-export async function generateStaticParams() {
-  return getAllDocParams()
-}
+/* Content lives in Postgres, so this route is rendered on demand: adding a
+   row makes a page appear without a rebuild. Prerendering the whole catalogue
+   at build time would need the database up during `next build` and would go
+   stale the moment anything changed. */
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }) {
   const { project, page } = await params
@@ -25,5 +27,3 @@ export default async function Page({ params }) {
 
   return <DocsPage data={data} />
 }
-
-export const dynamicParams = false

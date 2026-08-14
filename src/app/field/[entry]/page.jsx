@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation'
 import FieldEntry from '@/views/void/FieldEntry'
-import { getFieldEntries, getFieldEntry, getFieldSlugs } from '@/lib/content'
+import { getFieldEntries, getFieldEntry, getFieldSlugs, getSettings } from '@/lib/content'
 
-export async function generateStaticParams() {
-  const slugs = await getFieldSlugs()
-  return slugs.map((entry) => ({ entry }))
-}
+/* Content lives in Postgres, so this route is rendered on demand: adding a
+   row makes a page appear without a rebuild. Prerendering the whole catalogue
+   at build time would need the database up during `next build` and would go
+   stale the moment anything changed. */
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }) {
   const { entry: slug } = await params
@@ -28,7 +29,13 @@ export default async function Page({ params }) {
   const index = all.findIndex((e) => e.slug === slug)
   const next = all[(index + 1) % all.length]
 
-  return <FieldEntry entry={entry} next={next.slug === slug ? null : next} />
-}
+  const settings = await getSettings()
 
-export const dynamicParams = false
+  return (
+    <FieldEntry
+      entry={entry}
+      next={next.slug === slug ? null : next}
+      fieldNote={settings.fieldNote}
+    />
+  )
+}

@@ -8,10 +8,9 @@ import Chevron from '@/components/void/Icons'
 import Prose from '@/components/learn/Prose'
 import VideoEmbed from '@/components/learn/VideoEmbed'
 import { Badge, Crumbs, MetaRow, SectionHead } from '@/components/learn/ui'
-import { fieldNote } from '@/lib/content'
 import { formatDate, formatMinutes } from '@/lib/format'
 
-export default function FieldEntry({ entry, next }) {
+export default function FieldEntry({ entry, next, fieldNote }) {
   return (
     <div className="grain">
       <Nav />

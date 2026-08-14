@@ -5,7 +5,7 @@ import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { ProjectCard } from '@/components/learn/cards'
 import { PageHead, SectionHead } from '@/components/learn/ui'
-import { catalogueNote, getDocSets, getProjects } from '@/lib/content'
+import { getDocSets, getProjects, getSettings } from '@/lib/content'
 import { formatCount } from '@/lib/format'
 
 /**
@@ -15,7 +15,7 @@ import { formatCount } from '@/lib/format'
  * documentation or says it has none.
  */
 export default async function Projects() {
-  const [projects, docSets] = await Promise.all([getProjects(), getDocSets()])
+  const [projects, docSets, settings] = await Promise.all([getProjects(), getDocSets(), getSettings()])
   const documented = projects.filter((p) => p.docs)
   const totalPages = docSets.reduce((total, set) => total + set.pageCount, 0)
 
@@ -58,7 +58,7 @@ export default async function Projects() {
             </ul>
 
             <p className="note" style={{ marginTop: 28 }}>
-              {catalogueNote}
+              {settings.catalogueNote}
             </p>
           </div>
         </section>

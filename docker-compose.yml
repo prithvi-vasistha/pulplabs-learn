@@ -1,0 +1,60 @@
+# =============================================================================
+# The same three processes, one container each.
+#
+# This is the shape to deploy: Postgres can be swapped for a managed instance,
+# the service and the UI scale independently, and a crash in one does not take
+# the others with it. `Dockerfile` builds all three into a single image instead
+# — use that to try the project, use this to run it.
+#
+#   docker compose up --build      → http://localhost:3000
+# =============================================================================
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: learn
+      POSTGRES_USER: learn
+      POSTGRES_PASSWORD: learn
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U learn -d learn']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  service:
+    build:
+      context: .
+      dockerfile: service/Dockerfile
+    environment:
+      DATABASE_URL: postgres://learn:learn@db:5432/learn
+      PORT: 4000
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:4000/health']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: web.Dockerfile
+    environment:
+      CONTENT_API_URL: http://service:4000
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      service:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  db-data:

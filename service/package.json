@@ -1,0 +1,16 @@
+{
+  "name": "pulplabs-learn-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Content service for PulpLabs Learn. Reads Postgres, serves JSON, and is the only thing that ever sees an exam answer key.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/index.js",
+    "seed": "node src/seed.js",
+    "seed:prune": "node src/seed.js --prune"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

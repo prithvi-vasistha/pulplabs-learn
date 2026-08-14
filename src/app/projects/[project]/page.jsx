@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation'
 import ProjectDetail from '@/views/void/ProjectDetail'
 import { getProject, getProjects } from '@/lib/content'
 
-export async function generateStaticParams() {
-  const projects = await getProjects()
-  return projects.map((p) => ({ project: p.slug }))
-}
+/* Content lives in Postgres, so this route is rendered on demand: adding a
+   row makes a page appear without a rebuild. Prerendering the whole catalogue
+   at build time would need the database up during `next build` and would go
+   stale the moment anything changed. */
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }) {
   const { project: slug } = await params
@@ -30,5 +31,3 @@ export default async function Page({ params }) {
 
   return <ProjectDetail project={project} next={next.slug === slug ? null : next} />
 }
-
-export const dynamicParams = false

@@ -5,10 +5,9 @@ import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { PathModules, PathStart } from '@/components/learn/PathProgress'
 import { Crumbs, Difficulty, MetaRow, SectionHead } from '@/components/learn/ui'
-import { disclosure } from '@/lib/content'
 import { formatCount, formatMinutes } from '@/lib/format'
 
-export default function PathDetail({ path, exams, projects, technologies, nextPath }) {
+export default function PathDetail({ path, exams, projects, technologies, nextPath, disclosure }) {
   return (
     <div className="grain">
       <Nav />

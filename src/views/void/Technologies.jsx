@@ -4,10 +4,10 @@ import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import TechExplorer from '@/components/learn/TechExplorer'
 import { PageHead } from '@/components/learn/ui'
-import { getTechnologies, technologyCategories } from '@/lib/content'
+import { getSettings, getTechnologies } from '@/lib/content'
 
 export default async function Technologies() {
-  const technologies = await getTechnologies()
+  const [technologies, settings] = await Promise.all([getTechnologies(), getSettings()])
 
   return (
     <div className="grain">
@@ -32,7 +32,7 @@ export default async function Technologies() {
 
         <section className="sec-sm">
           <div className="shell-wide">
-            <TechExplorer technologies={technologies} categories={technologyCategories} />
+            <TechExplorer technologies={technologies} categories={settings.technologyCategories ?? []} />
           </div>
         </section>
 

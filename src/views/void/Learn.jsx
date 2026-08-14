@@ -7,15 +7,16 @@ import Cover from '@/components/void/Cover'
 import CourseCatalogue from '@/components/learn/CourseCatalogue'
 import { TechCell } from '@/components/learn/cards'
 import { PageHead, SectionHead } from '@/components/learn/ui'
-import { disclosure, getExams, getPaths, getProgressCatalogue, getTechnologies } from '@/lib/content'
+import { getExams, getPaths, getProgressCatalogue, getSettings, getTechnologies } from '@/lib/content'
 import { formatCount, formatMinutes } from '@/lib/format'
 
 export default async function Learn() {
-  const [paths, catalogue, technologies, exams] = await Promise.all([
+  const [paths, catalogue, technologies, exams, settings] = await Promise.all([
     getPaths(),
     getProgressCatalogue(),
     getTechnologies(),
     getExams(),
+    getSettings(),
   ])
 
   const totalMinutes = paths.reduce((total, path) => total + path.minutes, 0)
@@ -125,7 +126,7 @@ export default async function Learn() {
             </div>
 
             <p className="note" style={{ marginTop: 32 }}>
-              {disclosure}
+              {settings.disclosure}
             </p>
           </div>
         </section>

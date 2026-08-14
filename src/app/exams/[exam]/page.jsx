@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation'
 import ExamDetail from '@/views/void/ExamDetail'
 import { getExam, getExamSlugs } from '@/lib/content'
 
-export async function generateStaticParams() {
-  const slugs = await getExamSlugs()
-  return slugs.map((exam) => ({ exam }))
-}
+/* Content lives in Postgres, so this route is rendered on demand: adding a
+   row makes a page appear without a rebuild. Prerendering the whole catalogue
+   at build time would need the database up during `next build` and would go
+   stale the moment anything changed. */
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }) {
   const { exam: slug } = await params

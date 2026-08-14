@@ -7,12 +7,12 @@ import ContinueLearning from '@/components/learn/ContinueLearning'
 import CourseCard, { AUDIENCE, PathCourseCard } from '@/components/learn/CourseCard'
 import { SectionHead } from '@/components/learn/ui'
 import {
-  disclosure,
   getExams,
   getFieldEntries,
   getPaths,
   getProgressCatalogue,
   getProjects,
+  getSettings,
   getTechnologies,
 } from '@/lib/content'
 import { formatCount, formatMinutes, levelRank } from '@/lib/format'
@@ -25,13 +25,14 @@ import { formatCount, formatMinutes, levelRank } from '@/lib/format'
  * the first screen rather than below a page of introduction.
  */
 export default async function Home() {
-  const [paths, catalogue, exams, projects, field, technologies] = await Promise.all([
+  const [paths, catalogue, exams, projects, field, technologies, settings] = await Promise.all([
     getPaths(),
     getProgressCatalogue(),
     getExams(),
     getProjects(),
     getFieldEntries(),
     getTechnologies(),
+    getSettings(),
   ])
 
   const totalLessons = paths.reduce((t, p) => t + p.lessonCount, 0)
@@ -100,7 +101,7 @@ export default async function Home() {
             </ul>
 
             <p className="note" style={{ marginTop: 26 }}>
-              {disclosure}
+              {settings.disclosure}
             </p>
           </div>
         </section>

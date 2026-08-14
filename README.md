@@ -4,13 +4,77 @@ Certification preparation for AI engineers: structured tracks, mock exams that r
 point back at the lesson behind each gap, technology references, case studies and interviews from
 real engagements, and documentation for the projects PulpLabs builds in the open.
 
+## Run it
+
 ```bash
-npm install
-npm run dev      # http://localhost:3000
-npm run build && npm start
+docker build -t pulplabs-learn .
+docker run --rm -p 3000:3000 -v pulplabs-learn-db:/var/lib/postgresql/data pulplabs-learn
 ```
 
-Requires Node 20+. The only runtime dependencies are `next`, `react`, and `react-dom`.
+One container: Postgres, the content service and the UI. It creates the
+cluster, applies the schema, seeds the content and comes up on
+**http://localhost:3000**. The volume keeps the database across restarts; drop
+it and the next boot rebuilds from the seed.
+
+`docker-compose.yml` runs the same three processes as three containers, which
+is the shape to deploy — Postgres becomes a managed instance, and the service
+and UI scale separately.
+
+### Without Docker
+
+```bash
+npm install && (cd service && npm install)
+
+# postgres somewhere, then
+DATABASE_URL=postgres://localhost/learn npm start --prefix service   # :4000
+CONTENT_API_URL=http://localhost:4000 npm run dev                    # :3000
+```
+
+Requires Node 20+. The UI's only runtime dependencies are `next`, `react` and
+`react-dom`; the service's is `pg`.
+
+---
+
+## Architecture
+
+```
+browser ──▶ Next.js (UI)  ──▶ service (JSON over HTTP) ──▶ Postgres
+                                    │
+                              the only process that
+                              ever reads an answer key
+```
+
+Three processes, one image. The split matters for one reason above the others:
+`questions.correct` and `questions.explanation` are columns the candidate
+routes do not select, so the answer key is not stripped in transit — it never
+enters the process that renders the page.
+
+**`src/data/*.js` is still the authoring source.** It is readable, reviewable
+and diffable in a way a SQL dump is not. `npm run export:content` turns it into
+`service/seed/content.json`, and the service seeds from that on every boot.
+Content travels one way:
+
+```
+src/data/*.js  →  service/seed/content.json  →  postgres  →  service  →  UI
+```
+
+Schema and seed are both idempotent, so a cold start and a restart take the
+same path — the path that runs in production is the one exercised in
+development. `npm run seed:prune` is the only thing that deletes.
+
+### The database
+
+Anything *queried* — slugs, levels, relationships, topics — is a column.
+Anything *authored* — a lesson body, a doc page, a feature list — is JSONB.
+Normalising block-structured prose into rows buys nothing: it is always read
+whole, never filtered on, and its shape is already validated by the renderer.
+
+### Why the pages are dynamic
+
+Every data route is `force-dynamic` and every fetch is `no-store`. Edit a row,
+reload, see it. Prerendering the catalogue would need Postgres up during
+`next build` and would go stale the moment anything changed — which is the
+opposite of what putting content in a database is for.
 
 ---
 
@@ -136,8 +200,9 @@ Technology ──┬── Track ── Module ── Lesson ── Exercise
              └── Build ── DocumentationSet ── DocumentationPage
 ```
 
-`src/lib/content.js` is the only thing pages talk to. Every accessor is `async` even though the data
-is static today, so replacing the imports with `fetch` does not touch a single call site.
+`src/lib/content.js` is the only thing pages talk to. Every accessor was `async` from the start on
+the bet that "replacing the imports with `fetch` does not touch a single call site" — that bet was
+collected when the content moved to Postgres, and no page component changed.
 
 Lessons and documentation share one block model (`p`, `h2`, `h3`, `list`, `code`, `callout`,
 `table`, `figure`, `steps`, `quote`) and one renderer (`components/learn/Prose.jsx`). That is why a
@@ -145,13 +210,12 @@ lesson and a documentation page are typographically identical.
 
 ### The assessment engine
 
-`src/lib/exam-engine.js` is pure: `toCandidateExam()` strips `correct` and `explanation`, and
-`grade()` computes score, per-topic performance, strong and weak areas, and recommendations.
+`service/src/content.js` owns both halves: `getCandidateExam()` runs a query that does not select
+`correct` or `explanation`, and `gradeAttempt()` is the only query that does.
 
-Answers are **not** in the browser during an attempt. The attempt page renders the stripped exam;
-submission calls a server action (`src/app/exams/actions.js`) which grades against the full bank and
-returns the result with explanations attached. Adding a question bank to `src/data/exams/` requires
-no change to the engine and no change to the UI.
+Answers are **not** in the browser during an attempt, and they are not in the web process either.
+Submission calls a server action (`src/app/exams/actions.js`) which asks the service to grade, and
+gets back the result with explanations attached. Adding a question bank means adding rows.
 
 ### Progress
 
@@ -253,6 +317,14 @@ the marketing site at matching viewports:
 - One `h1` and one `main` per page, no heading-level skips, no duplicate ids, every control has an
   accessible name, every decorative image has `alt=""`, and focus rings are present on tab stops.
 - Mobile navigation is the system's sheet: it locks scroll, closes on Escape, and returns focus.
+- **The containerised stack, end to end**: the image builds, boots Postgres, applies the schema,
+  seeds 15 technologies / 4 courses / 24 lessons / 6 exams / 66 questions / 4 projects / 20 doc
+  pages / 7 field entries, and serves every route. A restart reuses the volume and reseeds
+  idempotently.
+- **The answer key is not in the attempt page** — asserted against the rendered HTML of the running
+  container, and the candidate API response carries only `id, type, topic, difficulty, prompt,
+  options`.
+- Rendered counts match the seed on every index page.
 - The video facade contacts no video host before activation, is keyboard-operable, and loads a
   titled `youtube-nocookie.com` embed on demand — asserted in a browser, not assumed.
 - **Both themes**, across every route and viewport: the ground is actually painted, the toggle

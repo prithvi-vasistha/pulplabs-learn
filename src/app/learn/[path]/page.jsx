@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation'
 import PathDetail from '@/views/void/PathDetail'
-import { getExams, getPath, getPaths, getProjects, getTechnologies } from '@/lib/content'
+import { getSettings, getExams, getPath, getPaths, getProjects, getTechnologies } from '@/lib/content'
 
-export async function generateStaticParams() {
-  const paths = await getPaths()
-  return paths.map((p) => ({ path: p.slug }))
-}
+/* Content lives in Postgres, so this route is rendered on demand: adding a
+   row makes a page appear without a rebuild. Prerendering the whole catalogue
+   at build time would need the database up during `next build` and would go
+   stale the moment anything changed. */
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }) {
   const { path: slug } = await params
@@ -24,11 +25,12 @@ export default async function Page({ params }) {
   const path = await getPath(slug)
   if (!path) notFound()
 
-  const [allPaths, allExams, allProjects, allTechnologies] = await Promise.all([
+  const [allPaths, allExams, allProjects, allTechnologies, settings] = await Promise.all([
     getPaths(),
     getExams(),
     getProjects(),
     getTechnologies(),
+    getSettings(),
   ])
 
   const exams = path.exams.map((s) => allExams.find((e) => e.slug === s)).filter(Boolean)
@@ -40,6 +42,7 @@ export default async function Page({ params }) {
 
   return (
     <PathDetail
+      disclosure={settings.disclosure}
       path={path}
       exams={exams}
       projects={projects}
@@ -48,5 +51,3 @@ export default async function Page({ params }) {
     />
   )
 }
-
-export const dynamicParams = false

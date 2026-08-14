@@ -10,6 +10,10 @@ import {
 
 const BASE = 'https://learn.pulplabs.dev'
 
+/* Built from the database, so it is generated per request rather than at build
+   time — a sitemap frozen at build would stop listing new content. */
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap() {
   const [paths, lessons, technologies, exams, projects, docPages, fieldSlugs] = await Promise.all([
     getPaths(),

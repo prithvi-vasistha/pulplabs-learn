@@ -5,10 +5,10 @@ import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import FieldGrid from '@/components/learn/FieldGrid'
 import { PageHead, SectionHead } from '@/components/learn/ui'
-import { fieldKinds, fieldNote, getFieldEntries } from '@/lib/content'
+import { getFieldEntries, getSettings } from '@/lib/content'
 
 export default async function Field() {
-  const entries = await getFieldEntries()
+  const [entries, settings] = await Promise.all([getFieldEntries(), getSettings()])
   const interviews = entries.filter((e) => e.kind === 'Interview')
 
   return (
@@ -35,10 +35,10 @@ export default async function Field() {
 
         <section className="sec-sm" id="entries" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
           <div className="shell-wide">
-            <FieldGrid entries={entries} kinds={fieldKinds} />
+            <FieldGrid entries={entries} kinds={settings.fieldKinds ?? []} />
 
             <p className="note" style={{ marginTop: 28 }}>
-              {fieldNote}
+              {settings.fieldNote}
             </p>
           </div>
         </section>
