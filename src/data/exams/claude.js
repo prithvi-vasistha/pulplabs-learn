@@ -13,6 +13,7 @@
 
 export const claudeArchitect = {
   slug: 'claude-architect',
+  family: 'Claude certifications',
   title: 'Claude Certified Architect — Mock Exam',
   summary:
     'Scenario questions on model selection, context strategy, retrieval boundaries, integration design, evaluation and production operations.',
@@ -239,6 +240,7 @@ export const claudeArchitect = {
 
 export const claudeDeveloper = {
   slug: 'claude-developer',
+  family: 'Claude certifications',
   title: 'Claude Certified Developer — Mock Exam',
   summary:
     'The request surface in detail: content blocks and stop reasons, streaming, the tool-use exchange, structured output, caching, and error classification.',

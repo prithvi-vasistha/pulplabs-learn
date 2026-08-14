@@ -34,6 +34,9 @@ export const fieldEntries = [
     kind: 'Case study',
     title: 'Quote turnaround, from two days to twenty minutes',
     client: 'Power & Pack Solutions',
+    // Generated placeholder mark. Drop a real file in public/logos/ and set
+    // logo: '/logos/power-and-pack.svg' to replace it.
+    logo: null,
     sector: 'Manufacturing · Power and packaging',
     summary:
       'A quoting workflow that depended on a handful of people holding the pricing rules in their heads, rebuilt so the rules live in the system and the people review the output.',
@@ -114,6 +117,7 @@ draft quote for review                     ← a person still signs it`,
     kind: 'Case study',
     title: 'Keeping a research coding framework, losing the tagging',
     client: 'Urban Ethnographers',
+    logo: null,
     sector: 'Research · Urban ethnography',
     summary:
       'Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.',
@@ -344,12 +348,20 @@ draft quote for review                     ← a person still signs it`,
     published: null,
     minutes: 28,
     plate: 'aperture-glow',
+    /* SAMPLE VIDEO — not a PulpLabs recording.
+       A third-party talk on the same subject, wired up so the player can be
+       seen working end to end. `external: true` makes the interface say so on
+       the frame, because an unlabelled third-party video sitting under a
+       PulpLabs interview heading would read as ours. Replace `id` with the
+       real recording and drop `external`/`credit` when the edit is done. */
     video: {
       provider: 'youtube',
-      id: null,
-      title: 'Memory that lasts longer than the context window',
+      id: 'YL8KsWTlCKI',
+      external: true,
+      credit: 'Sample — third-party video on the same subject',
+      title: 'Solving Claude Code’s short-term memory problem',
       duration: '28 min',
-      note: 'Recorded. Publishing once the edit is finished.',
+      note: 'Our own recording publishes once the edit is finished.',
     },
     people: [{ name: 'Name Surname', role: 'Engineering, PulpLabs' }],
     facts: [

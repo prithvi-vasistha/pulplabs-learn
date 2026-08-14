@@ -3198,155 +3198,104 @@ mark {
   pointer-events: none;
 }
 
-/* ---- light ---- */
+/* Dark is the default, so it is the bare rule. Light is opted into. */
 .cv-ember {
-  --cv-bg: #ffffff;
-  --cv-1: #ffb4a2;
-  --cv-2: #ffd6a5;
-  --cv-3: #ff8fa3;
-}
-.cv-kelp {
-  --cv-bg: #ffffff;
-  --cv-1: #a8e6cf;
-  --cv-2: #cfe8a9;
-  --cv-3: #7fd8be;
-}
-.cv-iris {
-  --cv-bg: #ffffff;
-  --cv-1: #c3b1e1;
-  --cv-2: #b8c0ff;
-  --cv-3: #ffc2e2;
-}
-.cv-lagoon {
-  --cv-bg: #ffffff;
-  --cv-1: #9fe0d8;
-  --cv-2: #b4f0c8;
-  --cv-3: #8fd3e8;
-}
-.cv-clay {
-  --cv-bg: #ffffff;
-  --cv-1: #f5c0a0;
-  --cv-2: #efd9b4;
-  --cv-3: #e8a87c;
-}
-.cv-orchid {
-  --cv-bg: #ffffff;
-  --cv-1: #e8b4f0;
-  --cv-2: #d8a7e8;
-  --cv-3: #f4a6c8;
-}
-.cv-meadow {
-  --cv-bg: #ffffff;
-  --cv-1: #d4e09b;
-  --cv-2: #f0eda0;
-  --cv-3: #b8d8a0;
-}
-.cv-dusk {
-  --cv-bg: #ffffff;
-  --cv-1: #b5a7e6;
-  --cv-2: #f0b7c4;
-  --cv-3: #ffcfa8;
-}
-
-/* ---- dark: deeper and more saturated, so they emit against black ---- */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .cv-ember {
-    --cv-bg: #0b0b0c;
-    --cv-1: #ff6b4a;
-    --cv-2: #ffa94d;
-    --cv-3: #ff5c8a;
-  }
-  :root:not([data-theme='light']) .cv-kelp {
-    --cv-bg: #0b0b0c;
-    --cv-1: #2dd4a0;
-    --cv-2: #8fd14f;
-    --cv-3: #14b8a6;
-  }
-  :root:not([data-theme='light']) .cv-iris {
-    --cv-bg: #0b0b0c;
-    --cv-1: #8b6fe8;
-    --cv-2: #6c7bff;
-    --cv-3: #e85fa8;
-  }
-  :root:not([data-theme='light']) .cv-lagoon {
-    --cv-bg: #0b0b0c;
-    --cv-1: #22d3c6;
-    --cv-2: #4ade80;
-    --cv-3: #38bdf8;
-  }
-  :root:not([data-theme='light']) .cv-clay {
-    --cv-bg: #0b0b0c;
-    --cv-1: #f08c4a;
-    --cv-2: #e0b060;
-    --cv-3: #d97757;
-  }
-  :root:not([data-theme='light']) .cv-orchid {
-    --cv-bg: #0b0b0c;
-    --cv-1: #d946c8;
-    --cv-2: #a855d8;
-    --cv-3: #f0509b;
-  }
-  :root:not([data-theme='light']) .cv-meadow {
-    --cv-bg: #0b0b0c;
-    --cv-1: #a3d63f;
-    --cv-2: #e8e04a;
-    --cv-3: #6ec85f;
-  }
-  :root:not([data-theme='light']) .cv-dusk {
-    --cv-bg: #0b0b0c;
-    --cv-1: #7c6ce0;
-    --cv-2: #e8547c;
-    --cv-3: #ff9a56;
-  }
-}
-
-:root[data-theme='dark'] .cv-ember {
   --cv-bg: #0b0b0c;
   --cv-1: #ff6b4a;
   --cv-2: #ffa94d;
   --cv-3: #ff5c8a;
 }
-:root[data-theme='dark'] .cv-kelp {
+.cv-kelp {
   --cv-bg: #0b0b0c;
   --cv-1: #2dd4a0;
   --cv-2: #8fd14f;
   --cv-3: #14b8a6;
 }
-:root[data-theme='dark'] .cv-iris {
+.cv-iris {
   --cv-bg: #0b0b0c;
   --cv-1: #8b6fe8;
   --cv-2: #6c7bff;
   --cv-3: #e85fa8;
 }
-:root[data-theme='dark'] .cv-lagoon {
+.cv-lagoon {
   --cv-bg: #0b0b0c;
   --cv-1: #22d3c6;
   --cv-2: #4ade80;
   --cv-3: #38bdf8;
 }
-:root[data-theme='dark'] .cv-clay {
+.cv-clay {
   --cv-bg: #0b0b0c;
   --cv-1: #f08c4a;
   --cv-2: #e0b060;
   --cv-3: #d97757;
 }
-:root[data-theme='dark'] .cv-orchid {
+.cv-orchid {
   --cv-bg: #0b0b0c;
   --cv-1: #d946c8;
   --cv-2: #a855d8;
   --cv-3: #f0509b;
 }
-:root[data-theme='dark'] .cv-meadow {
+.cv-meadow {
   --cv-bg: #0b0b0c;
   --cv-1: #a3d63f;
   --cv-2: #e8e04a;
   --cv-3: #6ec85f;
 }
-:root[data-theme='dark'] .cv-dusk {
+.cv-dusk {
   --cv-bg: #0b0b0c;
   --cv-1: #7c6ce0;
   --cv-2: #e8547c;
   --cv-3: #ff9a56;
+}
+
+/* ---- light ---- */
+:root[data-theme='light'] .cv-ember {
+  --cv-bg: #ffffff;
+  --cv-1: #ffb4a2;
+  --cv-2: #ffd6a5;
+  --cv-3: #ff8fa3;
+}
+:root[data-theme='light'] .cv-kelp {
+  --cv-bg: #ffffff;
+  --cv-1: #a8e6cf;
+  --cv-2: #cfe8a9;
+  --cv-3: #7fd8be;
+}
+:root[data-theme='light'] .cv-iris {
+  --cv-bg: #ffffff;
+  --cv-1: #c3b1e1;
+  --cv-2: #b8c0ff;
+  --cv-3: #ffc2e2;
+}
+:root[data-theme='light'] .cv-lagoon {
+  --cv-bg: #ffffff;
+  --cv-1: #9fe0d8;
+  --cv-2: #b4f0c8;
+  --cv-3: #8fd3e8;
+}
+:root[data-theme='light'] .cv-clay {
+  --cv-bg: #ffffff;
+  --cv-1: #f5c0a0;
+  --cv-2: #efd9b4;
+  --cv-3: #e8a87c;
+}
+:root[data-theme='light'] .cv-orchid {
+  --cv-bg: #ffffff;
+  --cv-1: #e8b4f0;
+  --cv-2: #d8a7e8;
+  --cv-3: #f4a6c8;
+}
+:root[data-theme='light'] .cv-meadow {
+  --cv-bg: #ffffff;
+  --cv-1: #d4e09b;
+  --cv-2: #f0eda0;
+  --cv-3: #b8d8a0;
+}
+:root[data-theme='light'] .cv-dusk {
+  --cv-bg: #ffffff;
+  --cv-1: #b5a7e6;
+  --cv-2: #f0b7c4;
+  --cv-3: #ffcfa8;
 }
 
 /* ==========================================================================
@@ -3735,28 +3684,19 @@ mark {
 }
 
 .phead-light {
-  opacity: 0.5;
-}
-
-.close-img {
-  opacity: 0.55;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .phead-light {
-    opacity: 0.62;
-  }
-  :root:not([data-theme='light']) .close-img {
-    opacity: 0.66;
-  }
-}
-
-:root[data-theme='dark'] .phead-light {
   opacity: 0.62;
 }
 
-:root[data-theme='dark'] .close-img {
+.close-img {
   opacity: 0.66;
+}
+
+:root[data-theme='light'] .phead-light {
+  opacity: 0.5;
+}
+
+:root[data-theme='light'] .close-img {
+  opacity: 0.55;
 }
 
 .tile-media {
@@ -3779,7 +3719,7 @@ mark {
   inset: -30% -10% auto;
   height: 190%;
   z-index: -1;
-  opacity: 0.4;
+  opacity: 0.5;
   -webkit-mask-image: radial-gradient(80% 70% at 22% 30%, #000 10%, transparent 72%);
   mask-image: radial-gradient(80% 70% at 22% 30%, #000 10%, transparent 72%);
 }
@@ -3795,12 +3735,133 @@ mark {
   display: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .ac-head-cv {
-    opacity: 0.5;
-  }
+:root[data-theme='light'] .ac-head-cv {
+  opacity: 0.4;
 }
 
-:root[data-theme='dark'] .ac-head-cv {
-  opacity: 0.5;
+/* ---- exam families ----
+   A group of papers reads as a track, so it gets a heading of its own rather
+   than a divider. */
+.fam + .fam {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.fam {
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+
+.fam-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: clamp(18px, 2vw, 24px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.fam-h .body {
+  margin-top: 6px;
+  max-width: 62ch;
+  color: var(--w-3);
+}
+
+.fam-h .mono {
+  color: var(--w-4);
+  flex: none;
+}
+
+/* ---- client marks ----
+   Generated placeholders by default; a real file in public/logos/ replaces
+   the monogram entirely. Both read at the same size. */
+.lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--w-2);
+}
+
+.lg-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--void);
+  background: var(--w-1);
+  border-radius: 7px;
+}
+
+.lg-name {
+  font-weight: 500;
+  letter-spacing: -0.014em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lg img {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.lg-sm .lg-mark {
+  width: 22px;
+  height: 22px;
+  font-size: 0.5625rem;
+  border-radius: 6px;
+}
+.lg-sm .lg-name,
+.lg-sm img {
+  font-size: 0.75rem;
+  max-height: 22px;
+}
+
+.lg-md .lg-mark {
+  width: 28px;
+  height: 28px;
+  font-size: 0.6875rem;
+}
+.lg-md .lg-name,
+.lg-md img {
+  font-size: 0.875rem;
+  max-height: 28px;
+}
+
+.lg-lg .lg-mark {
+  width: 36px;
+  height: 36px;
+  font-size: 0.875rem;
+  border-radius: 9px;
+}
+.lg-lg .lg-name,
+.lg-lg img {
+  font-size: 1.0625rem;
+  max-height: 36px;
+}
+
+/* A mark sitting on a card's cover needs its own ground to stay legible over
+   whatever colour the generated art happens to put behind it. */
+.tile-logo {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 6px 11px 6px 7px;
+  border-radius: 100px;
+  background: var(--scrim-3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line-1);
+}
+
+.video-credit {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.625rem;
+  color: var(--w-4);
 }

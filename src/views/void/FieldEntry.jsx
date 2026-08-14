@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Cover from '@/components/void/Cover'
+import Logo from '@/components/void/Logo'
 import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
@@ -25,8 +26,14 @@ export default function FieldEntry({ entry, next }) {
             <Crumbs items={[{ label: 'Field', href: '/field' }, { label: entry.title }]} />
 
             <p className="mono" style={{ marginTop: 18 }}>
-              {entry.kind} · {entry.client ?? entry.sector}
+              {entry.kind} · {entry.sector}
             </p>
+
+            {entry.client && (
+              <div style={{ marginTop: 16 }}>
+                <Logo name={entry.client} src={entry.logo} size="lg" />
+              </div>
+            )}
 
             <h1 className="d1 phead-h" style={{ marginTop: 14 }}>
               {entry.title}

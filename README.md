@@ -73,10 +73,11 @@ not a palette inversion — it inverts the *mechanic*: the same photographs are
 read as pigment rather than light (`invert(1) hue-rotate(180deg)` under
 `multiply`), which is what `--plate-blend` and `--plate-filter` express.
 
-Three states, resolved in `src/lib/theme.js`: **System** (no attribute, CSS
-follows the OS), **Light** and **Dark** (`data-theme` on `<html>` wins in both
-directions). System is the default, because a two-state toggle silently ignores
-the OS preference of everyone who never touches it.
+Two states, resolved in `src/lib/theme.js`: **Dark** is the default for
+everyone and **Light** is opted into and remembered (`data-theme="light"` on
+`<html>`). The OS preference is deliberately not consulted — there is no
+`prefers-color-scheme` rule in either stylesheet — so the product looks the
+same to a first-time visitor whatever their machine is set to.
 
 `THEME_SCRIPT` is inlined in `<head>` ahead of any stylesheet. Resolving the
 theme in an effect instead would paint one frame of the wrong ground on every
@@ -239,8 +240,13 @@ list.
   site uses, and no metric appears that is not already published. Engagement entries describe
   PulpLabs' own published engagement model and carry no client claims at all. The rules are written
   at the top of `src/data/field.js`.
-- **No interview recording is published yet**, so every `video.id` is null and the player renders its
-  "not published" state. No third-party video is embedded to make the feature look finished.
+- **One sample video is wired up** — a third-party talk on the interview's own subject, so the
+  player can be seen working end to end. It carries `external: true` and a credit, and the frame
+  says "Sample — third-party video on the same subject" so it never reads as a PulpLabs recording.
+  Every other `video.id` is still null and renders the "not published" state.
+- **Client marks are generated placeholders**, never an approximation of a real logo — a wrong
+  version of somebody's mark is worse than an obvious stand-in. Drop a real file in `public/logos/`
+  and set `logo:` on the entry to replace it.
 - **Progress and attempts are browser-local.** No account exists, and the interface never implies
   one.
 
@@ -263,8 +269,8 @@ the marketing site at matching viewports:
 - The video facade contacts no video host before activation, is keyboard-operable, and loads a
   titled `youtube-nocookie.com` embed on demand — asserted in a browser, not assumed.
 - **Both themes**, across every route and viewport: the ground is actually painted, the toggle
-  cycles System → Light → Dark, the stored choice survives a reload, and `data-theme` is already
-  correct at first paint rather than corrected afterwards.
+  moves Dark → Light → Dark, the stored choice survives a reload, `data-theme` is already correct
+  at first paint, and an OS set to light still renders the dark default.
 - Light-theme contrast measured against the rendered ground with alpha composited: body 7.3:1,
   mono and breadcrumbs 5.1:1 — `--w-3` was raised from 0.54 to 0.62 because it measured 3.94:1.
 - The command palette opens on `/` and `⌘K`, groups across content types, moves with the arrow

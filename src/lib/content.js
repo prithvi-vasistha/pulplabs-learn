@@ -249,9 +249,35 @@ function pick(source, keys) {
 
 /* ---------------------------------------------------------------- exams --- */
 
+/** Display order for the families. Easiest entry point first. */
+export const EXAM_FAMILIES = [
+  {
+    name: 'Foundations and practice',
+    blurb: 'The vendor-neutral core every certification assumes, and the safety material most of them include.',
+  },
+  {
+    name: 'Claude certifications',
+    blurb: 'Preparation for the certification track aimed at people designing and building on Claude.',
+  },
+  {
+    name: 'Retrieval and agents',
+    blurb: 'The two system shapes certifications test hardest: what you retrieve, and what runs on its own.',
+  },
+]
+
+/** Exams grouped for the catalogue, in the order above. Empty groups drop out. */
+export async function getExamFamilies() {
+  const all = exams.map(summariseExam)
+  return EXAM_FAMILIES.map((family) => ({
+    ...family,
+    exams: all.filter((exam) => exam.family === family.name),
+  })).filter((family) => family.exams.length > 0)
+}
+
 export function summariseExam(exam) {
   return {
     slug: exam.slug,
+    family: exam.family ?? 'Foundations and practice',
     title: exam.title,
     summary: exam.summary,
     level: exam.level,
@@ -444,6 +470,7 @@ function summariseFieldEntry(entry) {
     kind: entry.kind,
     title: entry.title,
     client: entry.client ?? null,
+    logo: entry.logo ?? null,
     sector: entry.sector,
     summary: entry.summary,
     published: entry.published ?? null,

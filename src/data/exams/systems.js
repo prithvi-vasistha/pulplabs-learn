@@ -2,6 +2,7 @@
 
 export const ragSystems = {
   slug: 'rag-systems',
+  family: 'Retrieval and agents',
   title: 'RAG Systems — Mock Exam',
   summary:
     'Chunking, hybrid retrieval, reranking, grounding and the component metrics that tell you which half of the system is at fault.',
@@ -192,6 +193,7 @@ export const ragSystems = {
 
 export const agentSystems = {
   slug: 'agent-systems',
+  family: 'Retrieval and agents',
   title: 'Agent Systems — Mock Exam',
   summary:
     'The agent loop and its bounds, tool design, memory, multi-agent trade-offs, tracing, and moving a workflow between orchestration platforms.',

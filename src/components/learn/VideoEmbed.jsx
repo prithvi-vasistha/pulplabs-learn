@@ -20,7 +20,7 @@ export default function VideoEmbed({ video, plate = 'aperture-glow' }) {
 
   if (!video) return null
 
-  const { provider = 'youtube', id, title, duration, note, src } = video
+  const { provider = 'youtube', id, title, duration, note, src, external, credit } = video
   const available = provider === 'file' ? Boolean(src) : Boolean(id)
 
   if (!available) {
@@ -52,6 +52,9 @@ export default function VideoEmbed({ video, plate = 'aperture-glow' }) {
             </svg>
           </span>
           <span className="video-t">{title}</span>
+          {/* A video we did not record says so on the frame, not in a caption
+              somebody has to look for. */}
+          {external && credit && <span className="video-credit mono">{credit}</span>}
           <span className="sr-only">
             Play video{duration ? `, ${duration}` : ''}
             {provider === 'youtube' ? ', loads from YouTube' : ''}

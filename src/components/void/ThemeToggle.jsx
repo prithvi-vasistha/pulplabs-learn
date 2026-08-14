@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MODES, applyMode, readMode, resolve } from '@/lib/theme'
+import { applyMode, readMode } from '@/lib/theme'
 
-const LABEL = { system: 'System', light: 'Light', dark: 'Dark' }
-
-function Icon({ shown }) {
+function Icon({ mode }) {
   // Sun and moon as strokes, like the brand mark — geometry, not pictures.
-  if (shown === 'light') {
+  if (mode === 'light') {
     return (
       <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3">
         <circle cx="8" cy="8" r="3.1" />
@@ -23,12 +21,12 @@ function Icon({ shown }) {
 }
 
 /**
- * Cycles System → Light → Dark. The accessible name always states where you
- * are and where one more press will take you, because a cycling control that
- * only shows an icon leaves a screen-reader user guessing at both.
+ * Dark and light, nothing else. The accessible name says where you are and
+ * where one press will take you, because an icon-only switch leaves a
+ * screen-reader user guessing at both.
  */
 export default function ThemeToggle() {
-  const [mode, setMode] = useState('system')
+  const [mode, setMode] = useState('dark')
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -36,37 +34,23 @@ export default function ThemeToggle() {
     setReady(true)
   }, [])
 
-  // Following the system means following it as it changes, not just at load.
-  useEffect(() => {
-    if (mode !== 'system') return
-    const mq = window.matchMedia('(prefers-color-scheme: light)')
-    const onChange = () => applyMode('system')
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [mode])
-
-  const next = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
-
-  const change = () => {
-    setMode(next)
-    applyMode(next)
-  }
-
-  // Before hydration the stored mode is unknown, so render the frame without
-  // committing to an icon rather than guessing and flipping.
-  const shown = ready ? resolve(mode) : 'dark'
+  const next = mode === 'light' ? 'dark' : 'light'
 
   return (
     <button
       type="button"
       className="nv-theme"
-      onClick={change}
-      aria-label={`Theme: ${LABEL[mode]}. Switch to ${LABEL[next]}.`}
-      title={`Theme: ${LABEL[mode]}`}
+      onClick={() => {
+        setMode(next)
+        applyMode(next)
+      }}
+      aria-label={`Theme: ${mode === 'light' ? 'Light' : 'Dark'}. Switch to ${next === 'light' ? 'light' : 'dark'}.`}
+      aria-pressed={mode === 'light'}
+      title={mode === 'light' ? 'Light theme' : 'Dark theme'}
       data-ready={ready || undefined}
     >
-      <Icon shown={shown} />
-      <span className="nv-theme-t mono">{LABEL[mode]}</span>
+      <Icon mode={mode} />
+      <span className="nv-theme-t mono">{mode === 'light' ? 'Light' : 'Dark'}</span>
     </button>
   )
 }

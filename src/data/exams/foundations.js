@@ -2,6 +2,7 @@
 
 export const aiFoundations = {
   slug: 'ai-foundations',
+  family: 'Foundations and practice',
   title: 'AI Engineering Foundations — Mock Exam',
   summary:
     'The vendor-neutral core every AI certification assumes: how a model behaves, what prompting can and cannot fix, retrieval, structured output, and evaluation.',
@@ -219,6 +220,7 @@ export const aiFoundations = {
 
 export const responsibleAi = {
   slug: 'responsible-ai',
+  family: 'Foundations and practice',
   title: 'Responsible AI & Safety — Mock Exam',
   summary:
     'Prompt injection, authorisation, data boundaries, human oversight and auditability — the section that appears in almost every AI certification.',

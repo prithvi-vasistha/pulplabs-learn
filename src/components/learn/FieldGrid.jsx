@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Cover from '@/components/void/Cover'
+import Logo from '@/components/void/Logo'
 import Chevron from '@/components/void/Icons'
 import { Badge, StateBlock } from '@/components/learn/ui'
 import { formatDate, formatMinutes, padIndex } from '@/lib/format'
@@ -67,6 +68,11 @@ export default function FieldGrid({ entries, kinds }) {
               <article className="tile" data-r style={{ '--rd': `${Math.min(i, 5) * 65}ms` }}>
                 <div className="tile-media">
                   <Cover seed={entry.slug} ratio="16 / 9" />
+                  {entry.client && (
+                    <span className="tile-logo">
+                      <Logo name={entry.client} src={entry.logo} size="sm" />
+                    </span>
+                  )}
                   <span className="tile-n">{padIndex(i + 1)}</span>
                   <span className="tile-badge">
                     <Badge quiet={entry.kind !== 'Interview'} pip={entry.kind === 'Interview'}>
