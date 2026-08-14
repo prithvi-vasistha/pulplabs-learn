@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M64 13 C63 4, 72 -1, 82 2 C85 12, 78 19, 68 17 Z" fill="#7BC043"/>
+  <circle cx="48" cy="56" r="42" fill="#FF6B1A"/>
+  <circle cx="48" cy="56" r="36" fill="#FFF6EC"/>
+  <path d="M 45.59 47.33 L 39.85 26.61 A 30.5 30.5 0 0 1 56.15 26.61 L 50.41 47.33 Z" fill="#FF6B1A" stroke="#FF6B1A" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 52.43 48.17 L 63.02 29.45 A 30.5 30.5 0 0 1 74.55 40.98 L 55.83 51.57 Z" fill="#FF8A2B" stroke="#FF8A2B" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 56.67 53.59 L 77.39 47.85 A 30.5 30.5 0 0 1 77.39 64.15 L 56.67 58.41 Z" fill="#FFC93C" stroke="#FFC93C" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 55.83 60.43 L 74.55 71.02 A 30.5 30.5 0 0 1 63.02 82.55 L 52.43 63.83 Z" fill="#FF6B1A" stroke="#FF6B1A" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 50.41 64.67 L 56.15 85.39 A 30.5 30.5 0 0 1 39.85 85.39 L 45.59 64.67 Z" fill="#FFA23F" stroke="#FFA23F" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 43.57 63.83 L 32.98 82.55 A 30.5 30.5 0 0 1 21.45 71.02 L 40.17 60.43 Z" fill="#F0384B" stroke="#F0384B" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 39.33 58.41 L 18.61 64.15 A 30.5 30.5 0 0 1 18.61 47.85 L 39.33 53.59 Z" fill="#FF6B1A" stroke="#FF6B1A" stroke-width="5.5" stroke-linejoin="round"/>
+  <path d="M 40.17 51.57 L 21.45 40.98 A 30.5 30.5 0 0 1 32.98 29.45 L 43.57 48.17 Z" fill="#FF8A2B" stroke="#FF8A2B" stroke-width="5.5" stroke-linejoin="round"/>
+  <circle cx="48" cy="56" r="4" fill="#FFF6EC"/>
+</svg>

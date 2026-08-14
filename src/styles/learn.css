@@ -1,0 +1,2795 @@
+/* ==========================================================================
+   PulpLabs Learn Lab — product layer
+
+   void.css is a byte-for-byte copy of the marketing site's stylesheet and is
+   never edited here; syncing the two is a straight file copy. Everything the
+   Learn Lab adds on top lives in this file.
+
+   Nothing below introduces a colour, a radius, a shadow or an easing that is
+   not already in the system. Structure is hairlines, hierarchy is opacity and
+   weight, and the only colour on the page still arrives through the light
+   plates in public/void/.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Foundation additions
+   -------------------------------------------------------------------------- */
+
+/* The system sets a focus ring per control. The Lab adds many more controls,
+   so the contract is enforced globally instead. */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+:target {
+  scroll-margin-top: calc(var(--nav-h) + 28px);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* `.num` is the system's display numeral. This is its small-text counterpart:
+   any figure that might change or sit in a column gets tabular numerals. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.btn-sm {
+  min-height: 34px;
+  padding: 0.4em 1em;
+  font-size: 0.8125rem;
+}
+
+.btn[disabled],
+.btn[aria-disabled='true'] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.link-quiet {
+  color: var(--w-2);
+  transition: color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-quiet:hover {
+    color: var(--w-1);
+  }
+}
+
+.stack-list {
+  display: grid;
+  gap: 10px;
+}
+
+.eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.trunc-2,
+.trunc-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.trunc-2 {
+  -webkit-line-clamp: 2;
+}
+
+.trunc-3 {
+  -webkit-line-clamp: 3;
+}
+
+/* Whole-cell link: one focusable element, the entire cell as hit area. */
+.stretch {
+  position: relative;
+}
+
+.stretch-l::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* --------------------------------------------------------------------------
+   1. The hairline grid, generalised
+
+   §6 of the design system, as a reusable container rather than nine
+   hand-written variants. The container is filled with the hairline colour and
+   the gap is 1px, so the children's own black backgrounds become the lines.
+   -------------------------------------------------------------------------- */
+
+.grid-h {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.grid-h > li,
+.grid-h > .cell {
+  background: var(--void);
+  padding: clamp(24px, 2.8vw, 36px);
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.grid-h-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-h-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-h-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-h-sm {
+  border-radius: 14px;
+}
+
+.grid-h-sm > li {
+  padding: clamp(18px, 2vw, 24px);
+  gap: 10px;
+}
+
+.grid-band {
+  border-radius: 0;
+  border-inline: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grid-h > .lift {
+    transition: background-color var(--t-hover) var(--ease-out);
+  }
+
+  .grid-h > .lift:hover {
+    background: var(--raise-1);
+  }
+}
+
+/* An incomplete last row would show the container's line colour as a solid
+   block, so the last cell stretches across whatever remains. */
+.grid-h-2 > :last-child:nth-child(odd),
+.grid-h-3 > :last-child:nth-child(3n + 1),
+.grid-h-4 > :last-child:nth-child(4n + 1),
+.doc-groups > :last-child:nth-child(4n + 1) {
+  grid-column: 1 / -1;
+}
+
+.grid-h-3 > :last-child:nth-child(3n + 2),
+.grid-h-4 > :last-child:nth-child(4n + 3),
+.doc-groups > :last-child:nth-child(4n + 3) {
+  grid-column: span 2;
+}
+
+.grid-h-4 > :last-child:nth-child(4n + 2),
+.doc-groups > :last-child:nth-child(4n + 2) {
+  grid-column: span 3;
+}
+
+@media (max-width: 900px) {
+  .grid-h-3,
+  .grid-h-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-h-3 > :last-child,
+  .grid-h-4 > :last-child,
+  .doc-groups > :last-child {
+    grid-column: auto;
+  }
+
+  .grid-h-3 > :last-child:nth-child(odd),
+  .grid-h-4 > :last-child:nth-child(odd),
+  .doc-groups > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .grid-h-2,
+  .grid-h-3,
+  .grid-h-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .grid-h-2 > :last-child,
+  .grid-h-3 > :last-child,
+  .grid-h-4 > :last-child {
+    grid-column: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. The dense index
+
+   The other list shape from §6: bordered rows with a numbered column, a
+   flexible body, and metadata. Chosen when items are read in order or scanned
+   for one match, where a grid would be too card-like.
+   -------------------------------------------------------------------------- */
+
+.index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.index > li {
+  border-bottom: 1px solid var(--line-1);
+}
+
+.index-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 280px;
+  gap: 24px;
+  padding-block: clamp(22px, 2.6vw, 30px);
+  align-items: start;
+  transition: background-color var(--t-hover) var(--ease-out);
+}
+
+.index-n {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: var(--w-4);
+  font-variant-numeric: tabular-nums;
+  padding-top: 5px;
+}
+
+.index-n[data-done='1'] {
+  color: var(--w-2);
+}
+
+.index-b > * + * {
+  margin-top: 8px;
+}
+
+.index-m {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding-top: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.index-row:hover {
+    background: var(--raise-1);
+  }
+}
+
+@media (max-width: 860px) {
+  .index-row {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .index-m {
+    grid-column: 2;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Panels, cards, rails
+   -------------------------------------------------------------------------- */
+
+.panel {
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  padding: clamp(22px, 2.6vw, 32px);
+  background: var(--void);
+}
+
+.panel-sm {
+  border-radius: 14px;
+  padding: clamp(18px, 2vw, 24px);
+}
+
+.panel-raise {
+  background: var(--raise-1);
+}
+
+a.panel {
+  display: block;
+  transition: background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift-panel:hover {
+    background: var(--raise-1);
+    border-color: var(--line-2);
+  }
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .cols-2,
+  .cols-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+
+/* minmax(0, 1fr), not 1fr: a plain 1fr track refuses to shrink below its
+   content's min-content width, so one wide table pushes the whole page. */
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.rail {
+  position: sticky;
+  top: calc(var(--nav-h) + 28px);
+  display: grid;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .rail {
+    position: static;
+  }
+}
+
+.rail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rail-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 11px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.rail-list li:first-child {
+  border-top: 1px solid var(--line-1);
+}
+
+.rail-list .k {
+  color: var(--w-3);
+}
+
+.rail-list .v {
+  color: var(--w-1);
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.rail-notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.rail-notes li {
+  padding-left: 16px;
+  position: relative;
+}
+
+.rail-notes li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 8px;
+  height: 1px;
+  background: var(--line-3);
+}
+
+/* --------------------------------------------------------------------------
+   4. Metadata: breadcrumbs, meta rows, badges, difficulty, meters, tags
+   -------------------------------------------------------------------------- */
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.crumbs li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.crumbs li + li::before {
+  content: '/';
+  color: var(--w-4);
+}
+
+.crumbs a {
+  color: var(--w-3);
+  transition: color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .crumbs a:hover {
+    color: var(--w-1);
+  }
+}
+
+.crumbs [aria-current='page'] {
+  color: var(--w-2);
+}
+
+.meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 14px;
+}
+
+.meta li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.meta li + li::before {
+  content: '';
+  width: 1px;
+  height: 10px;
+  background: var(--line-2);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line-2);
+  border-radius: 100px;
+  padding: 4px 11px;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+  white-space: nowrap;
+}
+
+.badge-solid {
+  background: var(--w-1);
+  border-color: var(--w-1);
+  color: var(--void);
+}
+
+.badge-quiet {
+  border-color: var(--line-1);
+  color: var(--w-4);
+}
+
+.pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 100px;
+  background: var(--signal);
+  flex: none;
+}
+
+/* Difficulty — three hairline bars, filled by level. No hue. */
+.diff {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+}
+
+.diff i {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.diff i span {
+  width: 12px;
+  height: 2px;
+  border-radius: 100px;
+  background: var(--line-2);
+}
+
+.diff i span[data-on='1'] {
+  background: var(--w-1);
+}
+
+.meter {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 100px;
+  background: var(--line-1);
+  overflow: hidden;
+}
+
+.meter i {
+  display: block;
+  height: 100%;
+  background: var(--w-1);
+  border-radius: 100px;
+  transition: width 700ms var(--ease-out);
+}
+
+.meter-quiet i {
+  background: var(--w-3);
+}
+
+.meter-lg {
+  height: 3px;
+}
+
+.meter-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+/* Tag chips. The system's `.stack` is a hairline grid container and `.certs`
+   carries its own section rule, so the Lab needs a plain chip row. */
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tags li {
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  color: var(--w-3);
+  transition: border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tags li:hover {
+    border-color: var(--line-2);
+    color: var(--w-2);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Filters, inputs, search field
+   -------------------------------------------------------------------------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-block: 18px;
+  border-block: 1px solid var(--line-1);
+  margin-bottom: clamp(28px, 3.5vw, 44px);
+}
+
+.filters-g {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.chip {
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  padding: 7px 14px;
+  font-size: 0.75rem;
+  letter-spacing: -0.006em;
+  color: var(--w-3);
+  background: none;
+  cursor: pointer;
+  transition: border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out),
+    background-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    border-color: var(--line-3);
+    color: var(--w-1);
+  }
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--w-1);
+  border-color: var(--w-1);
+  color: var(--void);
+}
+
+.filters-r {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .filters-r {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.count {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.f-input {
+  width: 100%;
+  background: var(--raise-1);
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font: inherit;
+  font-size: 0.9375rem;
+  letter-spacing: -0.008em;
+  color: var(--w-1);
+  transition: background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out),
+    box-shadow var(--t-hover) var(--ease-out);
+}
+
+.f-input::placeholder {
+  color: var(--w-4);
+}
+
+.f-input:focus {
+  outline: none;
+  background: var(--raise-2);
+  border-color: var(--line-3);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.search-box {
+  display: grid;
+  gap: 10px;
+}
+
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-field svg {
+  position: absolute;
+  left: 16px;
+  color: var(--w-3);
+  pointer-events: none;
+}
+
+.search-field .f-input {
+  padding: 14px 16px 14px 46px;
+  border-radius: 100px;
+  font-size: 1rem;
+}
+
+.search-field .f-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.kbd {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: var(--w-3);
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  padding: 3px 6px;
+  white-space: nowrap;
+}
+
+/* Search entry point in the nav, sized to sit beside .nv-cta */
+.nv-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  color: var(--w-3);
+  font-size: 0.8125rem;
+  transition: border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out),
+    background-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nv-search:hover {
+    border-color: var(--line-2);
+    color: var(--w-1);
+    background: var(--raise-1);
+  }
+}
+
+@media (max-width: 900px) {
+  .nv-search .kbd {
+    display: none;
+  }
+
+  .nv-search {
+    padding-inline: 10px;
+  }
+}
+
+.res-type {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-4);
+  white-space: nowrap;
+}
+
+mark {
+  background: transparent;
+  color: var(--w-1);
+  font-weight: 500;
+}
+
+.index-search .index-row {
+  grid-template-columns: 132px minmax(0, 1fr) 200px;
+}
+
+@media (max-width: 860px) {
+  .index-search .index-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .index-search .index-m {
+    grid-column: 1;
+  }
+}
+
+.search-browse {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.search-browse > section {
+  background: var(--void);
+  padding: clamp(20px, 2.4vw, 28px);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.search-browse > :last-child:nth-child(3n + 1) {
+  grid-column: 1 / -1;
+}
+
+.search-browse > :last-child:nth-child(3n + 2) {
+  grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+  .search-browse {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .search-browse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Page head extras
+   -------------------------------------------------------------------------- */
+
+.phead-meta {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-1);
+  max-width: 760px;
+}
+
+
+/* The system's hand-off keeps the destination on one line, which assumes a
+   short label. Long ones must wrap rather than clip on a narrow screen. */
+@media (max-width: 520px) {
+  .next-t {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: right;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Reader — lessons and documentation
+   -------------------------------------------------------------------------- */
+
+.reader {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr) 210px;
+  gap: clamp(28px, 3.4vw, 56px);
+  align-items: start;
+  padding-block: clamp(36px, 4vw, 56px) clamp(56px, 7vw, 96px);
+}
+
+.reader-side {
+  position: sticky;
+  top: calc(var(--nav-h) + 28px);
+  max-height: calc(100vh - var(--nav-h) - 56px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 8px;
+}
+
+.reader-main {
+  min-width: 0;
+}
+
+.reader-toc {
+  position: sticky;
+  top: calc(var(--nav-h) + 28px);
+  max-height: calc(100vh - var(--nav-h) - 56px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1180px) {
+  .reader {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .reader-toc {
+    display: none;
+  }
+}
+
+/* Below 900px the outline becomes a disclosure inside the article rather than
+   a column that would push the prose into a gutter. */
+@media (max-width: 900px) {
+  .reader {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .reader-side {
+    display: none;
+  }
+}
+
+.outline {
+  display: grid;
+  gap: 22px;
+}
+
+.outline-top {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.outline-g > .mono {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.outline ol,
+.outline ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.outline a {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+  color: var(--w-3);
+  transition: color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
+}
+
+.outline-flat a {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.outline a .n {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--w-4);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .outline a:hover {
+    color: var(--w-1);
+    background: var(--raise-1);
+  }
+}
+
+.outline a[aria-current='page'] {
+  color: var(--w-1);
+  background: var(--raise-1);
+}
+
+.outline a[aria-current='page'] .n {
+  color: var(--w-2);
+}
+
+.outline a[data-done='1'] .n {
+  color: var(--w-2);
+}
+
+.outline a[data-done='1'] .n::after {
+  content: '✓';
+  margin-left: 2px;
+}
+
+.outline-mob {
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.outline-mob > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.outline-mob > summary::-webkit-details-marker {
+  display: none;
+}
+
+.outline-mob[open] > summary {
+  border-bottom: 1px solid var(--line-1);
+}
+
+.outline-mob-in {
+  padding: 14px;
+}
+
+@media (min-width: 901px) {
+  .outline-mob {
+    display: none;
+  }
+}
+
+.toc > .mono {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  border-left: 1px solid var(--line-1);
+}
+
+.toc a {
+  display: block;
+  padding: 5px 0 5px 14px;
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--w-3);
+  transition: color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out);
+}
+
+.toc a[data-sub='1'] {
+  padding-left: 26px;
+  font-size: 0.75rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .toc a:hover {
+    color: var(--w-1);
+  }
+}
+
+.toc a[aria-current='true'] {
+  color: var(--w-1);
+  border-left-color: var(--w-1);
+}
+
+/* --------------------------------------------------------------------------
+   8. Prose
+   -------------------------------------------------------------------------- */
+
+.prose {
+  color: var(--w-2);
+  font-size: 0.9375rem;
+  line-height: 1.72;
+  letter-spacing: -0.008em;
+}
+
+.prose > * + * {
+  margin-top: 20px;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  max-width: 62ch;
+}
+
+.prose h2 {
+  font-size: 1.375rem;
+  line-height: 1.25;
+  letter-spacing: -0.026em;
+  font-weight: 500;
+  color: var(--w-1);
+  max-width: 40ch;
+  margin-top: clamp(40px, 4.5vw, 56px);
+  padding-top: clamp(12px, 1.5vw, 18px);
+  border-top: 1px solid var(--line-1);
+}
+
+/* A leading heading needs no rule above it — there is nothing to separate. */
+.prose > h2:first-child {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.prose h2 + * {
+  margin-top: 14px;
+}
+
+.prose h3 {
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  letter-spacing: -0.014em;
+  font-weight: 500;
+  color: var(--w-1);
+  max-width: 44ch;
+  margin-top: 32px;
+}
+
+.prose h3 + * {
+  margin-top: 10px;
+}
+
+.prose strong {
+  color: var(--w-1);
+  font-weight: 500;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.prose li::marker {
+  color: var(--w-4);
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 8px;
+}
+
+.prose a:not(.btn):not(.link) {
+  color: var(--w-1);
+  border-bottom: 1px solid var(--line-2);
+  transition: border-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .prose a:not(.btn):not(.link):hover {
+    border-bottom-color: var(--w-1);
+  }
+}
+
+/* Inline code only — a `code` inside a `pre` keeps the block's whitespace
+   handling and carries no frame of its own. */
+.prose :not(pre) > code,
+.opt code,
+.q-stem code,
+.explain code,
+.exercise code,
+.callout .body code {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.8125em;
+  background: var(--raise-1);
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  padding: 2px 6px;
+  color: var(--w-1);
+  white-space: nowrap;
+}
+
+.prose blockquote {
+  border-left: 1px solid var(--line-2);
+  padding-left: 20px;
+  max-width: 60ch;
+  margin: 0;
+  color: var(--w-2);
+}
+
+.tbl-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+}
+
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  min-width: 480px;
+}
+
+.tbl th,
+.tbl td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-1);
+  vertical-align: top;
+  color: var(--w-2);
+}
+
+.tbl thead th {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.tbl tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tbl td strong,
+.tbl td code {
+  color: var(--w-1);
+}
+
+/* --------------------------------------------------------------------------
+   9. Code blocks, callouts, figures, steps
+   -------------------------------------------------------------------------- */
+
+.code {
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--raise-1);
+}
+
+.code-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 12px 9px 16px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.code-f {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+  flex: none;
+  transition: color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out),
+    background-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .code-copy:hover {
+    color: var(--w-1);
+    border-color: var(--line-3);
+    background: var(--raise-2);
+  }
+}
+
+.code pre {
+  margin: 0;
+  padding: 18px 16px;
+  overflow-x: auto;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.72;
+  letter-spacing: 0;
+  color: var(--w-2);
+  tab-size: 2;
+}
+
+.code pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font: inherit;
+  color: inherit;
+  white-space: pre;
+}
+
+/* Syntax tokens — hierarchy by weight and opacity, never hue (§1) */
+.t-key,
+.t-typ {
+  color: var(--w-1);
+  font-weight: 500;
+}
+
+.t-str {
+  color: var(--w-2);
+}
+
+.t-com {
+  color: var(--w-4);
+}
+
+.t-num {
+  color: var(--w-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.t-fn {
+  color: var(--w-1);
+}
+
+.t-pun {
+  color: var(--w-3);
+}
+
+.callout {
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  background: var(--raise-1);
+  padding: 18px 20px;
+  display: grid;
+  gap: 8px;
+  max-width: 66ch;
+}
+
+.callout-warn {
+  border-color: var(--line-2);
+}
+
+.figure {
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.figure pre {
+  margin: 0;
+  padding: 22px 18px;
+  overflow-x: auto;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: var(--w-3);
+}
+
+.figure figcaption {
+  padding: 10px 16px;
+  border-top: 1px solid var(--line-1);
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-4);
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  counter-reset: step;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.steps li:first-child {
+  border-top: 1px solid var(--line-1);
+}
+
+.steps li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  color: var(--w-4);
+  padding-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   10. Lesson furniture
+   -------------------------------------------------------------------------- */
+
+.lesson-head {
+  padding-bottom: clamp(24px, 3vw, 32px);
+  border-bottom: 1px solid var(--line-1);
+  margin-bottom: clamp(28px, 3.4vw, 40px);
+}
+
+.lesson-head .d2 {
+  margin-top: 16px;
+}
+
+.lesson-head .lede {
+  margin-top: 16px;
+  max-width: 60ch;
+}
+
+.lesson-head-foot {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+
+.objectives {
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  padding: clamp(20px, 2.4vw, 26px);
+  margin-bottom: clamp(32px, 3.6vw, 44px);
+}
+
+.objectives ul {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.objectives li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--w-2);
+}
+
+.objectives li span[aria-hidden] {
+  color: var(--w-4);
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  padding-top: 5px;
+}
+
+.exercise {
+  margin-top: clamp(40px, 5vw, 60px);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.exercise-h {
+  padding: clamp(20px, 2.4vw, 26px);
+  display: grid;
+  gap: 10px;
+}
+
+.exercise details {
+  border-top: 1px solid var(--line-1);
+}
+
+.exercise summary {
+  padding: 14px clamp(20px, 2.4vw, 26px);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color var(--t-hover) var(--ease-out);
+}
+
+.exercise summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .exercise summary:hover {
+    background: var(--raise-1);
+  }
+}
+
+.exercise details[open] summary {
+  border-bottom: 1px solid var(--line-1);
+}
+
+.exercise-a {
+  padding: clamp(20px, 2.4vw, 26px);
+  background: var(--raise-1);
+}
+
+.related-list {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.related-list li {
+  background: var(--void);
+}
+
+.related-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  transition: background-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .related-list a:hover {
+    background: var(--raise-1);
+  }
+}
+
+.lesson-done {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: clamp(36px, 4vw, 56px);
+  padding-top: 24px;
+  border-top: 1px solid var(--line-1);
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.pager a,
+.pager div {
+  background: var(--void);
+  padding: 20px 22px;
+  display: grid;
+  gap: 8px;
+  align-content: center;
+  min-height: 92px;
+  transition: background-color var(--t-hover) var(--ease-out);
+}
+
+.pager .pg-next {
+  text-align: right;
+  justify-items: end;
+}
+
+/* The label carries an inline chevron; system icons are display:block. */
+.pager .mono {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pager a:hover {
+    background: var(--raise-1);
+  }
+}
+
+@media (max-width: 620px) {
+  .pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Path page */
+.path-cta {
+  margin-top: clamp(28px, 3.4vw, 40px);
+  display: grid;
+  gap: 22px;
+  max-width: 560px;
+}
+
+.path-cta .btn-row {
+  align-items: center;
+  gap: 16px;
+}
+
+.modules {
+  display: grid;
+  gap: clamp(36px, 4.5vw, 56px);
+}
+
+.module-h {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.module-h .mono {
+  flex: none;
+}
+
+/* --------------------------------------------------------------------------
+   11. Exam
+   -------------------------------------------------------------------------- */
+
+.exam-bar {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.exam-bar-in {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-block: 12px;
+}
+
+.exam-bar-t {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.exam-bar-t strong {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.011em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exam-bar-r {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+}
+
+.timer {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--w-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer[data-low='1'] {
+  color: var(--w-1);
+}
+
+@media (max-width: 760px) {
+  .exam-bar-in {
+    flex-wrap: wrap;
+    gap: 10px 16px;
+  }
+
+  .exam-bar-t {
+    width: 100%;
+  }
+
+  .exam-bar-t .mono {
+    display: none;
+  }
+
+  .exam-bar-r {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.exam-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  gap: clamp(28px, 3.4vw, 52px);
+  align-items: start;
+  padding-block: clamp(32px, 4vw, 52px) clamp(56px, 7vw, 88px);
+}
+
+.exam-side {
+  position: sticky;
+  top: calc(var(--nav-h) + 76px);
+  display: grid;
+  gap: 20px;
+}
+
+/* The question leads on a small screen; the navigator follows it, because the
+   sticky bar already reports answered count and carries Submit. */
+@media (max-width: 900px) {
+  .exam-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exam-side {
+    position: static;
+    margin-top: 8px;
+  }
+}
+
+.exam-exit {
+  padding-bottom: clamp(40px, 5vw, 64px);
+}
+
+.qnav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+  gap: 6px;
+}
+
+.qbtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 38px;
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--w-4);
+  transition: color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out),
+    background-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .qbtn:hover {
+    border-color: var(--line-3);
+    color: var(--w-1);
+  }
+}
+
+.qbtn[data-answered='1'] {
+  border-color: var(--line-3);
+  color: var(--w-1);
+}
+
+.qbtn[aria-current='true'] {
+  background: var(--w-1);
+  border-color: var(--w-1);
+  color: var(--void);
+}
+
+.qbtn[data-flag='1']::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 100px;
+  background: var(--w-1);
+}
+
+.qbtn[aria-current='true'][data-flag='1']::after {
+  background: var(--void);
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend .sw {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid var(--line-1);
+  flex: none;
+}
+
+.legend .sw[data-k='answered'],
+.legend .sw[data-k='flag'] {
+  border-color: var(--line-3);
+}
+
+.legend .sw[data-k='current'] {
+  background: var(--w-1);
+  border-color: var(--w-1);
+}
+
+.legend .sw[data-k='flag'] {
+  position: relative;
+}
+
+.legend .sw[data-k='flag']::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 100px;
+  background: var(--w-1);
+}
+
+.q {
+  display: grid;
+  gap: clamp(20px, 2.4vw, 28px);
+}
+
+.q-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.q-head .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.q-stem {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  letter-spacing: -0.016em;
+  font-weight: 500;
+  margin: 0;
+  max-width: 60ch;
+}
+
+.q-anim {
+  animation: q-in 260ms var(--ease-out) both;
+}
+
+@keyframes q-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .q-anim {
+    animation: fade 200ms var(--ease-out) both;
+  }
+}
+
+.opts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  max-width: 72ch;
+}
+
+.opt {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  text-align: left;
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  letter-spacing: -0.008em;
+  color: var(--w-2);
+  transition: border-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out),
+    color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .opt:hover {
+    border-color: var(--line-2);
+    background: var(--raise-1);
+    color: var(--w-1);
+  }
+}
+
+.opt-m {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  border: 1px solid var(--line-2);
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  color: var(--w-3);
+  flex: none;
+  transition: inherit;
+}
+
+.opt-multi .opt-m {
+  border-radius: 8px;
+}
+
+.opt[aria-pressed='true'] {
+  border-color: var(--w-1);
+  background: var(--raise-1);
+  color: var(--w-1);
+}
+
+.opt[aria-pressed='true'] .opt-m {
+  background: var(--w-1);
+  border-color: var(--w-1);
+  color: var(--void);
+}
+
+.opt-review {
+  cursor: default;
+}
+
+.opt-review[data-correct='1'] {
+  border-color: var(--w-1);
+}
+
+.opt-review[data-correct='1'] .opt-m {
+  background: var(--w-1);
+  border-color: var(--w-1);
+  color: var(--void);
+}
+
+.opt-review[data-picked='1'][data-correct='0'] .opt-m {
+  border-color: var(--w-1);
+  color: var(--w-1);
+}
+
+.opt-tag {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-3);
+}
+
+.q-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line-1);
+}
+
+/* Results */
+.score {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.score-n {
+  font-size: clamp(3.4rem, 9vw, 5.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-n sup {
+  font-size: 0.32em;
+  vertical-align: super;
+  letter-spacing: 0;
+  color: var(--w-3);
+  margin-left: 4px;
+}
+
+.score-side {
+  padding-bottom: 6px;
+  max-width: 46ch;
+}
+
+.topics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.topics li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px 88px;
+  gap: 24px;
+  align-items: center;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.topics .t-name {
+  font-size: 0.9375rem;
+  letter-spacing: -0.011em;
+}
+
+.topics .t-score {
+  text-align: right;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--w-2);
+}
+
+@media (max-width: 620px) {
+  .topics li {
+    grid-template-columns: minmax(0, 1fr) 72px;
+    gap: 12px 16px;
+  }
+
+  .topics .t-meter {
+    grid-column: 1 / -1;
+  }
+}
+
+.review {
+  display: grid;
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.review-q {
+  background: var(--void);
+  padding: clamp(20px, 2.4vw, 28px);
+  display: grid;
+  gap: 16px;
+}
+
+.review-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.explain {
+  border-left: 1px solid var(--line-2);
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  max-width: 68ch;
+}
+
+/* --------------------------------------------------------------------------
+   12. Dialog
+   -------------------------------------------------------------------------- */
+
+.dlg-back {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(0, 0, 0, 0.74);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  animation: fade 200ms var(--ease-out) both;
+}
+
+.dlg {
+  width: min(540px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: var(--void);
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+  padding: clamp(24px, 3vw, 32px);
+  display: grid;
+  gap: 16px;
+  animation: dlg-in 260ms var(--ease-out) both;
+}
+
+@keyframes dlg-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dlg {
+    animation: fade 200ms var(--ease-out) both;
+  }
+}
+
+.dlg-facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--line-1);
+}
+
+.dlg-facts li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.dlg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   13. Docs
+   -------------------------------------------------------------------------- */
+
+.docs-shell {
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr) 200px;
+  gap: clamp(28px, 3.4vw, 52px);
+  align-items: start;
+  padding-block: clamp(32px, 4vw, 48px) clamp(56px, 7vw, 96px);
+}
+
+@media (max-width: 1180px) {
+  .docs-shell {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .docs-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.docs-side {
+  position: sticky;
+  top: calc(var(--nav-h) + 24px);
+  max-height: calc(100vh - var(--nav-h) - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 8px;
+  display: grid;
+  gap: 22px;
+  align-content: start;
+}
+
+@media (max-width: 900px) {
+  .docs-side {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.docs-proj {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.docs-index {
+  display: grid;
+  gap: clamp(28px, 3.4vw, 40px);
+}
+
+.docs-index > section > .mono {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.doc-sets {
+  display: grid;
+  gap: 20px;
+}
+
+.doc-set {
+  display: grid;
+  gap: clamp(24px, 3vw, 32px);
+}
+
+.doc-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.doc-groups > div {
+  background: var(--void);
+  padding: 18px 20px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.doc-groups ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.doc-groups a {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .doc-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .doc-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .doc-groups > :last-child {
+    grid-column: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   14. Dashboard
+   -------------------------------------------------------------------------- */
+
+.stat-band {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line-1);
+  border-block: 1px solid var(--line-1);
+}
+
+.stat-band li {
+  background: var(--void);
+  padding: clamp(20px, 2.4vw, 28px) clamp(16px, 2vw, 24px);
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.stat-band b {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .stat-band {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.tl li {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: baseline;
+  padding-block: 14px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+@media (max-width: 620px) {
+  .tl li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .tl li > .mono:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   15. States: empty, error, loading
+   -------------------------------------------------------------------------- */
+
+.state {
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  padding: clamp(36px, 5vw, 64px) clamp(24px, 4vw, 48px);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+}
+
+.state .body {
+  max-width: 46ch;
+}
+
+.state .btn-row {
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.state-l {
+  justify-items: start;
+  text-align: left;
+}
+
+.state-l .btn-row {
+  justify-content: flex-start;
+}
+
+.skel {
+  display: block;
+  background: var(--raise-1);
+  border-radius: 8px;
+  height: 12px;
+  animation: skel 1.6s var(--ease-in-out) infinite;
+}
+
+.skel-t {
+  height: 28px;
+}
+
+.skel-b {
+  height: 132px;
+  border-radius: 16px;
+}
+
+@keyframes skel {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skel {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   16. Tiles — the visual catalogue card
+
+   The system has no illustration budget and no second colour, so the "cover
+   image" problem is solved the way §8 solves every other one: a light plate,
+   screened onto black, masked into the card. Each tile picks a different plate
+   and a different crop, which is what makes a grid of them read as a catalogue
+   rather than as repeated furniture.
+   -------------------------------------------------------------------------- */
+
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.tiles-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .tiles,
+  .tiles-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.tile {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--line-1);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--void);
+  transition: border-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
+}
+
+.tile-media {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-bottom: 1px solid var(--line-1);
+  background: var(--void);
+}
+
+/* The plate itself. `screen` means the black in the source contributes
+   nothing, so the card gains light rather than a grey rectangle. */
+.tile-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  opacity: 0.62;
+  transform: scale(1.02);
+  transition: transform 600ms var(--ease-out), opacity var(--t-hover) var(--ease-out);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, rgba(0, 0, 0, 0.35));
+  mask-image: linear-gradient(to bottom, #000 40%, rgba(0, 0, 0, 0.35));
+}
+
+/* A hairline grid over the plate, on the same 72px module as .grid-bg */
+.tile-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(var(--line-1) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-1) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%);
+  mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent 80%);
+}
+
+.tile-n {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  left: 16px;
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: var(--w-2);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+
+.tile-badge {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+}
+
+.tile-in {
+  padding: clamp(20px, 2.4vw, 28px);
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.tile-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover {
+    border-color: var(--line-2);
+    background: var(--raise-1);
+  }
+
+  .tile:hover .tile-media img {
+    transform: scale(1.06);
+    opacity: 0.78;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-media img {
+    transition: opacity var(--t-hover) var(--ease-out);
+  }
+
+  .tile:hover .tile-media img {
+    transform: scale(1.02);
+  }
+}
+
+/* A wider, two-up tile for the featured row */
+.tile-wide {
+  grid-column: span 2;
+  grid-template-rows: none;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+}
+
+.tile-wide .tile-media {
+  aspect-ratio: auto;
+  border-bottom: 0;
+  border-right: 1px solid var(--line-1);
+}
+
+@media (max-width: 1000px) {
+  .tile-wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .tile-wide {
+    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .tile-wide .tile-media {
+    aspect-ratio: 16 / 9;
+    border-bottom: 1px solid var(--line-1);
+    border-right: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. Video
+
+   A facade, not an iframe. Nothing from the video host is contacted until the
+   reader asks for it — the same principle as LoopVideo in §8, applied to a
+   third party instead of to our own bytes.
+   -------------------------------------------------------------------------- */
+
+.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line-1);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--void);
+  isolation: isolate;
+}
+
+.video-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.video-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+
+.video-facade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  align-content: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 24px;
+  text-align: center;
+}
+
+.video-play {
+  width: 68px;
+  height: 68px;
+  border-radius: 100px;
+  border: 1px solid var(--line-2);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  color: var(--w-1);
+  transition: background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out),
+    transform var(--t-press) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .video-facade:hover .video-play {
+    background: var(--w-1);
+    border-color: var(--w-1);
+    color: var(--void);
+  }
+}
+
+.video-facade:active .video-play {
+  transform: scale(0.97);
+}
+
+.video-facade .video-t {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.014em;
+  color: var(--w-1);
+  max-width: 34ch;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+}
+
+.video-meta {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.video iframe,
+.video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* No recording yet: the frame stays, the promise does not. */
+.video-off {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.video-off .body {
+  max-width: 40ch;
+}
+
+/* --------------------------------------------------------------------------
+   18. Field entries
+   -------------------------------------------------------------------------- */
+
+.field-quote {
+  border-left: 1px solid var(--line-2);
+  padding-left: clamp(20px, 3vw, 32px);
+  margin-block: clamp(32px, 4vw, 48px);
+  display: grid;
+  gap: 16px;
+  max-width: 60ch;
+}
+
+.field-quote p:first-child {
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  line-height: 1.3;
+  letter-spacing: -0.024em;
+  font-weight: 500;
+  color: var(--w-1);
+  text-wrap: pretty;
+}
+
+.people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.people li {
+  display: grid;
+  gap: 2px;
+}
+
+.people strong {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.011em;
+}
+
+/* A multi-line disclosure is unreadable set in uppercase mono. Body size,
+   --w-3, capped measure. */
+.note {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+  color: var(--w-3);
+  max-width: 78ch;
+}
