@@ -38,21 +38,10 @@ Two rules shape the code:
 
 ### There is no landing page
 
-`/` is the academy, not a page about it. A visitor lands on the catalogue with
-the day's question already on screen — one click from starting something, zero
-clicks from doing something.
-
-### The hook
-
-`DailyQuestion` is the thing a course catalogue structurally cannot do: give
-somebody a reason to come back tomorrow. One real question from the exam banks,
-the same one for everyone that day, graded on the server and explained
-immediately with a link to the lesson behind it.
-
-It is deliberately not gamified past the point of honesty. A streak counts days
-actually answered, it lives in `localStorage`, one attempt per day counts, and
-the card says all of that. No account means no leaderboard and no badge that
-implies one.
+`/` is the academy, not a page about it. The band above the catalogue is
+deliberately short and the first section carries no top padding of its own,
+because the certifications are the product: three course cards are readable at
+1280×720 without scrolling.
 
 ### Generated covers, not one photograph
 
@@ -264,8 +253,6 @@ the marketing site at matching viewports:
 - One `h1` and one `main` per page, no heading-level skips, no duplicate ids, every control has an
   accessible name, every decorative image has `alt=""`, and focus rings are present on tab stops.
 - Mobile navigation is the system's sheet: it locks scroll, closes on Escape, and returns focus.
-- The daily question: no answer key in the page HTML, server grading, streak
-  reaching 1 after one answer, and the question locked for the rest of the day.
 - The video facade contacts no video host before activation, is keyboard-operable, and loads a
   titled `youtube-nocookie.com` embed on demand — asserted in a browser, not assumed.
 - **Both themes**, across every route and viewport: the ground is actually painted, the toggle

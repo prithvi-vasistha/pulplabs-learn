@@ -2,24 +2,16 @@ import Link from 'next/link'
 import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
-import Cover from '@/components/void/Cover'
 import Chevron from '@/components/void/Icons'
-import DailyQuestion from '@/components/learn/DailyQuestion'
 import CourseCard, { AUDIENCE } from '@/components/learn/CourseCard'
 import { PageHead, SectionHead } from '@/components/learn/ui'
-import { getDailyQuestion, getExamFamilies, getExams } from '@/lib/content'
-import { dayKey } from '@/lib/daily'
+import { getExamFamilies, getExams } from '@/lib/content'
 import { formatCount } from '@/lib/format'
 
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
 export default async function Practice() {
-  const key = dayKey()
-  const [question, exams, families] = await Promise.all([
-    getDailyQuestion(key),
-    getExams(),
-    getExamFamilies(),
-  ])
+  const [exams, families] = await Promise.all([getExams(), getExamFamilies()])
   const questionCount = exams.reduce((total, exam) => total + exam.questionCount, 0)
 
   return (
@@ -35,9 +27,8 @@ export default async function Practice() {
               Find the gaps. <span className="dim">Then close them.</span>
             </>
           }
-          lede="One question a day, and full mock papers whenever you want them. Both report by topic and point at the lesson behind the gap."
+          lede="Every result breaks down by topic and links each weak area to the lesson that covers it."
           jump={[
-            { href: '#daily', label: 'Today' },
             ...families.map((f) => ({
               href: `#${slugify(f.name)}`,
               label: f.name,
@@ -47,25 +38,8 @@ export default async function Practice() {
           ]}
         />
 
-        <section className="sec-sm" id="daily" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
-          <div className="shell">
-            <div className="daily-wrap" data-r>
-              <Cover seed={`daily-${key}`} className="daily-cv" ratio="auto" />
-              <DailyQuestion question={question} dayKey={key} />
-            </div>
-
-            {question && (
-              <p className="note" style={{ marginTop: 20 }}>
-                Drawn from the {question.poolSize} questions in our mock papers. Everyone gets the same
-                question on the same day, and the streak is kept in this browser — there is no account.
-              </p>
-            )}
-          </div>
-        </section>
-
-        <div className="flow">
-          <section className="sec" id="papers" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
-            <div className="shell-wide">
+        <section className="sec-sm" id="papers" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
+          <div className="shell-wide">
               <SectionHead
                 eyebrow={`${exams.length} papers · ${questionCount} questions`}
                 title="Sit a full paper."
@@ -115,9 +89,10 @@ export default async function Practice() {
                   </ul>
                 </section>
               ))}
-            </div>
-          </section>
+          </div>
+        </section>
 
+        <div className="flow">
           <section className="sec" id="how" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
             <div className="shell">
               <SectionHead

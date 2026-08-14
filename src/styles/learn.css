@@ -3307,37 +3307,79 @@ mark {
 
 .ac-head {
   position: relative;
-  padding-block: clamp(40px, 6vh, 76px) clamp(32px, 4vh, 52px);
+  padding-block: clamp(20px, 2.6vh, 32px) clamp(18px, 2.2vh, 26px);
   border-bottom: 1px solid var(--line-1);
 }
 
 .ac-head-in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
-  gap: clamp(28px, 4vw, 56px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(24px, 4vw, 60px);
+  align-items: end;
 }
 
 .ac-h {
-  margin: 14px 0 0;
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  margin: 10px 0 0;
+  font-size: clamp(1.55rem, 2.7vw, 2.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   font-weight: 500;
-  max-width: 16ch;
+  max-width: 24ch;
+}
+
+.ac-head-side {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
 }
 
 .ac-l {
-  margin-top: 18px;
-  max-width: 46ch;
+  margin: 0;
+  max-width: 52ch;
+  font-size: 0.9375rem;
 }
 
 @media (max-width: 900px) {
   .ac-head-in {
     grid-template-columns: minmax(0, 1fr);
+    align-items: start;
   }
   .ac-h {
-    max-width: 20ch;
+    max-width: 22ch;
+  }
+}
+
+/* A thin section bar instead of a full section head, so the cards start as
+   high up the page as they can. */
+.ac-first {
+  padding-top: clamp(20px, 2.4vh, 30px);
+}
+
+.ac-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  margin-bottom: clamp(14px, 1.6vw, 18px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.ac-bar h2 {
+  margin: 0;
+}
+
+.ac-bar .mono {
+  color: var(--w-4);
+}
+
+.ac-bar .link {
+  margin-left: auto;
+}
+
+@media (max-width: 560px) {
+  .ac-bar .link {
+    margin-left: 0;
   }
 }
 
@@ -3488,161 +3530,7 @@ mark {
 }
 
 /* ==========================================================================
-   23. The daily question
-
-   The one thing a catalogue cannot do: give somebody a reason to come back
-   tomorrow. It is a real exam question, so it sits in the same furniture as
-   the exam surface rather than in a game.
-   ========================================================================== */
-
-.daily-wrap {
-  position: relative;
-  border: 1px solid var(--line-1);
-  border-radius: 18px;
-  overflow: hidden;
-  background: var(--card);
-}
-
-.daily-cv {
-  height: 90px;
-}
-
-.daily {
-  padding: clamp(18px, 2.2vw, 26px);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.ac-daily .daily {
-  background: var(--card);
-  border: 1px solid var(--line-1);
-  border-radius: 18px;
-}
-
-.daily-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.daily-sub {
-  margin: 4px 0 0;
-  color: var(--w-4);
-}
-
-.daily-streak {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-  flex: none;
-}
-
-.daily-n {
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.daily-q {
-  margin: 0;
-  font-size: 1.0625rem;
-  font-weight: 500;
-  line-height: 1.42;
-  letter-spacing: -0.014em;
-}
-
-.daily-opts {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 7px;
-}
-
-.daily-opt {
-  width: 100%;
-  text-align: left;
-}
-
-.daily-foot {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.daily-note {
-  color: var(--w-4);
-  font-size: 0.625rem;
-}
-
-.daily-result {
-  border-top: 1px solid var(--line-1);
-  padding-top: 14px;
-  display: grid;
-  gap: 8px;
-}
-
-.daily-result .body {
-  color: var(--w-2);
-}
-
-.daily-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 4px;
-}
-
-/* The run of days. A filled mark is a day answered; the ring is today. */
-.daily-run {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--line-1);
-  padding-top: 14px;
-}
-
-.daily-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  border: 1px solid var(--line-2);
-  flex: none;
-}
-
-.daily-dot[data-status] {
-  background: var(--w-2);
-  border-color: transparent;
-}
-
-.daily-dot[data-status='incorrect'] {
-  background: transparent;
-  border-color: var(--w-3);
-  border-width: 2px;
-}
-
-.daily-dot[data-today] {
-  box-shadow: 0 0 0 3px var(--focus-halo);
-}
-
-.daily-run .daily-note {
-  margin-left: auto;
-}
-
-@media (max-width: 560px) {
-  .daily-run .daily-note {
-    margin-left: 0;
-    width: 100%;
-  }
-}
-
-/* ==========================================================================
-   24. Covers in place of plates
+   23. Covers in place of plates
 
    void.css positions the light plates and applies the screen/multiply
    mechanic to them, because on the marketing site they are still
@@ -3707,8 +3595,8 @@ mark {
   box-shadow: inset 0 -1px 0 var(--line-1);
 }
 
-/* The head band gets a wash of its own, masked out under the daily card so
-   the question stays the most legible thing on the first screen. */
+/* The head band gets a wash of its own, weighted to the left so the type
+   stays the most legible thing on it. */
 .ac-head {
   isolation: isolate;
   overflow: hidden;

@@ -3,13 +3,11 @@ import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import Cover from '@/components/void/Cover'
 import Chevron from '@/components/void/Icons'
-import DailyQuestion from '@/components/learn/DailyQuestion'
 import ContinueLearning from '@/components/learn/ContinueLearning'
 import CourseCard, { AUDIENCE, PathCourseCard } from '@/components/learn/CourseCard'
 import { SectionHead } from '@/components/learn/ui'
 import {
   disclosure,
-  getDailyQuestion,
   getExams,
   getFieldEntries,
   getPaths,
@@ -17,21 +15,17 @@ import {
   getProjects,
   getTechnologies,
 } from '@/lib/content'
-import { dayKey } from '@/lib/daily'
 import { formatCount, formatMinutes, levelRank } from '@/lib/format'
 
 /**
  * The academy itself, not a page about it.
  *
- * There is no marketing landing page any more. Someone arriving here should be
- * one click from starting something and zero clicks from *doing* something,
- * which is what the daily question is for: a catalogue earns one visit, a
- * question a day earns the habit.
+ * There is no marketing landing page any more, and the band above the courses
+ * is deliberately short: the certifications are the product, so they are on
+ * the first screen rather than below a page of introduction.
  */
 export default async function Home() {
-  const key = dayKey()
-  const [question, paths, catalogue, exams, projects, field, technologies] = await Promise.all([
-    getDailyQuestion(key),
+  const [paths, catalogue, exams, projects, field, technologies] = await Promise.all([
     getPaths(),
     getProgressCatalogue(),
     getExams(),
@@ -49,7 +43,9 @@ export default async function Home() {
       <Nav />
 
       <main id="main">
-        {/* ── A band, not a hero. Say what this is, then get out of the way ── */}
+        {/* ── A band, not a hero ────────────────────────────────────────────
+            Short on purpose. The courses are the product, so they are on the
+            first screen rather than below a page of introduction. */}
         <section className="ac-head">
           <div className="ac-head-cv" aria-hidden="true">
             <Cover seed="pulplabs-learn-home" ratio="auto" />
@@ -61,42 +57,41 @@ export default async function Home() {
               <h1 className="ac-h">
                 Learn the AI stack <span className="dim">by being tested on it.</span>
               </h1>
+            </div>
+
+            <div className="ac-head-side">
               <p className="lede ac-l">
-                {paths.length} courses, {totalLessons} lessons and {exams.length} mock papers — every
-                result broken down by topic and pointed back at the lesson behind the gap.
+                {paths.length} certification courses, {totalLessons} lessons and {exams.length} mock
+                papers — every result broken down by topic and pointed back at the lesson behind the gap.
               </p>
-              <div className="btn-row" style={{ marginTop: 26 }}>
+              <div className="btn-row">
                 <Link href="/learn" className="btn">
                   Browse courses <Chevron />
                 </Link>
                 <Link href="/practice" className="btn btn-ghost">
-                  Today’s question
+                  Mock papers
                 </Link>
               </div>
-            </div>
-
-            {/* The hook is on the first screen, unasked. */}
-            <div className="ac-daily">
-              <DailyQuestion question={question} dayKey={key} compact />
             </div>
           </div>
         </section>
 
-        <ContinueLearning catalogue={catalogue} />
-
-        {/* ── Courses ────────────────────────────────────────────────────── */}
-        <section className="sec-sm" id="courses" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
+        {/* ── Certifications, above the fold ──────────────────────────────── */}
+        <section
+          className="sec-sm ac-first"
+          id="courses"
+          style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}
+        >
           <div className="shell-wide">
-            <SectionHead
-              eyebrow={`${paths.length} courses · ${formatMinutes(totalMinutes)}`}
-              title="Build practical AI skills."
-              lede="Each course is a sequence with an exam behind it, not a playlist."
-              action={
-                <Link href="/learn" className="link">
-                  All courses <Chevron />
-                </Link>
-              }
-            />
+            <div className="ac-bar">
+              <h2 className="d3">Certification courses</h2>
+              <span className="mono tnum">
+                {paths.length} courses · {formatMinutes(totalMinutes)}
+              </span>
+              <Link href="/learn" className="link">
+                All courses <Chevron />
+              </Link>
+            </div>
 
             <ul className="cc-grid" role="list">
               {sorted.map((path, i) => (
@@ -104,11 +99,15 @@ export default async function Home() {
               ))}
             </ul>
 
-            <p className="note" style={{ marginTop: 28 }}>
+            <p className="note" style={{ marginTop: 26 }}>
               {disclosure}
             </p>
           </div>
         </section>
+
+        {/* Progress belongs after the catalogue: it must never push the
+            courses down for somebody who has not started one. */}
+        <ContinueLearning catalogue={catalogue} />
 
         <div className="flow">
           {/* ── Practice ─────────────────────────────────────────────────── */}
