@@ -25,7 +25,7 @@ export default function Footer() {
                 <Link href="/learn">Certification tracks</Link>
               </li>
               <li>
-                <Link href="/exams">Mock exams</Link>
+                <Link href="/practice">Practice</Link>
               </li>
               <li>
                 <Link href="/technologies">Technologies</Link>

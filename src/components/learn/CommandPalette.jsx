@@ -42,7 +42,7 @@ function loadIndex() {
 /** Shown before a reader has typed: the four places they can go, with counts. */
 const STARTERS = [
   { type: 'Learning path', label: 'Preparation tracks', href: '/learn', hint: 'Sequenced, start to finish' },
-  { type: 'Mock exam', label: 'Mock exams', href: '/exams', hint: 'Scored by topic' },
+  { type: 'Mock exam', label: 'Mock exams', href: '/practice', hint: 'Scored by topic' },
   { type: 'Project', label: 'Open-source projects', href: '/projects', hint: 'Source and documentation' },
   { type: 'Field', label: 'Field', href: '/field', hint: 'Case studies and interviews' },
 ]

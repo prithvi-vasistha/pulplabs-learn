@@ -25,7 +25,7 @@ export default async function sitemap() {
     { url: '/', priority: 1 },
     { url: '/learn', priority: 0.9 },
     { url: '/technologies', priority: 0.8 },
-    { url: '/exams', priority: 0.8 },
+    { url: '/practice', priority: 0.9 },
     { url: '/projects', priority: 0.7 },
     { url: '/field', priority: 0.7 },
     { url: '/dashboard', priority: 0.4 },

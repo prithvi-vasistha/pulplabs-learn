@@ -13,6 +13,7 @@ import { paths, pathBySlug, orderedLessons, pathMinutes, DISCLOSURE } from '@/da
 import { exams, examBySlug } from '@/data/exams'
 import { projects, projectBySlug, CATALOGUE_NOTE } from '@/data/projects'
 import { fieldEntries, fieldBySlug, FIELD_NOTE, KINDS } from '@/data/field'
+import { dayKey, pickDaily } from '@/lib/daily'
 import { openlcmDocs } from '@/data/docs/openlcm'
 import { wheatearDocs } from '@/data/docs/wheatear'
 
@@ -287,6 +288,36 @@ export async function getExam(slug) {
 
 export async function getExamSlugs() {
   return exams.map((e) => e.slug)
+}
+
+/* ---------------------------------------------------------------- daily --- */
+
+/**
+ * Today's question, with `correct` and `explanation` removed.
+ *
+ * Same boundary as the exams: the page renders a candidate question and the
+ * server action holds the key. Nothing here can be read out of the HTML.
+ */
+export async function getDailyQuestion(key = dayKey()) {
+  const pool = exams.flatMap((exam) =>
+    exam.questions
+      .filter((q) => q.type === 'single' && q.correct.length === 1)
+      .map((question) => ({ question, exam }))
+  )
+
+  const picked = pickDaily(pool, key)
+  if (!picked) return null
+
+  const { question, exam } = picked
+  return {
+    id: question.id,
+    topic: question.topic,
+    prompt: question.prompt,
+    options: question.options.map((o) => ({ id: o.id, text: o.text })),
+    examSlug: exam.slug,
+    examTitle: exam.title,
+    poolSize: pool.length,
+  }
 }
 
 /* ------------------------------------------------------------- projects --- */

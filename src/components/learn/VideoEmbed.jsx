@@ -1,5 +1,7 @@
 'use client'
 
+import Cover from '@/components/void/Cover'
+
 import { useState } from 'react'
 
 /**
@@ -25,7 +27,7 @@ export default function VideoEmbed({ video, plate = 'aperture-glow' }) {
     return (
       <div className="video">
         <div className="video-plate" aria-hidden="true">
-          <img src={`/void/${plate}.webp`} alt="" loading="lazy" decoding="async" />
+          <Cover seed={plate} ratio="16 / 9" />
         </div>
         <div className="video-off">
           <p className="mono">Recording not published</p>
@@ -40,7 +42,7 @@ export default function VideoEmbed({ video, plate = 'aperture-glow' }) {
     return (
       <div className="video">
         <div className="video-plate" aria-hidden="true">
-          <img src={`/void/${plate}.webp`} alt="" loading="lazy" decoding="async" />
+          <Cover seed={plate} ratio="16 / 9" />
         </div>
 
         <button type="button" className="video-facade" onClick={() => setPlaying(true)}>

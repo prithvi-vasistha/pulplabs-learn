@@ -1,286 +1,223 @@
 import Link from 'next/link'
 import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
-import NextPage from '@/components/void/NextPage'
-import LoopVideo from '@/components/void/LoopVideo'
+import Cover from '@/components/void/Cover'
 import Chevron from '@/components/void/Icons'
+import DailyQuestion from '@/components/learn/DailyQuestion'
 import ContinueLearning from '@/components/learn/ContinueLearning'
-import { SectionHead, CloseSection } from '@/components/learn/ui'
-import { DocRow, ExamRow, PathCard, ProjectCard, TechCell } from '@/components/learn/cards'
-import { Badge } from '@/components/learn/ui'
+import CourseCard, { AUDIENCE, PathCourseCard } from '@/components/learn/CourseCard'
+import { SectionHead } from '@/components/learn/ui'
 import {
   disclosure,
-  getDocSets,
-  getFieldEntries,
+  getDailyQuestion,
   getExams,
+  getFieldEntries,
   getPaths,
   getProgressCatalogue,
   getProjects,
   getTechnologies,
 } from '@/lib/content'
+import { dayKey } from '@/lib/daily'
+import { formatCount, formatMinutes, levelRank } from '@/lib/format'
 
+/**
+ * The academy itself, not a page about it.
+ *
+ * There is no marketing landing page any more. Someone arriving here should be
+ * one click from starting something and zero clicks from *doing* something,
+ * which is what the daily question is for: a catalogue earns one visit, a
+ * question a day earns the habit.
+ */
 export default async function Home() {
-  const [paths, exams, technologies, projects, docSets, catalogue, field] = await Promise.all([
+  const key = dayKey()
+  const [question, paths, catalogue, exams, projects, field, technologies] = await Promise.all([
+    getDailyQuestion(key),
     getPaths(),
-    getExams(),
-    getTechnologies(),
-    getProjects(),
-    getDocSets(),
     getProgressCatalogue(),
+    getExams(),
+    getProjects(),
     getFieldEntries(),
+    getTechnologies(),
   ])
 
-  const lessonCount = paths.reduce((total, path) => total + path.lessonCount, 0)
-  const questionCount = exams.reduce((total, exam) => total + exam.questionCount, 0)
-
-  const facts = [
-    { n: paths.length, k: 'Tracks' },
-    { n: lessonCount, k: 'Lessons' },
-    { n: exams.length, k: 'Mock exams' },
-    { n: questionCount, k: 'Questions' },
-  ]
+  const totalLessons = paths.reduce((t, p) => t + p.lessonCount, 0)
+  const totalMinutes = paths.reduce((t, p) => t + p.minutes, 0)
+  const sorted = [...paths].sort((a, b) => levelRank(a.level) - levelRank(b.level))
 
   return (
     <div className="grain">
       <Nav />
 
       <main id="main">
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <section className="hero grid-bg">
-          <LoopVideo
-            className="hero-light"
-            src="/void/hero-loop"
-            poster="/void/hero-pause.webp"
-            opacity={0.85}
-            once
-            pauseAt={4.2}
-          />
+        {/* ── A band, not a hero. Say what this is, then get out of the way ── */}
+        <section className="ac-head">
+          <div className="ac-head-cv" aria-hidden="true">
+            <Cover seed="pulplabs-learn-home" ratio="auto" />
+          </div>
 
-          <div className="shell hero-in">
-            <p className="mono hero-pill-line">Prepare. Practise. Build.</p>
+          <div className="shell-wide ac-head-in">
+            <div>
+              <p className="mono">PulpLabs Learn</p>
+              <h1 className="ac-h">
+                Learn the AI stack <span className="dim">by being tested on it.</span>
+              </h1>
+              <p className="lede ac-l">
+                {paths.length} courses, {totalLessons} lessons and {exams.length} mock papers — every
+                result broken down by topic and pointed back at the lesson behind the gap.
+              </p>
+              <div className="btn-row" style={{ marginTop: 26 }}>
+                <Link href="/learn" className="btn">
+                  Browse courses <Chevron />
+                </Link>
+                <Link href="/practice" className="btn btn-ghost">
+                  Today’s question
+                </Link>
+              </div>
+            </div>
 
-            <h1 className="d1 hero-h">
-              Know the AI stack.
-              <br />
-              <span className="dim">Prove that you do.</span>
-            </h1>
-
-            <p className="lede hero-l measure-w">
-              Certification preparation from PulpLabs: structured tracks, mock exams that report by topic, and
-              the documentation for what we build in the open.
-            </p>
-
-            <div className="hero-cta">
-              <Link href="/learn" className="btn">
-                Explore preparation tracks <Chevron />
-              </Link>
-              <Link href="/exams" className="btn btn-ghost">
-                Take a mock exam
-              </Link>
+            {/* The hook is on the first screen, unasked. */}
+            <div className="ac-daily">
+              <DailyQuestion question={question} dayKey={key} compact />
             </div>
           </div>
         </section>
 
-        {/* ── What is in the Lab ───────────────────────────────────────── */}
-        <section className="trust">
-          <div className="shell-wide trust-in">
-            <span className="mono">In the Lab</span>
-            <ul className="trust-logos">
-              {paths.map((path) => (
-                <li key={path.slug}>{path.eyebrow}</li>
+        <ContinueLearning catalogue={catalogue} />
+
+        {/* ── Courses ────────────────────────────────────────────────────── */}
+        <section className="sec-sm" id="courses" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
+          <div className="shell-wide">
+            <SectionHead
+              eyebrow={`${paths.length} courses · ${formatMinutes(totalMinutes)}`}
+              title="Build practical AI skills."
+              lede="Each course is a sequence with an exam behind it, not a playlist."
+              action={
+                <Link href="/learn" className="link">
+                  All courses <Chevron />
+                </Link>
+              }
+            />
+
+            <ul className="cc-grid" role="list">
+              {sorted.map((path, i) => (
+                <PathCourseCard key={path.slug} path={path} index={i} />
               ))}
             </ul>
-            <ul className="trust-counts tnum">
-              {facts.map((fact) => (
-                <li key={fact.k}>
-                  <b>{fact.n}</b> {fact.k.toLowerCase()}
-                </li>
-              ))}
-            </ul>
+
+            <p className="note" style={{ marginTop: 28 }}>
+              {disclosure}
+            </p>
           </div>
         </section>
 
         <div className="flow">
-          {/* ── Continue ───────────────────────────────────────────────── */}
-          <section className="sec-sm">
-            <div className="shell-wide">
-              <SectionHead eyebrow="Your progress" title="Where you left off." />
-              <div data-r>
-                <ContinueLearning catalogue={catalogue} />
-              </div>
-            </div>
-          </section>
-
-          {/* ── Tracks ─────────────────────────────────────────────────── */}
+          {/* ── Practice ─────────────────────────────────────────────────── */}
           <section className="sec">
             <div className="shell-wide">
               <SectionHead
-                eyebrow="Preparation tracks"
+                eyebrow={`${exams.length} papers`}
                 title={
                   <>
-                    Structured routes. <span className="dim">Not a reading list.</span>
+                    Prove it, <span className="dim">then read what you missed.</span>
                   </>
                 }
-                lede="Each track states who it is for, what it assumes, and what you will be able to do at the end."
                 action={
-                  <Link href="/learn" className="link">
-                    All tracks <Chevron />
+                  <Link href="/practice" className="link">
+                    All papers <Chevron />
                   </Link>
                 }
               />
 
-              <ul className="grid-h grid-h-2" role="list">
-                {paths.map((path, i) => (
-                  <PathCard key={path.slug} path={path} index={i} />
+              <ul className="cc-grid" role="list">
+                {exams.slice(0, 3).map((exam, i) => (
+                  <CourseCard
+                    key={exam.slug}
+                    href={`/exams/${exam.slug}`}
+                    seed={`exam-${exam.slug}`}
+                    audience={AUDIENCE[exam.level]}
+                    title={exam.title}
+                    summary={exam.summary}
+                    meta={`${formatCount(exam.questionCount, 'question')} · ${exam.minutes} min`}
+                    level={exam.level}
+                    index={i}
+                  />
                 ))}
               </ul>
             </div>
           </section>
 
-          {/* ── Practice ───────────────────────────────────────────────── */}
+          {/* ── Subjects ─────────────────────────────────────────────────── */}
           <section className="sec">
             <div className="shell-wide">
               <SectionHead
-                eyebrow="Practice"
-                title={
-                  <>
-                    Find the gaps <span className="dim">before the exam does.</span>
-                  </>
-                }
-                lede="Every mock exam reports performance per topic and links each weak area straight back to the lesson that covers it."
-                action={
-                  <Link href="/exams" className="link">
-                    All mock exams <Chevron />
-                  </Link>
-                }
-              />
-
-              <ul className="index" role="list">
-                {exams.slice(0, 4).map((exam, i) => (
-                  <ExamRow key={exam.slug} exam={exam} index={i} />
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          {/* ── Technologies ───────────────────────────────────────────── */}
-          <section className="sec">
-            <div className="shell-wide">
-              <SectionHead
-                eyebrow="Technologies"
-                title="What the certifications actually test."
-                lede="Start from a subject rather than a course. Each one explains what it is, why it matters, and where it sits in the rest of the system."
+                eyebrow={`${technologies.length} subjects`}
+                title="Or start from a subject."
+                lede="Every subject page gathers each lesson, exam, project, guide and case study that touches it. The number is how many pieces that is."
                 action={
                   <Link href="/technologies" className="link">
-                    All technologies <Chevron />
+                    All subjects <Chevron />
                   </Link>
                 }
               />
 
-              <ul className="grid-h grid-h-4 grid-h-sm" role="list">
-                {technologies.slice(0, 8).map((tech, i) => (
-                  <TechCell key={tech.slug} tech={tech} index={i} />
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          {/* ── Field ──────────────────────────────────────────────────── */}
-          <section className="sec">
-            <div className="shell-wide">
-              <SectionHead
-                eyebrow="Field"
-                title={
-                  <>
-                    The same work, <span className="dim">outside a lesson.</span>
-                  </>
-                }
-                lede="Client case studies, how a PulpLabs engagement is actually run, and recorded conversations with the engineers who build these systems."
-                action={
-                  <Link href="/field" className="link">
-                    All entries <Chevron />
-                  </Link>
-                }
-              />
-
-              <ul className="tiles" role="list">
-                {field.slice(0, 3).map((entry, i) => (
-                  <li key={entry.slug}>
-                    <article className="tile" data-r style={{ '--rd': `${i * 65}ms` }}>
-                      <div className="tile-media">
-                        <img src={`/void/${entry.plate}.webp`} alt="" loading="lazy" decoding="async" />
-                        <span className="tile-badge">
-                          <Badge quiet={entry.kind !== 'Interview'} pip={entry.kind === 'Interview'}>
-                            {entry.kind}
-                          </Badge>
-                        </span>
-                      </div>
-                      <div className="tile-in">
-                        <p className="mono">{entry.client ?? entry.sector}</p>
-                        <h3 className="h4">
-                          <Link href={`/field/${entry.slug}`} className="stretch-l">
-                            {entry.title}
-                          </Link>
-                        </h3>
-                        <p className="body trunc-2">{entry.summary}</p>
-                      </div>
-                    </article>
+              <ul className="chip-grid" role="list">
+                {technologies.map((tech) => (
+                  <li key={tech.slug}>
+                    <Link href={`/technologies/${tech.slug}`}>
+                      {tech.name}
+                      <span className="tnum">{tech.materialCount}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           </section>
 
-          {/* ── Projects, documentation included ───────────────────────── */}
+          {/* ── Projects and Field ───────────────────────────────────────── */}
           <section className="sec">
             <div className="shell-wide">
               <SectionHead
-                eyebrow="Projects"
+                eyebrow="Beyond the courses"
                 title={
                   <>
-                    What we ship <span className="dim">in the open.</span>
+                    What we ship, <span className="dim">and what it was like.</span>
                   </>
-                }
-                lede="Open-source products and contributions, each with its source and its documentation."
-                action={
-                  <Link href="/projects" className="link">
-                    All projects <Chevron />
-                  </Link>
                 }
               />
 
-              <ul className="grid-h grid-h-2" role="list">
-                {projects.map((project, i) => (
-                  <ProjectCard key={project.slug} project={project} index={i} />
+              <ul className="cc-grid" role="list">
+                {projects.slice(0, 2).map((project, i) => (
+                  <CourseCard
+                    key={project.slug}
+                    href={`/projects/${project.slug}`}
+                    seed={`project-${project.slug}`}
+                    audience={`${project.category} · ${project.status}`}
+                    title={project.name}
+                    summary={project.tagline}
+                    meta={
+                      project.docPageCount > 0
+                        ? formatCount(project.docPageCount, 'doc page')
+                        : 'Repository only'
+                    }
+                    index={i}
+                  />
+                ))}
+                {field.slice(0, 1).map((entry) => (
+                  <CourseCard
+                    key={entry.slug}
+                    href={`/field/${entry.slug}`}
+                    seed={`field-${entry.slug}`}
+                    audience={`${entry.kind}${entry.client ? ` · ${entry.client}` : ''}`}
+                    title={entry.title}
+                    summary={entry.summary}
+                    meta={`${entry.minutes} min read`}
+                    index={2}
+                  />
                 ))}
               </ul>
-
-              <ul className="index" role="list" style={{ marginTop: 'clamp(28px, 3vw, 40px)' }}>
-                {docSets.map((set, i) => (
-                  <DocRow key={set.slug} set={set} index={i} />
-                ))}
-              </ul>
-
-              <p className="note" style={{ marginTop: 28 }}>
-                {disclosure}
-              </p>
             </div>
           </section>
         </div>
-
-        <CloseSection
-          title="Prepare. Practise. Build."
-          lede="Work through a track, sit the mock exam, find out what you actually know, then read the source of something built on it."
-        >
-          <Link href="/learn" className="btn">
-            Start preparing <Chevron />
-          </Link>
-          <Link href="/dashboard" className="btn btn-ghost">
-            Your dashboard
-          </Link>
-        </CloseSection>
-
-        <NextPage href="/learn" title="Preparation tracks" />
       </main>
 
       <Footer />

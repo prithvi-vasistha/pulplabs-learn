@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Cover from '@/components/void/Cover'
 import Chevron, { Search } from '@/components/void/Icons'
 import { useProgress } from '@/components/learn/ProgressProvider'
 import { Badge, Difficulty, Meter, StateBlock } from '@/components/learn/ui'
@@ -128,7 +129,7 @@ export default function CourseCatalogue({ paths, catalogue }) {
                     <li key={path.slug}>
                       <article className="tile" data-r style={{ '--rd': `${i * 65}ms` }}>
                         <div className="tile-media">
-                          <img src={`/void/${path.plate}.webp`} alt="" loading="lazy" decoding="async" />
+                          <Cover seed={path.slug} ratio="16 / 9" />
                           <span className="tile-n">{padIndex(i + 1)}</span>
                           {started && (
                             <span className="tile-badge">

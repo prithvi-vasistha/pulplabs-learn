@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Cover from '@/components/void/Cover'
 import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
@@ -17,7 +18,7 @@ export default function FieldEntry({ entry, next }) {
       <main id="main">
         <section className="phead grid-bg">
           <div className="phead-light" aria-hidden="true">
-            <img src={`/void/${entry.plate}.webp`} alt="" fetchPriority="high" decoding="async" />
+            <Cover seed={entry.slug} ratio="auto" />
           </div>
 
           <div className="shell phead-in">
@@ -167,7 +168,7 @@ export default function FieldEntry({ entry, next }) {
                   <li>
                     <article className="tile" data-r>
                       <div className="tile-media">
-                        <img src={`/void/${next.plate}.webp`} alt="" loading="lazy" decoding="async" />
+                        <Cover seed={next.slug} ratio="16 / 9" />
                         <span className="tile-badge">
                           <Badge quiet>{next.kind}</Badge>
                         </span>

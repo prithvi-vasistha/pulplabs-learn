@@ -47,7 +47,7 @@ export default function NotFound() {
               <li className="lift stretch">
                 <p className="mono">Practice</p>
                 <h2 className="h4">
-                  <Link href="/exams" className="stretch-l">
+                  <Link href="/practice" className="stretch-l">
                     Mock exams
                   </Link>
                 </h2>

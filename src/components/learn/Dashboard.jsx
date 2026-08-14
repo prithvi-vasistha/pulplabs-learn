@@ -99,7 +99,7 @@ export default function Dashboard({ catalogue, exams }) {
                   <Link href="/learn" className="btn">
                     Start a learning path <Chevron />
                   </Link>
-                  <Link href="/exams" className="btn btn-ghost">
+                  <Link href="/practice" className="btn btn-ghost">
                     Take a mock exam
                   </Link>
                 </>
@@ -178,7 +178,7 @@ export default function Dashboard({ catalogue, exams }) {
                   title="You have not taken an assessment in this browser."
                   body="An assessment is the fastest way to find out which parts of a path you can skip and which you cannot."
                   actions={
-                    <Link href="/exams" className="btn">
+                    <Link href="/practice" className="btn">
                       Browse mock exams <Chevron />
                     </Link>
                   }

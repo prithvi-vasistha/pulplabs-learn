@@ -128,7 +128,7 @@ button {
 
 .grid-h > li,
 .grid-h > .cell {
-  background: var(--void);
+  background: var(--card);
   padding: clamp(24px, 2.8vw, 36px);
   display: grid;
   gap: 12px;
@@ -301,7 +301,7 @@ button {
   border: 1px solid var(--line-1);
   border-radius: 16px;
   padding: clamp(22px, 2.6vw, 32px);
-  background: var(--void);
+  background: var(--card);
 }
 
 .panel-sm {
@@ -847,7 +847,7 @@ mark {
 }
 
 .search-browse > section {
-  background: var(--void);
+  background: var(--card);
   padding: clamp(20px, 2.4vw, 28px);
   display: grid;
   gap: 14px;
@@ -1563,7 +1563,7 @@ mark {
 }
 
 .related-list li {
-  background: var(--void);
+  background: var(--card);
 }
 
 .related-list a {
@@ -1605,7 +1605,7 @@ mark {
 
 .pager a,
 .pager div {
-  background: var(--void);
+  background: var(--card);
   padding: 20px 22px;
   display: grid;
   gap: 8px;
@@ -1837,7 +1837,7 @@ mark {
 }
 
 .qbtn[aria-current='true'][data-flag='1']::after {
-  background: var(--void);
+  background: var(--card);
 }
 
 .legend {
@@ -2119,7 +2119,7 @@ mark {
 }
 
 .review-q {
-  background: var(--void);
+  background: var(--card);
   padding: clamp(20px, 2.4vw, 28px);
   display: grid;
   gap: 16px;
@@ -2160,7 +2160,7 @@ mark {
   width: min(540px, 100%);
   max-height: calc(100vh - 48px);
   overflow-y: auto;
-  background: var(--void);
+  background: var(--card);
   border: 1px solid var(--line-2);
   border-radius: 18px;
   padding: clamp(24px, 3vw, 32px);
@@ -2288,7 +2288,7 @@ mark {
 }
 
 .doc-groups > div {
-  background: var(--void);
+  background: var(--card);
   padding: 18px 20px;
   display: grid;
   gap: 12px;
@@ -2340,7 +2340,7 @@ mark {
 }
 
 .stat-band li {
-  background: var(--void);
+  background: var(--card);
   padding: clamp(20px, 2.4vw, 28px) clamp(16px, 2vw, 24px);
   display: grid;
   gap: 8px;
@@ -2491,7 +2491,7 @@ mark {
   border: 1px solid var(--line-1);
   border-radius: 18px;
   overflow: hidden;
-  background: var(--void);
+  background: var(--card);
   transition: border-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
 }
 
@@ -2501,7 +2501,7 @@ mark {
   overflow: hidden;
   aspect-ratio: 16 / 9;
   border-bottom: 1px solid var(--line-1);
-  background: var(--void);
+  background: var(--card);
 }
 
 /* The plate itself. `screen` means the black in the source contributes
@@ -2641,7 +2641,7 @@ mark {
   border: 1px solid var(--line-1);
   border-radius: 18px;
   overflow: hidden;
-  background: var(--void);
+  background: var(--card);
   isolation: isolate;
 }
 
@@ -2907,7 +2907,7 @@ mark {
   max-height: min(560px, 80vh);
   display: flex;
   flex-direction: column;
-  background: var(--void);
+  background: var(--card);
   border: 1px solid var(--line-2);
   border-radius: 16px;
   overflow: hidden;
@@ -3155,4 +3155,652 @@ mark {
   border: 1px solid var(--line-1);
   border-radius: 14px;
   padding: clamp(18px, 2.4vw, 26px);
+}
+
+
+/* ==========================================================================
+   21. Generated covers
+
+   Colour lives here and nowhere else. The interface around a cover stays
+   achromatic, which is what keeps a grid of these reading as a catalogue
+   rather than as noise — the same reason the system never tints a button.
+
+   Each family is defined twice: a soft pastel on paper, and a deeper, more
+   saturated reading of the same hues on black. One SVG, two palettes.
+
+   Flat descendant selectors rather than nesting, so this needs no build step
+   beyond the one the project already has.
+   ========================================================================== */
+
+.cv {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--cv-bg, var(--void));
+  isolation: isolate;
+}
+
+.cv svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* A hairline over the art, so a cover meeting a card edge reads as printed
+   onto the card rather than pasted on top of it. */
+.cv::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px var(--line-1);
+  pointer-events: none;
+}
+
+/* ---- light ---- */
+.cv-ember {
+  --cv-bg: #ffffff;
+  --cv-1: #ffb4a2;
+  --cv-2: #ffd6a5;
+  --cv-3: #ff8fa3;
+}
+.cv-kelp {
+  --cv-bg: #ffffff;
+  --cv-1: #a8e6cf;
+  --cv-2: #cfe8a9;
+  --cv-3: #7fd8be;
+}
+.cv-iris {
+  --cv-bg: #ffffff;
+  --cv-1: #c3b1e1;
+  --cv-2: #b8c0ff;
+  --cv-3: #ffc2e2;
+}
+.cv-lagoon {
+  --cv-bg: #ffffff;
+  --cv-1: #9fe0d8;
+  --cv-2: #b4f0c8;
+  --cv-3: #8fd3e8;
+}
+.cv-clay {
+  --cv-bg: #ffffff;
+  --cv-1: #f5c0a0;
+  --cv-2: #efd9b4;
+  --cv-3: #e8a87c;
+}
+.cv-orchid {
+  --cv-bg: #ffffff;
+  --cv-1: #e8b4f0;
+  --cv-2: #d8a7e8;
+  --cv-3: #f4a6c8;
+}
+.cv-meadow {
+  --cv-bg: #ffffff;
+  --cv-1: #d4e09b;
+  --cv-2: #f0eda0;
+  --cv-3: #b8d8a0;
+}
+.cv-dusk {
+  --cv-bg: #ffffff;
+  --cv-1: #b5a7e6;
+  --cv-2: #f0b7c4;
+  --cv-3: #ffcfa8;
+}
+
+/* ---- dark: deeper and more saturated, so they emit against black ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .cv-ember {
+    --cv-bg: #0b0b0c;
+    --cv-1: #ff6b4a;
+    --cv-2: #ffa94d;
+    --cv-3: #ff5c8a;
+  }
+  :root:not([data-theme='light']) .cv-kelp {
+    --cv-bg: #0b0b0c;
+    --cv-1: #2dd4a0;
+    --cv-2: #8fd14f;
+    --cv-3: #14b8a6;
+  }
+  :root:not([data-theme='light']) .cv-iris {
+    --cv-bg: #0b0b0c;
+    --cv-1: #8b6fe8;
+    --cv-2: #6c7bff;
+    --cv-3: #e85fa8;
+  }
+  :root:not([data-theme='light']) .cv-lagoon {
+    --cv-bg: #0b0b0c;
+    --cv-1: #22d3c6;
+    --cv-2: #4ade80;
+    --cv-3: #38bdf8;
+  }
+  :root:not([data-theme='light']) .cv-clay {
+    --cv-bg: #0b0b0c;
+    --cv-1: #f08c4a;
+    --cv-2: #e0b060;
+    --cv-3: #d97757;
+  }
+  :root:not([data-theme='light']) .cv-orchid {
+    --cv-bg: #0b0b0c;
+    --cv-1: #d946c8;
+    --cv-2: #a855d8;
+    --cv-3: #f0509b;
+  }
+  :root:not([data-theme='light']) .cv-meadow {
+    --cv-bg: #0b0b0c;
+    --cv-1: #a3d63f;
+    --cv-2: #e8e04a;
+    --cv-3: #6ec85f;
+  }
+  :root:not([data-theme='light']) .cv-dusk {
+    --cv-bg: #0b0b0c;
+    --cv-1: #7c6ce0;
+    --cv-2: #e8547c;
+    --cv-3: #ff9a56;
+  }
+}
+
+:root[data-theme='dark'] .cv-ember {
+  --cv-bg: #0b0b0c;
+  --cv-1: #ff6b4a;
+  --cv-2: #ffa94d;
+  --cv-3: #ff5c8a;
+}
+:root[data-theme='dark'] .cv-kelp {
+  --cv-bg: #0b0b0c;
+  --cv-1: #2dd4a0;
+  --cv-2: #8fd14f;
+  --cv-3: #14b8a6;
+}
+:root[data-theme='dark'] .cv-iris {
+  --cv-bg: #0b0b0c;
+  --cv-1: #8b6fe8;
+  --cv-2: #6c7bff;
+  --cv-3: #e85fa8;
+}
+:root[data-theme='dark'] .cv-lagoon {
+  --cv-bg: #0b0b0c;
+  --cv-1: #22d3c6;
+  --cv-2: #4ade80;
+  --cv-3: #38bdf8;
+}
+:root[data-theme='dark'] .cv-clay {
+  --cv-bg: #0b0b0c;
+  --cv-1: #f08c4a;
+  --cv-2: #e0b060;
+  --cv-3: #d97757;
+}
+:root[data-theme='dark'] .cv-orchid {
+  --cv-bg: #0b0b0c;
+  --cv-1: #d946c8;
+  --cv-2: #a855d8;
+  --cv-3: #f0509b;
+}
+:root[data-theme='dark'] .cv-meadow {
+  --cv-bg: #0b0b0c;
+  --cv-1: #a3d63f;
+  --cv-2: #e8e04a;
+  --cv-3: #6ec85f;
+}
+:root[data-theme='dark'] .cv-dusk {
+  --cv-bg: #0b0b0c;
+  --cv-1: #7c6ce0;
+  --cv-2: #e8547c;
+  --cv-3: #ff9a56;
+}
+
+/* ==========================================================================
+   22. Academy surfaces
+
+   No landing page: the first screen is the product. A band that says what
+   this is, the day's question beside it, then the catalogue.
+   ========================================================================== */
+
+.ac-head {
+  position: relative;
+  padding-block: clamp(40px, 6vh, 76px) clamp(32px, 4vh, 52px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.ac-head-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.ac-h {
+  margin: 14px 0 0;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+  max-width: 16ch;
+}
+
+.ac-l {
+  margin-top: 18px;
+  max-width: 46ch;
+}
+
+@media (max-width: 900px) {
+  .ac-head-in {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ac-h {
+    max-width: 20ch;
+  }
+}
+
+/* ---- catalogue cards ---- */
+
+.cc-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+}
+
+@media (max-width: 980px) {
+  .cc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .cc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.cc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition:
+    border-color var(--t-hover) var(--ease-out),
+    transform var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cc:hover {
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+  }
+  .cc:hover .cc-cv {
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc,
+  .cc-cv {
+    transition: none;
+  }
+  .cc:hover {
+    transform: none;
+  }
+  .cc:hover .cc-cv {
+    transform: none;
+  }
+}
+
+.cc-cv {
+  flex: none;
+  transition: transform 400ms var(--ease-out);
+}
+
+/* The cover already has the card's edge above it; a second line where they
+   meet reads as a seam. */
+.cc-cv::after {
+  box-shadow: inset 0 -1px 0 var(--line-1);
+}
+
+.cc-in {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: clamp(16px, 1.8vw, 22px);
+  flex: 1;
+}
+
+.cc-aud {
+  color: var(--w-3);
+}
+
+.cc-t {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.018em;
+}
+
+.cc-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.6875rem;
+  color: var(--w-4);
+}
+
+/* ---- subject chips ---- */
+
+.chip-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.chip-grid a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid var(--line-1);
+  border-radius: 100px;
+  background: var(--card);
+  font-size: 0.875rem;
+  color: var(--w-2);
+  transition:
+    color var(--t-hover) var(--ease-out),
+    border-color var(--t-hover) var(--ease-out);
+}
+
+.chip-grid .tnum {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  color: var(--w-4);
+}
+
+.chip-grid a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip-grid a:hover {
+    color: var(--w-1);
+    border-color: var(--line-2);
+  }
+}
+
+/* ==========================================================================
+   23. The daily question
+
+   The one thing a catalogue cannot do: give somebody a reason to come back
+   tomorrow. It is a real exam question, so it sits in the same furniture as
+   the exam surface rather than in a game.
+   ========================================================================== */
+
+.daily-wrap {
+  position: relative;
+  border: 1px solid var(--line-1);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.daily-cv {
+  height: 90px;
+}
+
+.daily {
+  padding: clamp(18px, 2.2vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ac-daily .daily {
+  background: var(--card);
+  border: 1px solid var(--line-1);
+  border-radius: 18px;
+}
+
+.daily-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.daily-sub {
+  margin: 4px 0 0;
+  color: var(--w-4);
+}
+
+.daily-streak {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex: none;
+}
+
+.daily-n {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.daily-q {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: -0.014em;
+}
+
+.daily-opts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+}
+
+.daily-opt {
+  width: 100%;
+  text-align: left;
+}
+
+.daily-foot {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.daily-note {
+  color: var(--w-4);
+  font-size: 0.625rem;
+}
+
+.daily-result {
+  border-top: 1px solid var(--line-1);
+  padding-top: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.daily-result .body {
+  color: var(--w-2);
+}
+
+.daily-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+/* The run of days. A filled mark is a day answered; the ring is today. */
+.daily-run {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line-1);
+  padding-top: 14px;
+}
+
+.daily-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  flex: none;
+}
+
+.daily-dot[data-status] {
+  background: var(--w-2);
+  border-color: transparent;
+}
+
+.daily-dot[data-status='incorrect'] {
+  background: transparent;
+  border-color: var(--w-3);
+  border-width: 2px;
+}
+
+.daily-dot[data-today] {
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+
+.daily-run .daily-note {
+  margin-left: auto;
+}
+
+@media (max-width: 560px) {
+  .daily-run .daily-note {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   24. Covers in place of plates
+
+   void.css positions the light plates and applies the screen/multiply
+   mechanic to them, because on the marketing site they are still
+   photographs. Here every one of those slots holds a generated cover, which
+   already carries its own palette per theme — so the blend and the inversion
+   have to come back off, or the art would be inverted twice.
+   ========================================================================== */
+
+.phead-light,
+.close-img,
+.enable-img,
+.hero-light,
+.plate-img,
+.tel-img {
+  mix-blend-mode: normal;
+  filter: none;
+}
+
+.phead-light .cv,
+.close-img .cv,
+.enable-img .cv,
+.plate-img .cv,
+.tel-img .cv,
+.tile-media .cv {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background: none;
+}
+
+/* A page-head cover is a wash behind type, not a card, so it loses its edge
+   and most of its weight. */
+.phead-light .cv::after,
+.close-img .cv::after,
+.enable-img .cv::after,
+.tel-img .cv::after {
+  display: none;
+}
+
+.phead-light {
+  opacity: 0.5;
+}
+
+.close-img {
+  opacity: 0.55;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .phead-light {
+    opacity: 0.62;
+  }
+  :root:not([data-theme='light']) .close-img {
+    opacity: 0.66;
+  }
+}
+
+:root[data-theme='dark'] .phead-light {
+  opacity: 0.62;
+}
+
+:root[data-theme='dark'] .close-img {
+  opacity: 0.66;
+}
+
+.tile-media {
+  position: relative;
+}
+
+.tile-media .cv::after {
+  box-shadow: inset 0 -1px 0 var(--line-1);
+}
+
+/* The head band gets a wash of its own, masked out under the daily card so
+   the question stays the most legible thing on the first screen. */
+.ac-head {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ac-head-cv {
+  position: absolute;
+  inset: -30% -10% auto;
+  height: 190%;
+  z-index: -1;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(80% 70% at 22% 30%, #000 10%, transparent 72%);
+  mask-image: radial-gradient(80% 70% at 22% 30%, #000 10%, transparent 72%);
+}
+
+.ac-head-cv .cv {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  background: none;
+}
+
+.ac-head-cv .cv::after {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .ac-head-cv {
+    opacity: 0.5;
+  }
+}
+
+:root[data-theme='dark'] .ac-head-cv {
+  opacity: 0.5;
 }

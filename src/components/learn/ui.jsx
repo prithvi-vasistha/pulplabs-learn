@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Cover from '@/components/void/Cover'
 import { levelRank } from '@/lib/format'
 
 /**
@@ -15,8 +16,10 @@ import { levelRank } from '@/lib/format'
 export function PageHead({ eyebrow, title, lede, plate = 'deep-field', wide = true, jump, actions, children }) {
   return (
     <section className="phead grid-bg">
+      {/* Generated, not a photograph: every page gets its own composition from
+          its own seed, so no two heads share a background by accident. */}
       <div className="phead-light" aria-hidden="true">
-        <img src={`/void/${plate}.webp`} alt="" fetchPriority="high" decoding="async" />
+        <Cover seed={plate} ratio="auto" />
       </div>
       <div className={`${wide ? 'shell-wide' : 'shell'} phead-in`}>
         {eyebrow && <p className="mono">{eyebrow}</p>}
@@ -210,7 +213,7 @@ export function CloseSection({ title, lede, children, plate = 'aperture-glow' })
   return (
     <section className="close">
       <div className="close-img" aria-hidden="true">
-        <img src={`/void/${plate}.webp`} alt="" loading="lazy" decoding="async" />
+        <Cover seed={plate} ratio="auto" />
       </div>
       <div className="shell center">
         <h2 className="d2 measure" data-r>

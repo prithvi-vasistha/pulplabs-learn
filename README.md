@@ -36,6 +36,35 @@ Two rules shape the code:
 - **Every hover is gated** behind `@media (hover: hover) and (pointer: fine)`, and every animation
   has a `prefers-reduced-motion` branch.
 
+### There is no landing page
+
+`/` is the academy, not a page about it. A visitor lands on the catalogue with
+the day's question already on screen — one click from starting something, zero
+clicks from doing something.
+
+### The hook
+
+`DailyQuestion` is the thing a course catalogue structurally cannot do: give
+somebody a reason to come back tomorrow. One real question from the exam banks,
+the same one for everyone that day, graded on the server and explained
+immediately with a link to the lesson behind it.
+
+It is deliberately not gamified past the point of honesty. A streak counts days
+actually answered, it lives in `localStorage`, one attempt per day counts, and
+the card says all of that. No account means no leaderboard and no badge that
+implies one.
+
+### Generated covers, not one photograph
+
+`src/lib/covers.js` derives a palette and four blurred shapes from an item's
+slug, and `Cover.jsx` renders them as inline SVG — server-side, no client JS, no
+image request. A new lesson has cover art the moment it has a name.
+
+Eight families, each defined twice: a soft pastel on paper and a deeper, more
+saturated reading of the same hues on black. **Colour lives only in the covers.**
+The interface around them stays achromatic, which is what keeps a grid of them
+reading as a catalogue rather than as noise.
+
 ### Themes
 
 The system's colour comes entirely from spectral plates `screen`-blended onto
@@ -229,6 +258,8 @@ the marketing site at matching viewports:
 - One `h1` and one `main` per page, no heading-level skips, no duplicate ids, every control has an
   accessible name, every decorative image has `alt=""`, and focus rings are present on tab stops.
 - Mobile navigation is the system's sheet: it locks scroll, closes on Escape, and returns focus.
+- The daily question: no answer key in the page HTML, server grading, streak
+  reaching 1 after one answer, and the question locked for the rest of the day.
 - The video facade contacts no video host before activation, is keyboard-operable, and loads a
   titled `youtube-nocookie.com` embed on demand — asserted in a browser, not assumed.
 - **Both themes**, across every route and viewport: the ground is actually painted, the toggle

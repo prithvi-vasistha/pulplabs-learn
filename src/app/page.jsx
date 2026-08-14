@@ -7,6 +7,9 @@ export const metadata = {
   alternates: { canonical: '/' },
 }
 
+// The daily question turns over in UTC, so this cannot be fully static.
+export const revalidate = 3600
+
 export default function Page() {
   return <Home />
 }

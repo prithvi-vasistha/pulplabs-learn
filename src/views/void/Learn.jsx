@@ -3,6 +3,7 @@ import Nav from '@/components/void/Nav'
 import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
+import Cover from '@/components/void/Cover'
 import CourseCatalogue from '@/components/learn/CourseCatalogue'
 import { TechCell } from '@/components/learn/cards'
 import { PageHead, SectionHead } from '@/components/learn/ui'
@@ -28,19 +29,17 @@ export default async function Learn() {
 
       <main id="main">
         <PageHead
-          eyebrow="Prepare"
+          eyebrow="Courses"
           plate="flare-column"
           title={
             <>
-              Preparation tracks.
-              <br />
-              <span className="dim">In order, for a reason.</span>
+              Courses. <span className="dim">In order, for a reason.</span>
             </>
           }
           lede="Each track is a sequence, not a pile of videos — it says who it is for and what you will be able to do at the end."
           jump={[
             { href: '#start', label: 'Where to start' },
-            { href: '#catalogue', label: 'Tracks', count: paths.length },
+            { href: '#catalogue', label: 'Courses', count: paths.length },
             { href: '#subjects', label: 'By subject', count: technologies.length },
           ]}
         />
@@ -52,13 +51,13 @@ export default async function Learn() {
               <li>
                 <article className="tile" data-r>
                   <div className="tile-media">
-                    <img src="/void/hero-pause.webp" alt="" fetchPriority="high" decoding="async" />
+                    <Cover seed="start-here" ratio="16 / 9" />
                     <span className="tile-n">Start here</span>
                   </div>
                   <div className="tile-in">
                     <p className="mono">Not sure which track</p>
                     <h2 className="d3">
-                      <Link href={foundations ? `/exams/${foundations.slug}` : '/exams'} className="stretch-l">
+                      <Link href={foundations ? `/exams/${foundations.slug}` : '/practice'} className="stretch-l">
                         Sit the foundations paper cold
                       </Link>
                     </h2>
@@ -84,7 +83,7 @@ export default async function Learn() {
               <li>
                 <article className="tile" data-r style={{ '--rd': '65ms' }}>
                   <div className="tile-media">
-                    <img src="/void/deep-field.webp" alt="" loading="lazy" decoding="async" />
+                    <Cover seed="browse-subjects" ratio="16 / 9" />
                     <span className="tile-n">Or browse</span>
                   </div>
                   <div className="tile-in">
@@ -116,8 +115,8 @@ export default async function Learn() {
                 title="The catalogue."
                 lede="Filter by level, or search across every track and every individual lesson."
                 action={
-                  <Link href="/exams" className="link">
-                    Mock exams <Chevron />
+                  <Link href="/practice" className="link">
+                    Practice <Chevron />
                   </Link>
                 }
               />
@@ -162,7 +161,7 @@ export default async function Learn() {
           </section>
         </div>
 
-        <NextPage href="/exams" title="Mock exams" />
+        <NextPage href="/practice" title="Practice" />
       </main>
 
       <Footer />

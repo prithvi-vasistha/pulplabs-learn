@@ -221,7 +221,7 @@ export default function PathDetail({ path, exams, projects, technologies, nextPa
                   <li className="lift stretch" data-r style={{ '--rd': '65ms' }}>
                     <p className="mono">Practice</p>
                     <h3 className="d3">
-                      <Link href="/exams" className="stretch-l">
+                      <Link href="/practice" className="stretch-l">
                         Take an assessment
                       </Link>
                     </h3>

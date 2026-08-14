@@ -15,8 +15,8 @@ import ThemeToggle from '@/components/void/ThemeToggle'
    objects. A stranger reading this row should be able to tell which one owns
    the thing they came for without opening any of them. */
 const LINKS = [
-  { href: '/learn', label: 'Learn', hint: 'Tracks, lessons, technologies' },
-  { href: '/exams', label: 'Exams', hint: 'Mock papers, scored by topic' },
+  { href: '/learn', label: 'Courses', hint: 'Sequences, lessons and subjects' },
+  { href: '/practice', label: 'Practice', hint: 'A question a day, and full papers' },
   { href: '/projects', label: 'Projects', hint: 'Source and documentation' },
   { href: '/field', label: 'Field', hint: 'Case studies and interviews' },
 ]
@@ -44,6 +44,7 @@ export default function Nav() {
   const current = (href) => {
     if (pathname === href || pathname.startsWith(`${href}/`)) return 'page'
     if (href === '/learn' && pathname.startsWith('/technologies')) return 'page'
+    if (href === '/practice' && pathname.startsWith('/exams')) return 'page'
     return undefined
   }
 

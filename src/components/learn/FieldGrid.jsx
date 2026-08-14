@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Cover from '@/components/void/Cover'
 import Chevron from '@/components/void/Icons'
 import { Badge, StateBlock } from '@/components/learn/ui'
 import { formatDate, formatMinutes, padIndex } from '@/lib/format'
@@ -65,7 +66,7 @@ export default function FieldGrid({ entries, kinds }) {
             <li key={entry.slug}>
               <article className="tile" data-r style={{ '--rd': `${Math.min(i, 5) * 65}ms` }}>
                 <div className="tile-media">
-                  <img src={`/void/${entry.plate}.webp`} alt="" loading="lazy" decoding="async" />
+                  <Cover seed={entry.slug} ratio="16 / 9" />
                   <span className="tile-n">{padIndex(i + 1)}</span>
                   <span className="tile-badge">
                     <Badge quiet={entry.kind !== 'Interview'} pip={entry.kind === 'Interview'}>

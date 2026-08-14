@@ -9,6 +9,8 @@ const nextConfig = {
    */
   async redirects() {
     return [
+      // Exams are one half of Practice now, not a section of their own.
+      { source: '/exams', destination: '/practice', permanent: true },
       { source: '/builds', destination: '/projects', permanent: true },
       { source: '/builds/:project', destination: '/projects/:project', permanent: true },
       { source: '/docs', destination: '/projects', permanent: true },

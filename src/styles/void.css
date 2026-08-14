@@ -18,6 +18,7 @@
   color-scheme: dark;
 
   --void: #000000;
+  --card: #000000;
   --raise-1: rgba(255, 255, 255, 0.035);
   --raise-2: rgba(255, 255, 255, 0.06);
   --raise-3: rgba(255, 255, 255, 0.09);
@@ -485,65 +486,70 @@ canvas {
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
   /* --- Ground ----------------------------------------------------------
-     Not #fff. Pure white glares the way pure black crushes, and the hairline
-     grid needs a ground its opaque children can sit on and still read as
-     cells. */
+     A quiet neutral page with white cards on it. The colour in this theme
+     does not come from the ground — it comes from the generated covers, and
+     a ground with an opinion of its own would fight them.
+
+     Raises go *lighter*, toward white, exactly as they go lighter toward the
+     light in the dark theme. Raise always means nearer the source. */
   color-scheme: light;
 
-  --void: #f2f2f3;
-  --raise-1: rgba(0, 0, 0, 0.03);
-  --raise-2: rgba(0, 0, 0, 0.05);
-  --raise-3: rgba(0, 0, 0, 0.08);
+  --void: #f4f4f6;
+  --card: #ffffff;
+  --raise-1: rgba(255, 255, 255, 0.55);
+  --raise-2: rgba(255, 255, 255, 0.85);
+  --raise-3: #ffffff;
 
   /* --- Ink -------------------------------------------------------------
-     Not #000, for the same reason. Body sits at 0.72 rather than the dark
-     theme's 0.62: white type on black blooms and has to be held back, dark
-     type on paper does not and can afford the contrast. */
-  --w-1: #101011;
-  --w-2: rgba(16, 16, 17, 0.72);
-  --w-3: rgba(16, 16, 17, 0.62);
-  --w-4: rgba(16, 16, 17, 0.42);
+     Warm near-black. Cold ink on warm stock reads as a printing error. Body
+     sits at 0.74 rather than the dark theme's 0.62: white type on black
+     blooms and has to be held back, dark type on paper does not and can
+     afford the contrast. */
+  --w-1: #0d0d0f;
+  --w-2: rgba(13, 13, 15, 0.74);
+  --w-3: rgba(13, 13, 15, 0.63);
+  --w-4: rgba(13, 13, 15, 0.42);
 
-  --line-1: rgba(0, 0, 0, 0.1);
-  --line-2: rgba(0, 0, 0, 0.16);
-  --line-3: rgba(0, 0, 0, 0.3);
+  --line-1: rgba(13, 13, 15, 0.09);
+  --line-2: rgba(13, 13, 15, 0.15);
+  --line-3: rgba(13, 13, 15, 0.28);
 
-  --signal: #101011;
+  --signal: #0d0d0f;
 
   /* Pigment, not light. See --plate-blend above. */
   --plate-blend: multiply;
   --plate-filter: invert(1) hue-rotate(180deg) saturate(1.3) opacity(0.7);
   /* The hero is a full-bleed video behind the headline, not a corner plate
      beside it, so it carries its own weight. */
-  --plate-hero-a: 0.38;
+  --plate-hero-a: 0.34;
 
-  --scrim-1: rgba(242, 242, 243, 0.62);
-  --scrim-2: rgba(242, 242, 243, 0.74);
-  --scrim-3: rgba(242, 242, 243, 0.8);
-  --scrim-4: rgba(242, 242, 243, 0.94);
+  --scrim-1: rgba(244, 244, 246, 0.64);
+  --scrim-2: rgba(244, 244, 246, 0.76);
+  --scrim-3: rgba(244, 244, 246, 0.82);
+  --scrim-4: rgba(244, 244, 246, 0.94);
 
-  --ink-halo: rgba(255, 255, 255, 0.8);
-  --ink-halo-soft: rgba(255, 255, 255, 0.85);
-  --hero-dim: rgba(16, 16, 17, 0.66);
+  --ink-halo: rgba(255, 255, 255, 0.85);
+  --ink-halo-soft: rgba(255, 255, 255, 0.9);
+  --hero-dim: rgba(13, 13, 15, 0.62);
 
-  --focus-halo: rgba(0, 0, 0, 0.1);
-  --select-bg: rgba(16, 16, 17, 0.14);
-  --btn-hover: rgba(16, 16, 17, 0.86);
-  --sheen-1: rgba(0, 0, 0, 0.022);
-  --sheen-2: rgba(0, 0, 0, 0.018);
-  --grid-line: rgba(0, 0, 0, 0.05);
-  --tint-1: rgba(0, 0, 0, 0.02);
-  --tint-2: rgba(0, 0, 0, 0.04);
-  --tint-3: rgba(0, 0, 0, 0.07);
-  --edge-lit: rgba(0, 0, 0, 0.14);
-  --edge-dim: rgba(0, 0, 0, 0.04);
-  --glow-w: rgba(0, 0, 0, 0.16);
-  --pulse: rgba(16, 16, 17, 0.4);
+  --focus-halo: rgba(13, 13, 15, 0.12);
+  --select-bg: rgba(13, 13, 15, 0.13);
+  --btn-hover: rgba(13, 13, 15, 0.86);
+  --sheen-1: rgba(13, 13, 15, 0.02);
+  --sheen-2: rgba(13, 13, 15, 0.016);
+  --grid-line: rgba(13, 13, 15, 0.045);
+  --tint-1: rgba(255, 255, 255, 0.5);
+  --tint-2: rgba(255, 255, 255, 0.7);
+  --tint-3: rgba(255, 255, 255, 0.9);
+  --edge-lit: rgba(13, 13, 15, 0.12);
+  --edge-dim: rgba(13, 13, 15, 0.04);
+  --glow-w: rgba(13, 13, 15, 0.14);
+  --pulse: rgba(13, 13, 15, 0.38);
   --panel-solid: #ffffff;
-  --bubble-solid: #e9e9ea;
-  --dock-grad-a: rgba(255, 255, 255, 0.72);
-  --dock-grad-b: rgba(245, 245, 246, 0.62);
-  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --bubble-solid: #ececed;
+  --dock-grad-a: rgba(255, 255, 255, 0.8);
+  --dock-grad-b: rgba(244, 244, 246, 0.66);
+  --dock-shadow: rgba(13, 13, 15, 0.12);
   --amb-1: rgba(70, 110, 190, 0.1);
   --amb-2: rgba(190, 120, 60, 0.08);
   --amb-3: rgba(60, 150, 140, 0.07);
@@ -552,65 +558,70 @@ canvas {
 
 :root[data-theme='light'] {
   /* --- Ground ----------------------------------------------------------
-     Not #fff. Pure white glares the way pure black crushes, and the hairline
-     grid needs a ground its opaque children can sit on and still read as
-     cells. */
+     A quiet neutral page with white cards on it. The colour in this theme
+     does not come from the ground — it comes from the generated covers, and
+     a ground with an opinion of its own would fight them.
+
+     Raises go *lighter*, toward white, exactly as they go lighter toward the
+     light in the dark theme. Raise always means nearer the source. */
   color-scheme: light;
 
-  --void: #f2f2f3;
-  --raise-1: rgba(0, 0, 0, 0.03);
-  --raise-2: rgba(0, 0, 0, 0.05);
-  --raise-3: rgba(0, 0, 0, 0.08);
+  --void: #f4f4f6;
+  --card: #ffffff;
+  --raise-1: rgba(255, 255, 255, 0.55);
+  --raise-2: rgba(255, 255, 255, 0.85);
+  --raise-3: #ffffff;
 
   /* --- Ink -------------------------------------------------------------
-     Not #000, for the same reason. Body sits at 0.72 rather than the dark
-     theme's 0.62: white type on black blooms and has to be held back, dark
-     type on paper does not and can afford the contrast. */
-  --w-1: #101011;
-  --w-2: rgba(16, 16, 17, 0.72);
-  --w-3: rgba(16, 16, 17, 0.62);
-  --w-4: rgba(16, 16, 17, 0.42);
+     Warm near-black. Cold ink on warm stock reads as a printing error. Body
+     sits at 0.74 rather than the dark theme's 0.62: white type on black
+     blooms and has to be held back, dark type on paper does not and can
+     afford the contrast. */
+  --w-1: #0d0d0f;
+  --w-2: rgba(13, 13, 15, 0.74);
+  --w-3: rgba(13, 13, 15, 0.63);
+  --w-4: rgba(13, 13, 15, 0.42);
 
-  --line-1: rgba(0, 0, 0, 0.1);
-  --line-2: rgba(0, 0, 0, 0.16);
-  --line-3: rgba(0, 0, 0, 0.3);
+  --line-1: rgba(13, 13, 15, 0.09);
+  --line-2: rgba(13, 13, 15, 0.15);
+  --line-3: rgba(13, 13, 15, 0.28);
 
-  --signal: #101011;
+  --signal: #0d0d0f;
 
   /* Pigment, not light. See --plate-blend above. */
   --plate-blend: multiply;
   --plate-filter: invert(1) hue-rotate(180deg) saturate(1.3) opacity(0.7);
   /* The hero is a full-bleed video behind the headline, not a corner plate
      beside it, so it carries its own weight. */
-  --plate-hero-a: 0.38;
+  --plate-hero-a: 0.34;
 
-  --scrim-1: rgba(242, 242, 243, 0.62);
-  --scrim-2: rgba(242, 242, 243, 0.74);
-  --scrim-3: rgba(242, 242, 243, 0.8);
-  --scrim-4: rgba(242, 242, 243, 0.94);
+  --scrim-1: rgba(244, 244, 246, 0.64);
+  --scrim-2: rgba(244, 244, 246, 0.76);
+  --scrim-3: rgba(244, 244, 246, 0.82);
+  --scrim-4: rgba(244, 244, 246, 0.94);
 
-  --ink-halo: rgba(255, 255, 255, 0.8);
-  --ink-halo-soft: rgba(255, 255, 255, 0.85);
-  --hero-dim: rgba(16, 16, 17, 0.66);
+  --ink-halo: rgba(255, 255, 255, 0.85);
+  --ink-halo-soft: rgba(255, 255, 255, 0.9);
+  --hero-dim: rgba(13, 13, 15, 0.62);
 
-  --focus-halo: rgba(0, 0, 0, 0.1);
-  --select-bg: rgba(16, 16, 17, 0.14);
-  --btn-hover: rgba(16, 16, 17, 0.86);
-  --sheen-1: rgba(0, 0, 0, 0.022);
-  --sheen-2: rgba(0, 0, 0, 0.018);
-  --grid-line: rgba(0, 0, 0, 0.05);
-  --tint-1: rgba(0, 0, 0, 0.02);
-  --tint-2: rgba(0, 0, 0, 0.04);
-  --tint-3: rgba(0, 0, 0, 0.07);
-  --edge-lit: rgba(0, 0, 0, 0.14);
-  --edge-dim: rgba(0, 0, 0, 0.04);
-  --glow-w: rgba(0, 0, 0, 0.16);
-  --pulse: rgba(16, 16, 17, 0.4);
+  --focus-halo: rgba(13, 13, 15, 0.12);
+  --select-bg: rgba(13, 13, 15, 0.13);
+  --btn-hover: rgba(13, 13, 15, 0.86);
+  --sheen-1: rgba(13, 13, 15, 0.02);
+  --sheen-2: rgba(13, 13, 15, 0.016);
+  --grid-line: rgba(13, 13, 15, 0.045);
+  --tint-1: rgba(255, 255, 255, 0.5);
+  --tint-2: rgba(255, 255, 255, 0.7);
+  --tint-3: rgba(255, 255, 255, 0.9);
+  --edge-lit: rgba(13, 13, 15, 0.12);
+  --edge-dim: rgba(13, 13, 15, 0.04);
+  --glow-w: rgba(13, 13, 15, 0.14);
+  --pulse: rgba(13, 13, 15, 0.38);
   --panel-solid: #ffffff;
-  --bubble-solid: #e9e9ea;
-  --dock-grad-a: rgba(255, 255, 255, 0.72);
-  --dock-grad-b: rgba(245, 245, 246, 0.62);
-  --dock-shadow: rgba(0, 0, 0, 0.16);
+  --bubble-solid: #ececed;
+  --dock-grad-a: rgba(255, 255, 255, 0.8);
+  --dock-grad-b: rgba(244, 244, 246, 0.66);
+  --dock-shadow: rgba(13, 13, 15, 0.12);
   --amb-1: rgba(70, 110, 190, 0.1);
   --amb-2: rgba(190, 120, 60, 0.08);
   --amb-3: rgba(60, 150, 140, 0.07);
@@ -620,33 +631,33 @@ canvas {
    when a reader on a light system explicitly asks for dark. */
 @media (prefers-contrast: more) {
   :root[data-theme='light'] {
-    --w-2: rgba(16, 16, 17, 0.9);
-    --w-3: rgba(16, 16, 17, 0.75);
-    --line-1: rgba(0, 0, 0, 0.3);
-    --line-2: rgba(0, 0, 0, 0.42);
+    --w-2: rgba(13, 13, 15, 0.9);
+    --w-3: rgba(13, 13, 15, 0.76);
+    --line-1: rgba(13, 13, 15, 0.3);
+    --line-2: rgba(13, 13, 15, 0.42);
   }
 }
 
 @media (prefers-contrast: more) and (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
-    --w-2: rgba(16, 16, 17, 0.9);
-    --w-3: rgba(16, 16, 17, 0.75);
-    --line-1: rgba(0, 0, 0, 0.3);
-    --line-2: rgba(0, 0, 0, 0.42);
+    --w-2: rgba(13, 13, 15, 0.9);
+    --w-3: rgba(13, 13, 15, 0.76);
+    --line-1: rgba(13, 13, 15, 0.3);
+    --line-2: rgba(13, 13, 15, 0.42);
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   :root[data-theme='light'] {
-    --raise-1: #eaeaeb;
-    --raise-2: #e2e2e3;
+    --raise-1: #ffffff;
+    --raise-2: #f0f0f2;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
-    --raise-1: #eaeaeb;
-    --raise-2: #e2e2e3;
+    --raise-1: #ffffff;
+    --raise-2: #f0f0f2;
   }
 }
 
