@@ -26,7 +26,7 @@ const OAUTH_ERRORS = {
   'google-rejected': 'Google would not complete the sign-in. Check the client configuration and try again.',
 }
 
-export default function LoginForm({ next = '/profile', oauthError = null, googleEnabled = true }) {
+export default function LoginForm({ next = '/profile', oauthError = null }) {
   const router = useRouter()
   const [mode, setMode] = useState('signin')
   const [pending, setPending] = useState(false)
@@ -99,17 +99,17 @@ export default function LoginForm({ next = '/profile', oauthError = null, google
         </button>
       </div>
 
-      {googleEnabled && (
-        <>
-          <a className="auth-google" href={`/api/auth/google/start?next=${encodeURIComponent(next)}`}>
-            <GoogleMark />
-            Continue with Google
-          </a>
-          <p className="auth-or" aria-hidden="true">
-            <span>or</span>
-          </p>
-        </>
-      )}
+      {/* Always rendered, never gated on whether the server has credentials.
+          Hiding it when Google is unconfigured makes a missing environment
+          variable look like a missing feature — which is exactly how it was
+          read. If it is not configured, clicking says so in one sentence. */}
+      <a className="auth-google" href={`/api/auth/google/start?next=${encodeURIComponent(next)}`}>
+        <GoogleMark />
+        Continue with Google
+      </a>
+      <p className="auth-or" aria-hidden="true">
+        <span>or</span>
+      </p>
 
       <form onSubmit={onSubmit} noValidate>
         {creating && (

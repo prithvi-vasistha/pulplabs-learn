@@ -67,7 +67,22 @@ export async function initAuth() {
   }
 
   initKeys(secret)
-  console.log(`[auth] ready (google ${GOOGLE.clientId ? 'configured' : 'not configured'})`)
+
+  /* Loud on purpose. A silent "google: off" reads as a missing feature rather
+     than a missing environment variable, and that is exactly how it was read
+     the first time this shipped. */
+  if (googleConfigured()) {
+    console.log(`[auth] ready — google sign-in enabled for client ${GOOGLE.clientId.slice(0, 12)}…`)
+  } else {
+    const missing = [
+      !GOOGLE.clientId && 'GOOGLE_CLIENT_ID',
+      !GOOGLE.clientSecret && 'GOOGLE_CLIENT_SECRET',
+    ].filter(Boolean)
+    console.warn(
+      `[auth] ready — GOOGLE SIGN-IN IS OFF: ${missing.join(' and ')} not set. ` +
+        'Start the container with `--env-file .env` (see .env.example). Email and password still work.'
+    )
+  }
 }
 
 /* ----------------------------------------------------------- the record --- */

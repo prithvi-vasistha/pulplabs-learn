@@ -1,7 +1,6 @@
 import AppShell from '@/components/void/AppShell'
 import Cover from '@/components/void/Cover'
 import LoginForm from '@/components/learn/LoginForm'
-import { serviceFetch } from '@/lib/auth'
 
 /**
  * Sign in.
@@ -10,10 +9,7 @@ import { serviceFetch } from '@/lib/auth'
  * honest answer is "almost nothing on this site needs one" and hiding that
  * would make the form feel like a toll gate.
  */
-export default async function Login({ next = '/profile', error = null }) {
-  const { ok, payload } = await serviceFetch('/auth/providers').catch(() => ({ ok: false, payload: null }))
-  const googleEnabled = ok ? Boolean(payload?.google?.enabled) : false
-
+export default function Login({ next = '/profile', error = null }) {
   return (
     <AppShell>
       <section className="auth grid-bg">
@@ -51,7 +47,7 @@ export default async function Login({ next = '/profile', error = null }) {
             </ul>
           </div>
 
-          <LoginForm next={next} oauthError={error} googleEnabled={googleEnabled} />
+          <LoginForm next={next} oauthError={error} />
         </div>
       </section>
     </AppShell>
