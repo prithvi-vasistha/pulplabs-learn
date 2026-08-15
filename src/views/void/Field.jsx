@@ -13,14 +13,14 @@ export default async function Field() {
   return (
     <AppShell>
         <PageHead
-          eyebrow="PulpLabs Learn"
+          eyebrow="Field notes"
           plate="hero-bleed"
           title={
             <>
-              What we built, <span className="dim">and what we learned doing it.</span>
+              Notes from the field, <span className="dim">on building with AI.</span>
             </>
           }
-          lede="PulpLabs is an AI consultancy. This is the client work behind everything else in here — the case studies, how an engagement actually runs, and recorded conversations with the people who build these systems."
+          lede="Case studies, how an engagement runs from first call to handover, and recorded conversations with the people who build these systems. The courses, exams and articles elsewhere in here come out of the same work."
           jump={[
             { href: '#entries', label: 'All entries', count: entries.length },
             { href: '#interviews', label: 'Interviews', count: interviews.length },

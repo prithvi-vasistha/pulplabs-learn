@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import CommandPalette from '@/components/learn/CommandPalette'
 import ThemeToggle from '@/components/void/ThemeToggle'
-import { Book, Check, Clock, Flag, Search, Terminal } from '@/components/void/Icons'
+import { Book, Check, Clock, Terminal } from '@/components/void/Icons'
 
 /**
  * Primary navigation: a top bar that is always there, and a sidebar docked
@@ -132,17 +132,6 @@ export default function Sidebar() {
               </ul>
             </div>
           ))}
-
-          <div className="side-group">
-            <ul role="list">
-              <li>
-                <Link href="/search" data-current={pathname === '/search' || undefined} aria-current={pathname === '/search' ? 'page' : undefined}>
-                  <Search size={15} />
-                  Search
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
       </nav>
     </>
