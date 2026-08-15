@@ -17,6 +17,35 @@ PORT="${PORT:-3000}"
 
 log() { echo "[entrypoint] $*"; }
 
+# --- configuration -----------------------------------------------------------
+# `--env-file .env` is the usual way in. This is the other one people reach for,
+# and supporting it costs four lines:
+#
+#     docker run -v "$PWD/.env:/app/.env:ro" ...
+#
+# Nothing is baked into the image — .env is in .dockerignore, so a build cannot
+# copy it in even by accident.
+if [ -f /app/.env ]; then
+  log "reading credentials from the mounted /app/.env"
+  set -a
+  . /app/.env
+  set +a
+fi
+
+# Forgetting the credentials is otherwise silent until somebody clicks a button
+# that is not there, so say it here, once, in the place people are already
+# looking when something is wrong.
+if [ -z "${GOOGLE_CLIENT_ID:-}" ] || [ -z "${GOOGLE_CLIENT_SECRET:-}" ]; then
+  log "---------------------------------------------------------------"
+  log "GOOGLE SIGN-IN IS OFF — no credentials in this container."
+  log "Email and password sign-in works; the Google button will say so."
+  log "To turn it on, pass the file:"
+  log "    docker run --env-file .env -p 3000:3000 \\"
+  log "      -v pulplabs-learn-db:/var/lib/postgresql/data pulplabs-learn"
+  log "or mount it:  -v \"\$PWD/.env:/app/.env:ro\""
+  log "---------------------------------------------------------------"
+fi
+
 # --- postgres ----------------------------------------------------------------
 # The data directory may be a fresh volume, so initdb is conditional on the
 # marker file postgres itself writes.
