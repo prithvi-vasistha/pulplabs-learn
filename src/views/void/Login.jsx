@@ -25,7 +25,7 @@ export default function Login({ next = '/profile', error = null }) {
             </h1>
             <p className="lede">
               Reading is open. An account exists for the one part of this portal that has to run something on a
-              server for you — the playground — and for keeping your progress somewhere other than one browser.
+              server for you: the playground.
             </p>
 
             <ul className="auth-list" role="list">
@@ -35,7 +35,7 @@ export default function Login({ next = '/profile', error = null }) {
               </li>
               <li>
                 <span className="mono">Progress</span>
-                <p>Lessons and exam results still live in this browser. An account is what will let them follow you.</p>
+                <p>Lessons and exam results stay in this browser for now; signing in does not sync them yet.</p>
               </li>
               <li>
                 <span className="mono">What we store</span>

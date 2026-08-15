@@ -1,3 +1,5 @@
+import { SITE_URL } from './layout'
+
 export default function robots() {
   return {
     rules: [
@@ -9,6 +11,6 @@ export default function robots() {
         disallow: ['/exams/*/attempt', '/exams/*/results/'],
       },
     ],
-    sitemap: 'https://learn.pulplabs.dev/sitemap.xml',
+    sitemap: `${SITE_URL}/sitemap.xml`,
   }
 }

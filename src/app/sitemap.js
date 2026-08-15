@@ -9,8 +9,7 @@ import {
   getProjects,
   getTechnologies,
 } from '@/lib/content'
-
-const BASE = 'https://learn.pulplabs.dev'
+import { SITE_URL } from './layout'
 
 /* Built from the database, so it is generated per request rather than at build
    time — a sitemap frozen at build would stop listing new content. */
@@ -55,7 +54,7 @@ export default async function sitemap() {
   const lastModified = new Date()
 
   return routes.map((route) => ({
-    url: `${BASE}${route.url}`,
+    url: `${SITE_URL}${route.url}`,
     lastModified,
     priority: route.priority,
   }))

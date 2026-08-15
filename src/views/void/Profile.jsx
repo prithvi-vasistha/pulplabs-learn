@@ -49,7 +49,7 @@ export default async function Profile() {
         lede={
           user
             ? 'Everything on this page is derived from what you have actually done — nothing is invented, and where there is no data it says so rather than showing a zero that looks like a measurement.'
-            : 'Lessons you finish and exams you sit are recorded locally, so this page works without an account. Signing in is what will let that history follow you to another machine — and what opens the playground.'
+            : 'Lessons you finish and exams you sit are recorded locally, so this page works without an account. That progress stays in this browser; signing in opens the playground and its leased instances.'
         }
       />
 

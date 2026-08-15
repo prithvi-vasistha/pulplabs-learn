@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { MAIN_SITE_URL } from '@/lib/sites'
 
 export default function Footer() {
   return (
@@ -58,8 +59,8 @@ export default function Footer() {
             <p className="mono">PulpLabs</p>
             <ul>
               <li>
-                <a href="https://pulplabs.ai" target="_blank" rel="noreferrer">
-                  Main site
+                <a href={MAIN_SITE_URL}>
+                  PulpLabs services &amp; consulting
                 </a>
               </li>
               <li>

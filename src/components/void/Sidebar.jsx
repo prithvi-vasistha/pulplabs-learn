@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import CommandPalette from '@/components/learn/CommandPalette'
 import ThemeToggle from '@/components/void/ThemeToggle'
 import { Book, Check, Lock, Person, Play, Terminal } from '@/components/void/Icons'
+import { MAIN_SITE_URL } from '@/lib/sites'
 
 /**
  * Primary navigation: a top bar that is always there, and a sidebar docked
@@ -37,6 +38,7 @@ const GROUPS = [
     title: 'More',
     items: [
       { href: '/projects', label: 'Our software', icon: Terminal },
+      { href: MAIN_SITE_URL, label: 'PulpLabs services', icon: HomeIcon, external: true },
       { href: '/profile', label: 'Profile', icon: Person, match: ['/dashboard'] },
     ],
   },
@@ -110,7 +112,8 @@ export default function Sidebar({ user = null }) {
 
         <Link href="/" className="topbar-mark" aria-label="PulpLabs Learn home">
           <Mark />
-          <span>PulpLabs Learn</span>
+          <span className="topbar-brand-full">PulpLabs Learn</span>
+          <span className="topbar-brand-short" aria-hidden="true">Learn</span>
         </Link>
 
         <div className="topbar-end">
@@ -148,7 +151,12 @@ export default function Sidebar({ user = null }) {
                   const locked = item.account && !user
                   return (
                     <li key={item.href}>
-                      <Link href={item.href} aria-current={current ? 'page' : undefined} data-current={current || undefined}>
+                      <Link
+                        href={item.href}
+                        aria-current={current ? 'page' : undefined}
+                        data-current={current || undefined}
+                        prefetch={item.external ? false : undefined}
+                      >
                         <Icon size={15} />
                         {item.label}
                         {locked && (
@@ -171,7 +179,7 @@ export default function Sidebar({ user = null }) {
         {!user && (
           <div className="side-cta">
             <p className="mono">Not signed in</p>
-            <p>Sign in to run the playground demos and keep your progress on more than one machine.</p>
+            <p>Sign in to run playground demos and manage the instances leased to your account.</p>
             <Link href={`/login?next=${encodeURIComponent(pathname || '/')}`} className="btn btn-sm">
               Sign in
             </Link>

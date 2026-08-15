@@ -73,8 +73,8 @@ imagery appears to float in actual darkness. Never substitute `#0a0a0a` or `#111
 ```css
 --w-1: #ffffff;                          /* headlines, buttons, active nav, key numbers */
 --w-2: rgba(255,255,255,0.62);           /* body copy, ledes */
---w-3: rgba(255,255,255,0.42);           /* mono labels, inactive nav, metadata */
---w-4: rgba(255,255,255,0.26);           /* placeholders, step numbers, "pending" states */
+--w-3: rgba(255,255,255,0.56);           /* mono labels, inactive nav, metadata */
+--w-4: rgba(255,255,255,0.50);           /* quieter metadata and secondary labels */
 ```
 
 **Body text is never pure white.** At body size, `#fff` on `#000` blooms at the edges and gets
@@ -728,9 +728,10 @@ Non-negotiable, and all of it is already honoured by the existing pages:
 - **Focus** — `outline: 2px solid var(--signal); outline-offset: 3px` on every interactive element.
   Never remove an outline without replacing it. Inputs use a box-shadow ring instead, plus a border
   change.
-- **Contrast** — `--w-2` (62%) on `--void` is the floor for body copy. `--w-3` (42%) is for
-  *supporting* metadata only, never for a sentence someone must read. `--w-4` (26%) is decorative —
-  never put meaning in it alone. `prefers-contrast: more` raises all three.
+- **Contrast** — `--w-2` (62%) on `--void` is the floor for body copy. `--w-3` (56%) is for
+  supporting metadata, and `--w-4` (50%) for quieter secondary labels; both retain WCAG contrast
+  on the black ground. The light theme raises those ink opacities to 68% and 60% so small labels
+  retain the same standard on white surfaces. `prefers-contrast: more` raises them further.
 - **Decorative imagery** — every plate carries `aria-hidden="true"` on the wrapper *and* `alt=""` on
   the image. Plates are never content.
 - **Motion** — see §9. Every animation needs a reduced-motion branch.
@@ -786,7 +787,7 @@ whether new pages look uniform.
 
 ```
 GROUND    --void #000 · --raise-1/2/3  .035/.06/.09 white
-INK       --w-1 #fff · --w-2 .62 · --w-3 .42 · --w-4 .26
+INK       --w-1 #fff · --w-2 .62 · --w-3 .56 · --w-4 .50
 LINES     --line-1 .08 · --line-2 .14 · --line-3 .24
 MOTION    --ease-out · --t-press 120 · --t-hover 200 · --t-panel 260
 LAYOUT    --shell 1140 · --shell-wide 1360 · --gutter 24 · --nav-h 64

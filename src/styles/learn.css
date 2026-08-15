@@ -3800,6 +3800,10 @@ mark {
   flex: none;
 }
 
+.topbar-brand-short {
+  display: none;
+}
+
 /* Search and the theme switch, at the right end. */
 .topbar-end {
   margin-left: auto;
@@ -3960,12 +3964,19 @@ mark {
 @media (max-width: 980px) {
   .side {
     transform: translateX(-100%);
-    transition: transform var(--t-panel) var(--ease-out);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      transform var(--t-panel) var(--ease-out),
+      visibility 0s linear var(--t-panel);
     box-shadow: 0 0 60px var(--dock-shadow);
   }
 
   .side[data-open] {
     transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
   }
 
   .app-scrim {
@@ -3974,8 +3985,12 @@ mark {
 }
 
 @media (max-width: 560px) {
-  .topbar-mark span {
+  .topbar-brand-full {
     display: none;
+  }
+
+  .topbar-brand-short {
+    display: inline;
   }
 }
 

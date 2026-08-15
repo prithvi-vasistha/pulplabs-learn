@@ -20,14 +20,14 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://learn.pulpl
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'PulpLabs Learn Lab — prepare for AI certifications',
-    template: '%s — PulpLabs Learn Lab',
+    default: 'PulpLabs Learn — courses, field notes and AI playgrounds',
+    template: '%s — PulpLabs Learn',
   },
   description:
-    'Certification preparation for AI engineers: structured tracks, mock exams that report by topic, technology references, and documentation for the tools PulpLabs builds in the open.',
-  applicationName: 'PulpLabs Learn Lab',
+    'Courses, practice exams, field notes, technology references, open-source documentation and hands-on AI playgrounds from PulpLabs.',
+  applicationName: 'PulpLabs Learn',
   icons: { icon: '/favicon.svg' },
-  openGraph: { type: 'website', siteName: 'PulpLabs Learn Lab', url: SITE_URL },
+  openGraph: { type: 'website', siteName: 'PulpLabs Learn', url: SITE_URL },
   alternates: { canonical: '/' },
 }
 

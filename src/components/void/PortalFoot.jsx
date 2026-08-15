@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { MAIN_SITE_URL } from '@/lib/sites'
 
 /**
  * A footer rule, not a site map.
@@ -11,14 +12,15 @@ import Link from 'next/link'
 export default function PortalFoot() {
   return (
     <footer className="pfoot">
+      <p className="mono">A learning and enablement portal by PulpLabs, built from the same client work our services team delivers.</p>
       <div className="pfoot-row">
         <span className="mono">© {new Date().getFullYear()} PulpLabs</span>
         <span className="mono">Progress is stored in this browser</span>
         <Link href="/search" className="mono">
           Search everything
         </Link>
-        <a href="https://pulplabs.ai" target="_blank" rel="noreferrer" className="mono">
-          pulplabs.ai
+        <a href={MAIN_SITE_URL} className="mono">
+          PulpLabs services &amp; consulting
         </a>
       </div>
     </footer>
