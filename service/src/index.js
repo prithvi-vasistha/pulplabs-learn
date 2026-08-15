@@ -14,6 +14,9 @@ import { fileURLToPath } from 'node:url'
 import { pool, query, waitForDatabase } from './db.js'
 import { seed } from './seed.js'
 import * as content from './content.js'
+import * as auth from './auth.js'
+import * as playground from './playground.js'
+import { HttpError } from './errors.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const PORT = Number(process.env.PORT ?? 4000)
@@ -22,9 +25,29 @@ const PORT = Number(process.env.PORT ?? 4000)
  * Route table. A pattern is a path with `:name` segments; the first match
  * wins. Explicit and greppable, which is the whole reason not to reach for a
  * router.
+ *
+ * A fourth element marks a route as needing an account: `{ auth: true }` turns
+ * a missing or expired bearer token into a 401 before the handler runs, and
+ * hands the handler a resolved `ctx.user`. Everything without it is public,
+ * which is most of this file — reading does not need an account.
  */
 const ROUTES = [
   ['GET', '/health', async () => ({ ok: true })],
+
+  /* --- accounts --- */
+  ['GET', '/auth/providers', () => auth.providers()],
+  ['POST', '/auth/register', (p, body, ctx) => auth.register(body ?? {}, { ip: ctx.ip })],
+  ['POST', '/auth/login', (p, body, ctx) => auth.login(body ?? {}, { ip: ctx.ip })],
+  ['POST', '/auth/google', (p, body) => auth.googleSignIn(body ?? {})],
+  ['GET', '/auth/me', (p, body, ctx) => ctx.user, { auth: true }],
+
+  /* --- playground: the demos are public, the instances are not --- */
+  ['GET', '/playground', () => playground.getDemos()],
+  ['GET', '/playground/sessions', (p, body, ctx) => playground.listSessions(ctx.user.id), { auth: true }],
+  ['DELETE', '/playground/sessions/:id', (p, body, ctx) => playground.endSession(ctx.user.id, p.id), { auth: true }],
+  ['GET', '/playground/:slug', (p) => playground.getDemo(p.slug)],
+  ['POST', '/playground/:slug/session', (p, body, ctx) => playground.startSession(ctx.user.id, p.slug), { auth: true }],
+  ['POST', '/playground/:slug/run', (p, body, ctx) => playground.run(ctx.user.id, p.slug, body ?? {}), { auth: true }],
 
   ['GET', '/settings', () => content.getSettings()],
 
@@ -129,19 +152,41 @@ function send(res, status, payload) {
   res.end(body)
 }
 
+/** The bearer token, if there is one. Cookies are the web app's problem. */
+function bearer(req) {
+  const header = req.headers.authorization
+  if (!header || !header.toLowerCase().startsWith('bearer ')) return null
+  return header.slice(7).trim() || null
+}
+
 const server = createServer(async (req, res) => {
   const started = Date.now()
   const url = new URL(req.url, 'http://localhost')
   const path = url.pathname.replace(/^\/api(?=\/|$)/, '') || '/'
 
   try {
-    for (const [method, pattern, handler] of ROUTES) {
+    for (const [method, pattern, handler, options] of ROUTES) {
       if (req.method !== method) continue
       const params = match(pattern, path)
       if (!params) continue
 
+      const ctx = {
+        ip: (req.headers['x-forwarded-for']?.split(',')[0] ?? req.socket.remoteAddress ?? '').trim(),
+        token: bearer(req),
+        user: null,
+      }
+
+      // Only routes that ask for it pay for the lookup.
+      if (options?.auth) {
+        ctx.user = await auth.userFromToken(ctx.token)
+        if (!ctx.user) {
+          send(res, 401, { error: 'Sign in to continue' })
+          return
+        }
+      }
+
       const body = method === 'POST' ? await readBody(req) : null
-      const result = await handler(params, body)
+      const result = await handler(params, body, ctx)
 
       if (result === null || result === undefined) {
         send(res, 404, { error: 'Not found', path })
@@ -157,6 +202,15 @@ const server = createServer(async (req, res) => {
 
     send(res, 404, { error: 'No such route', path })
   } catch (error) {
+    // A handler that knows the right status says so; anything else is a bug
+    // here and the caller learns nothing about it beyond "500".
+    if (error instanceof HttpError) {
+      if (process.env.LOG_REQUESTS !== 'off') {
+        console.log(`${req.method} ${path} ${error.status} — ${error.message}`)
+      }
+      send(res, error.status, { error: error.message, ...(error.details ? { details: error.details } : {}) })
+      return
+    }
     console.error(`${req.method} ${path} failed:`, error)
     send(res, 500, { error: 'Internal error' })
   }
@@ -174,6 +228,10 @@ async function start() {
   if (process.env.SKIP_SEED !== '1') {
     await seed({ prune: process.env.SEED_PRUNE === '1' })
   }
+
+  // Needs the schema (it may store a generated secret) and must be ready
+  // before the first request, so it sits between seeding and listening.
+  await auth.initAuth()
 
   server.listen(PORT, '0.0.0.0', () => console.log(`[service] listening on :${PORT}`))
 }

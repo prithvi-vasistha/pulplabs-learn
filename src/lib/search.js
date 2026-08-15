@@ -53,6 +53,7 @@ export const TYPE_ORDER = [
   'Learning path',
   'Lesson',
   'Technology',
+  'Playground',
   'Mock exam',
   'Documentation',
   'Project',

@@ -7,14 +7,19 @@ real engagements, and documentation for the projects PulpLabs builds in the open
 ## Run it
 
 ```bash
+cp .env.example .env          # fill in AUTH_SECRET and the Google client
 docker build -t pulplabs-learn .
-docker run --rm -p 3000:3000 -v pulplabs-learn-db:/var/lib/postgresql/data pulplabs-learn
+docker run --rm -p 3000:3000 --env-file .env \
+  -v pulplabs-learn-db:/var/lib/postgresql/data pulplabs-learn
 ```
 
 One container: Postgres, the content service and the UI. It creates the
 cluster, applies the schema, seeds the content and comes up on
 **http://localhost:3000**. The volume keeps the database across restarts; drop
 it and the next boot rebuilds from the seed.
+
+`--env-file` is optional. Without it the site runs, accounts work, and Google
+sign-in reports that it is not configured — see **Accounts** below.
 
 `docker-compose.yml` runs the same three processes as three containers, which
 is the shape to deploy — Postgres becomes a managed instance, and the service
@@ -212,6 +217,59 @@ from `/api/search-index` — so visitors who never search pay nothing for it.
 Every index page carries a `JumpBar` under its head: what is on the page and how
 much of it there is, so a reader can choose without first reading the lede.
 
+### Accounts
+
+Two ways in — a password, or Google — and one thing to show for it: a signed
+token in an httpOnly cookie. `service/src/crypto.js` holds every primitive and
+`node:crypto` provides all of them; a JWT library, a bcrypt binding and an
+encryption helper would be three dependencies for one service that signs one
+kind of token.
+
+What is stored, and why it is stored that way:
+
+| Value | At rest | Because |
+| --- | --- | --- |
+| Password | scrypt digest, per-row salt | A password we can decrypt is a password an attacker can decrypt |
+| Email | AES-256-GCM ciphertext | It identifies a person and nothing needs to read it back except the account's owner |
+| Email lookup | HMAC-SHA256 blind index | Equality search still has to work when the column is ciphertext |
+| Name, avatar | AES-256-GCM ciphertext | Same reason as the email |
+
+One secret enters, three keys leave — HKDF derives the token signing key, the
+field encryption key and the blind index key separately, so recovering one does
+not hand over the others. Set `AUTH_SECRET`; without one the service generates
+a secret on first boot and keeps it in `settings`, which is fine for a demo and
+wrong for two replicas.
+
+Sign-in attempts are rate limited per address and per address-plus-IP, and both
+"no such account" and "wrong password" return the same message — the difference
+is not the caller's business and leaking it enumerates our users.
+
+**Google.** The client id and secret live in the content service; the web app
+holds neither and never calls Google's token endpoint. The flow carries `state`
+and PKCE, both minted server-side and kept in a ten-minute httpOnly cookie, so
+a stolen authorization code is useless and a forged callback is rejected.
+
+Google requires the redirect URI to match a registered value exactly, and the
+client we were issued registers bare origins — `http://localhost:3000`. So the
+code lands on `/`, and `src/middleware.js` rewrites requests carrying `code` and
+`state` to the callback handler. Register `<origin>/api/auth/google/callback`
+and set `GOOGLE_REDIRECT_URI` to it and the middleware never fires again.
+
+### The playground needs an account; nothing else does
+
+Field notes, articles, courses, exams, topics, our software and the profile all
+work signed out, and the profile still shows browser-local progress. The
+playground is the exception because a run costs something: starting a demo
+leases an instance to your account for 45 minutes with a 60-run quota, and both
+limits are enforced in `service/src/playground.js`, not in the browser.
+
+The three engines are deterministic — BM25 over a seeded corpus, a context
+budget, a keyword router graded against held-back labels. A demo calling a model
+would need a key we cannot ship, cost money per click, and teach less. Corpora
+and answer keys live in `playground_demos.spec`, which read routes never select;
+only `spec -> 'preview'` reaches a browser. It is the same boundary the exam
+answer key sits behind.
+
 ### Content is modelled, not duplicated
 
 Every entity is defined once and referenced by slug everywhere else. A lesson is authored in
@@ -324,8 +382,16 @@ list.
 - **Client marks are generated placeholders**, never an approximation of a real logo — a wrong
   version of somebody's mark is worse than an obvious stand-in. Drop a real file in `public/logos/`
   and set `logo:` on the entry to replace it.
-- **Progress and attempts are browser-local.** No account exists, and the interface never implies
-  one.
+- **Progress and attempts are still browser-local.** Accounts exist now, but they do not yet carry
+  lesson or exam history — the `attempts` table is there and nothing writes to it. The profile says
+  so rather than implying a sync that has not been built.
+- **The playground demos compute their own results.** No model is called, nothing is recorded, and
+  the numbers come from the inputs you give them. The corpus is fourteen passages written for the
+  demo; it is a teaching instrument, not a benchmark.
+- **The Google client currently in `.env` is a temporary one** supplied for development. Its
+  registered redirect URIs are bare origins, which is why the callback shim in `src/middleware.js`
+  exists. Rotate the secret before this runs anywhere real — anything committed to a repository or
+  pasted into a shell history should be treated as burned.
 
 ---
 
@@ -360,3 +426,18 @@ the marketing site at matching viewports:
   keys, opens with Enter, traps Tab, and closes on Escape from anywhere in the dialog.
 - The marketing site builds and renders in both themes with the same toggle, from the same
   `void.css`.
+- **Accounts, against the running container**: register, sign in, sign out, wrong password rejected,
+  and the session cookie is `HttpOnly; SameSite=lax` with `Secure` decided by the request rather
+  than by an environment variable.
+- **Nothing readable in the users table** — asserted with SQL against the container's database:
+  the email and name columns are `v1.…` ciphertext, the lookup column is an HMAC, and the password
+  is a `scrypt$16384$8$1$…` digest. A query for the plaintext address returns zero rows.
+- **The Google flow up to Google's door**: the authorize URL carries the right client, redirect URI,
+  `state` and S256 challenge; a callback with a mismatched `state` is refused; and a code arriving
+  at `/` is rewritten to the handler by the middleware. The round trip through a real Google account
+  is the one thing here that has to be tried by hand.
+- **The playground end to end in a browser**: signed out, every demo shows its brief and a gate;
+  signed in, the console leases an instance by itself and all three engines run — 5 ranked passages
+  with per-term contributions, a budget 178 tokens over an 8k window, and a routing eval opening at
+  75% with three failing cases to fix. Ending a lease from the profile removes it.
+- Redirect coverage after the move: `/dashboard → /profile`, `/field → /`, `/exams → /practice`.

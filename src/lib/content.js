@@ -173,6 +173,20 @@ export async function getArticleSlugs() {
   return get('/api/articles/slugs', { fallback: [] })
 }
 
+/* ----------------------------------------------------------- playground --- */
+
+/* The demos are public to read about — what they do, how long they take. What
+   needs an account is running one, and that goes through /api/playground/* in
+   the web app with the reader's token attached. */
+
+export async function getPlaygroundDemos() {
+  return get('/api/playground', { fallback: [] })
+}
+
+export async function getPlaygroundDemo(slug) {
+  return get(`/api/playground/${encode(slug)}`)
+}
+
 /* ---------------------------------------------------------------- field --- */
 
 export async function getFieldEntries() {

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import CommandPalette from '@/components/learn/CommandPalette'
 import ThemeToggle from '@/components/void/ThemeToggle'
-import { Book, Check, Clock, Terminal } from '@/components/void/Icons'
+import { Book, Check, Lock, Person, Play, Terminal } from '@/components/void/Icons'
 
 /**
  * Primary navigation: a top bar that is always there, and a sidebar docked
@@ -28,13 +28,16 @@ const GROUPS = [
       { href: '/learn', label: 'Courses', icon: Book },
       { href: '/practice', label: 'Exams', icon: Check, match: ['/exams'] },
       { href: '/technologies', label: 'Topics', icon: Terminal },
+      // The only section that needs an account, and it says so rather than
+      // letting somebody find out by clicking.
+      { href: '/playground', label: 'Playground', icon: Play, account: true },
     ],
   },
   {
     title: 'More',
     items: [
       { href: '/projects', label: 'Our software', icon: Terminal },
-      { href: '/dashboard', label: 'My progress', icon: Clock },
+      { href: '/profile', label: 'Profile', icon: Person, match: ['/dashboard'] },
     ],
   },
 ]
@@ -56,7 +59,14 @@ function Pencil({ size = 15 }) {
   )
 }
 
-export default function Sidebar() {
+/** Initials, for an account with no Google picture. */
+function initials(user) {
+  const source = user?.name || user?.email || '?'
+  const parts = source.replace(/@.*/, '').split(/[\s._-]+/).filter(Boolean)
+  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || source[0].toUpperCase()
+}
+
+export default function Sidebar({ user = null }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
@@ -106,6 +116,21 @@ export default function Sidebar() {
         <div className="topbar-end">
           <CommandPalette />
           <ThemeToggle />
+          {user ? (
+            <Link href="/profile" className="topbar-me" title={user.email ?? 'Your profile'}>
+              {user.avatar ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={user.avatar} alt="" width={26} height={26} referrerPolicy="no-referrer" />
+              ) : (
+                <span aria-hidden="true">{initials(user)}</span>
+              )}
+              <span className="sr-only">Your profile</span>
+            </Link>
+          ) : (
+            <Link href="/login" className="topbar-in">
+              Sign in
+            </Link>
+          )}
         </div>
       </header>
 
@@ -120,11 +145,18 @@ export default function Sidebar() {
                 {group.items.map((item) => {
                   const Icon = item.icon
                   const current = isCurrent(item)
+                  const locked = item.account && !user
                   return (
                     <li key={item.href}>
                       <Link href={item.href} aria-current={current ? 'page' : undefined} data-current={current || undefined}>
                         <Icon size={15} />
                         {item.label}
+                        {locked && (
+                          <span className="side-lock" title="Needs an account">
+                            <Lock size={11} />
+                            <span className="sr-only"> (requires an account)</span>
+                          </span>
+                        )}
                       </Link>
                     </li>
                   )
@@ -133,6 +165,18 @@ export default function Sidebar() {
             </div>
           ))}
         </div>
+
+        {/* A suggestion, not a wall. Everything above this except the
+            playground works perfectly well signed out. */}
+        {!user && (
+          <div className="side-cta">
+            <p className="mono">Not signed in</p>
+            <p>Sign in to run the playground demos and keep your progress on more than one machine.</p>
+            <Link href={`/login?next=${encodeURIComponent(pathname || '/')}`} className="btn btn-sm">
+              Sign in
+            </Link>
+          </div>
+        )}
       </nav>
     </>
   )

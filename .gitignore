@@ -5,6 +5,9 @@ build/
 .DS_Store
 *.pem
 npm-debug.log*
-.env*.local
+# Secrets: the Google client, the signing key. Never committed.
+.env
+.env.*
+!.env.example
 next-env.d.ts
 .vercel

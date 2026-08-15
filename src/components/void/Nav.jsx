@@ -75,8 +75,8 @@ export default function Nav() {
           <CommandPalette />
           <ThemeToggle />
 
-          <Link href="/dashboard" className="btn nv-cta">
-            Dashboard
+          <Link href="/profile" className="btn nv-cta">
+            Profile
           </Link>
 
           <button
@@ -113,8 +113,8 @@ export default function Nav() {
             </Link>
           </li>
         </ul>
-        <Link href="/dashboard" className="btn nv-sheet-cta">
-          Dashboard
+        <Link href="/profile" className="btn nv-sheet-cta">
+          Profile
         </Link>
       </div>
     </header>

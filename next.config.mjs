@@ -11,6 +11,8 @@ const nextConfig = {
     return [
       // Field notes are the front page now.
       { source: '/field', destination: '/', permanent: true },
+      // Progress is part of a profile, not a section of its own.
+      { source: '/dashboard', destination: '/profile', permanent: true },
       // Exams are one half of Practice now, not a section of their own.
       { source: '/exams', destination: '/practice', permanent: true },
       { source: '/builds', destination: '/projects', permanent: true },

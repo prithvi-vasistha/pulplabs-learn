@@ -246,6 +246,27 @@ export async function seed({ prune = false, file } = {}) {
       )
     }
 
+    // ---- playground ------------------------------------------------------
+    for (const [i, d] of (content.playground ?? []).entries()) {
+      await client.query(
+        `insert into playground_demos
+           (slug, title, tagline, kind, engine, summary, minutes, brief, controls, learn,
+            spec, technologies, position)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+         on conflict (slug) do update set
+           title = excluded.title, tagline = excluded.tagline, kind = excluded.kind,
+           engine = excluded.engine, summary = excluded.summary, minutes = excluded.minutes,
+           brief = excluded.brief, controls = excluded.controls, learn = excluded.learn,
+           spec = excluded.spec, technologies = excluded.technologies, position = excluded.position`,
+        [
+          d.slug, d.title, d.tagline, d.kind ?? 'Sandbox', d.engine, d.summary, d.minutes ?? 0,
+          JSON.stringify(d.brief ?? []), JSON.stringify(d.controls ?? {}),
+          JSON.stringify(d.learn ?? []), JSON.stringify(d.spec ?? {}),
+          d.technologies ?? [], i,
+        ]
+      )
+    }
+
     if (prune) {
       await pruneMissing(client, content)
     }
@@ -277,6 +298,7 @@ async function pruneMissing(client, content) {
   await table('doc_sets', slugs(content.docSets))
   await table('field_entries', slugs(content.fieldEntries))
   await table('articles', slugs(content.articles ?? []))
+  await table('playground_demos', slugs(content.playground ?? []))
 }
 
 async function countRows() {
@@ -291,7 +313,9 @@ async function countRows() {
       (select count(*) from doc_sets)      as doc_sets,
       (select count(*) from doc_pages)     as doc_pages,
       (select count(*) from field_entries) as field_entries,
-      (select count(*) from articles)      as articles
+      (select count(*) from articles)      as articles,
+      (select count(*) from playground_demos) as playground,
+      (select count(*) from users)         as users
   `)
   return Object.fromEntries(Object.entries(rows[0]).map(([k, v]) => [k, Number(v)]))
 }

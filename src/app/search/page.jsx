@@ -53,7 +53,7 @@ export default async function Page() {
           </div>
         </section>
 
-        <NextPage href="/dashboard" title="Your dashboard" />
+        <NextPage href="/profile" title="Your profile" />
       </main>
 
       <Footer />

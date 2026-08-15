@@ -9,7 +9,7 @@
     "lint": "next lint",
     "export:content": "node --import ./scripts/register-loader.mjs scripts/export-content.mjs",
     "docker:build": "docker build -t pulplabs-learn .",
-    "docker:run": "docker run --rm -p 3000:3000 -v pulplabs-learn-db:/var/lib/postgresql/data --name pulplabs-learn pulplabs-learn"
+    "docker:run": "docker run --rm -p 3000:3000 --env-file .env -v pulplabs-learn-db:/var/lib/postgresql/data --name pulplabs-learn pulplabs-learn"
   },
   "dependencies": {
     "next": "15.5.4",

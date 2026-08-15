@@ -794,6 +794,18 @@ export async function getSearchIndex() {
     })
   }
 
+  for (const demo of await rows('select * from playground_demos order by position')) {
+    entries.push({
+      id: `playground:${demo.slug}`,
+      type: 'Playground',
+      title: demo.title,
+      description: demo.tagline,
+      href: `/playground/${demo.slug}`,
+      meta: `${demo.kind} · ${demo.minutes} min`,
+      keywords: [demo.summary, ...(demo.technologies ?? [])].join(' '),
+    })
+  }
+
   const docPages = await rows(`
     select p.*, d.name as set_name from doc_pages p
       join doc_sets d on d.slug = p.set_slug

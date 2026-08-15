@@ -49,8 +49,8 @@ export default function ExamResults({ examSlug, examTitle, attemptId, relatedPat
                   Your most recent attempt
                 </Link>
               )}
-              <Link href="/dashboard" className="btn btn-ghost">
-                Dashboard
+              <Link href="/profile" className="btn btn-ghost">
+                Profile
               </Link>
             </>
           }

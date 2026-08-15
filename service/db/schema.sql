@@ -197,6 +197,66 @@ create table if not exists articles (
 
 create index if not exists articles_published_idx on articles (published desc);
 
+-- ------------------------------------------------------------- accounts ----
+-- Nothing in this table is stored in the clear except what has to be indexed.
+--
+-- `password_hash` is a scrypt digest, not ciphertext: a password we can
+-- decrypt is a password an attacker can decrypt, so the one-way function is
+-- the stronger choice and the only correct one.
+--
+-- Everything that identifies a person — email, name, avatar URL — is
+-- AES-256-GCM ciphertext. Lookup still needs an equality key, so `email_index`
+-- is a keyed HMAC of the lowercased address: it finds the row without the
+-- table ever holding a readable address. Lose the key and the ciphertext is
+-- noise, which is the intended failure mode.
+create table if not exists users (
+  id            uuid primary key,
+  email_index   text not null unique,
+  email_enc     text not null,
+  name_enc      text,
+  avatar_enc    text,
+  password_hash text,
+  provider      text not null default 'password',
+  google_sub    text unique,
+  created_at    timestamptz not null default now(),
+  last_login_at timestamptz
+);
+
+-- ------------------------------------------------------------ playground ----
+-- `spec` holds corpora, answer keys and grading rules. Like the exam answer
+-- key above, it is selected by one code path — the demo runner — and never by
+-- a read route. `preview` is the half a signed-out reader may see.
+create table if not exists playground_demos (
+  slug         text primary key,
+  title        text not null,
+  tagline      text not null,
+  kind         text not null default 'Sandbox',
+  engine       text not null,
+  summary      text not null,
+  minutes      int  not null default 0,
+  brief        jsonb  not null default '[]',
+  controls     jsonb  not null default '{}',
+  learn        jsonb  not null default '[]',
+  spec         jsonb  not null default '{}',
+  technologies text[] not null default '{}',
+  position     int    not null default 0
+);
+
+-- A demo instance: a lease on a demo, held by one account, with a deadline
+-- and a run quota. Both are enforced in the service, not in the browser.
+create table if not exists playground_sessions (
+  id           uuid primary key,
+  user_id      uuid not null references users(id) on delete cascade,
+  demo_slug    text not null references playground_demos(slug) on delete cascade,
+  created_at   timestamptz not null default now(),
+  expires_at   timestamptz not null,
+  last_used_at timestamptz,
+  runs         int not null default 0
+);
+
+create index if not exists playground_sessions_user_idx on playground_sessions (user_id, demo_slug);
+create index if not exists playground_sessions_expiry_idx on playground_sessions (expires_at);
+
 -- ------------------------------------------------------------- attempts -----
 -- Exam attempts were browser-local and stay that way by default. This table
 -- exists so a graded attempt can be persisted when there is an account to

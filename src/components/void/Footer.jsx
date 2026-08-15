@@ -31,7 +31,7 @@ export default function Footer() {
                 <Link href="/technologies">Technologies</Link>
               </li>
               <li>
-                <Link href="/dashboard">Your progress</Link>
+                <Link href="/profile">Your progress</Link>
               </li>
             </ul>
           </nav>

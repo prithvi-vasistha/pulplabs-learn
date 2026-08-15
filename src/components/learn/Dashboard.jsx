@@ -92,7 +92,7 @@ export default function Dashboard({ catalogue, exams }) {
             <StateBlock
               align="left"
               eyebrow="Nothing tracked yet"
-              title="Your dashboard fills itself in as you work."
+              title="This page fills itself in as you work."
               body="Complete a lesson or take an assessment and this page starts reporting where you are, what you have finished, and which topics need another pass. Everything is stored in this browser only."
               actions={
                 <>

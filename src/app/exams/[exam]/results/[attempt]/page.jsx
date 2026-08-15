@@ -38,7 +38,7 @@ export default async function Page({ params }) {
           relatedPaths={exam.relatedPaths}
         />
 
-        <NextPage href="/dashboard" title="Your dashboard" label="Track it" />
+        <NextPage href="/profile" title="Your profile" label="Track it" />
       </main>
 
       <Footer />

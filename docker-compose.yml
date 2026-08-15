@@ -31,6 +31,11 @@ services:
     environment:
       DATABASE_URL: postgres://learn:learn@db:5432/learn
       PORT: 4000
+      # Auth. Set these in .env; without AUTH_SECRET the service generates one
+      # and stores it in the database, which two replicas cannot share safely.
+      AUTH_SECRET: ${AUTH_SECRET:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
     depends_on:
       db:
         condition: service_healthy
@@ -49,6 +54,7 @@ services:
     environment:
       CONTENT_API_URL: http://service:4000
       PORT: 3000
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-}
     ports:
       - '3000:3000'
     depends_on:

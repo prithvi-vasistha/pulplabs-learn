@@ -5,6 +5,7 @@ import {
   getArticleSlugs,
   getFieldSlugs,
   getPaths,
+  getPlaygroundDemos,
   getProjects,
   getTechnologies,
 } from '@/lib/content'
@@ -16,7 +17,7 @@ const BASE = 'https://learn.pulplabs.dev'
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap() {
-  const [paths, lessons, technologies, exams, projects, docPages, fieldSlugs, articleSlugs] = await Promise.all([
+  const [paths, lessons, technologies, exams, projects, docPages, fieldSlugs, articleSlugs, demos] = await Promise.all([
     getPaths(),
     getAllLessonParams(),
     getTechnologies(),
@@ -25,6 +26,7 @@ export default async function sitemap() {
     getAllDocParams(),
     getFieldSlugs(),
     getArticleSlugs(),
+    getPlaygroundDemos(),
   ])
 
   const routes = [
@@ -34,7 +36,7 @@ export default async function sitemap() {
     { url: '/practice', priority: 0.9 },
     { url: '/projects', priority: 0.7 },
     { url: '/articles', priority: 0.8 },
-    { url: '/dashboard', priority: 0.4 },
+    { url: '/playground', priority: 0.7 },
     { url: '/search', priority: 0.4 },
     ...paths.map((p) => ({ url: `/learn/${p.slug}`, priority: 0.8 })),
     ...lessons.map((l) => ({ url: `/learn/${l.path}/${l.lesson}`, priority: 0.7 })),
@@ -44,7 +46,11 @@ export default async function sitemap() {
     ...docPages.map((d) => ({ url: `/projects/${d.project}/${d.page.join('/')}`, priority: 0.5 })),
     ...fieldSlugs.map((slug) => ({ url: `/field/${slug}`, priority: 0.6 })),
     ...articleSlugs.map((slug) => ({ url: `/articles/${slug}`, priority: 0.7 })),
+    ...demos.map((demo) => ({ url: `/playground/${demo.slug}`, priority: 0.6 })),
   ]
+
+  /* /login and /profile are deliberately absent: both are noindex, and a
+     sitemap entry for a page that tells crawlers to go away is noise. */
 
   const lastModified = new Date()
 

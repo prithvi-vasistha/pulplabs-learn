@@ -39,11 +39,12 @@ function loadIndex() {
   return inFlight
 }
 
-/** Shown before a reader has typed: the four places they can go, with counts. */
+/** Shown before a reader has typed: the sections, in the order they are used. */
 const STARTERS = [
   { type: 'Article', label: 'Articles', href: '/articles', hint: 'Notes on the stack' },
   { type: 'Learning path', label: 'Courses', href: '/learn', hint: 'Sequenced, start to finish' },
   { type: 'Mock exam', label: 'Exams', href: '/practice', hint: 'Scored by topic' },
+  { type: 'Playground', label: 'Playground', href: '/playground', hint: 'Demos that actually run' },
   { type: 'Project', label: 'Our software', href: '/projects', hint: 'Source and documentation' },
 ]
 

@@ -4054,7 +4054,10 @@ mark {
   padding-block: 0;
 }
 
-.app .sec + .sec,
+/* Sections inside the portal carry no padding of their own, so the gap has to
+   come from adjacency — and a `.sec-sm` following a `.sec-sm` needs it as much
+   as two `.sec`s do. Without this the profile's panels touch. */
+.app :is(.sec, .sec-sm) + :is(.sec, .sec-sm),
 .app .flow .sec {
   margin-top: clamp(34px, 4vw, 52px);
 }
@@ -4323,5 +4326,924 @@ mark {
   }
   .art-side {
     position: static;
+  }
+}
+
+/* ==========================================================================
+   27. Accounts
+
+   Sign-in, the profile, and the small affordances in the shell that say
+   whether anybody is signed in. No hue anywhere except the Google mark, which
+   is theirs and has to stay theirs.
+   ========================================================================== */
+
+/* ---- in the shell ---- */
+
+.topbar-in {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  letter-spacing: -0.008em;
+  color: var(--w-1);
+  white-space: nowrap;
+}
+
+.topbar-in:hover {
+  border-color: var(--line-3);
+  background: var(--raise-1);
+}
+
+.topbar-me {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  overflow: hidden;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--w-1);
+  background: var(--raise-1);
+}
+
+.topbar-me img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topbar-me:hover {
+  border-color: var(--line-3);
+}
+
+.side-lock {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  color: var(--w-4);
+}
+
+/* The nudge. It sits under the menu, it never covers anything, and it is
+   gone the moment there is a session. */
+.side-cta {
+  flex: none;
+  margin: 0 12px 14px;
+  padding: 14px;
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  background: var(--raise-1);
+}
+
+.side-cta .mono {
+  color: var(--w-3);
+}
+
+.side-cta p:nth-of-type(2) {
+  margin: 8px 0 12px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--w-2);
+}
+
+/* `.side a` colours every link in the sidebar, and this is a button that
+   happens to be a link — without this it inherits body ink onto a filled
+   button and disappears. */
+.side-cta .btn {
+  width: 100%;
+  justify-content: center;
+  color: var(--void);
+}
+
+/* ---- the sign-in page ---- */
+
+.auth {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(32px, 5vw, 72px);
+}
+
+.auth-light {
+  position: absolute;
+  inset: -20% -10% auto -30%;
+  height: 120%;
+  opacity: 0.5;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
+  pointer-events: none;
+}
+
+.auth-in {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+
+.auth-copy .mono {
+  color: var(--w-3);
+}
+
+.auth-copy h1 {
+  margin: 12px 0 0;
+}
+
+.auth-copy .lede {
+  margin-top: 14px;
+  max-width: 46ch;
+}
+
+.auth-list {
+  margin: clamp(22px, 3vw, 34px) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 16px;
+  max-width: 48ch;
+}
+
+.auth-list li {
+  padding-top: 14px;
+  border-top: 1px solid var(--line-1);
+}
+
+.auth-list .mono {
+  color: var(--w-1);
+}
+
+.auth-list p {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--w-2);
+}
+
+.auth-card {
+  padding: clamp(20px, 2.4vw, 28px);
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  background: var(--panel-solid);
+}
+
+.auth-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line-1);
+  border-radius: 999px;
+}
+
+.auth-switch button {
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--w-3);
+  cursor: pointer;
+}
+
+.auth-switch button[data-on] {
+  background: var(--w-1);
+  color: var(--void);
+}
+
+.auth-switch button:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+.auth-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 42px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: var(--w-1);
+  background: var(--raise-1);
+}
+
+.auth-google:hover {
+  border-color: var(--line-3);
+  background: var(--raise-2);
+}
+
+.auth-or {
+  position: relative;
+  margin: 18px 0;
+  text-align: center;
+  border-top: 1px solid var(--line-1);
+}
+
+.auth-or span {
+  position: relative;
+  top: -0.7em;
+  padding: 0 10px;
+  background: var(--panel-solid);
+  font-size: 0.75rem;
+  color: var(--w-4);
+}
+
+.auth-field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.auth-field > .mono {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--w-3);
+}
+
+.auth-field input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--raise-1);
+  color: var(--w-1);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.auth-field input:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.auth-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--w-4);
+}
+
+.auth-error {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-2);
+  border-left-width: 3px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--w-1);
+  background: var(--raise-1);
+}
+
+.auth-card .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.auth-foot {
+  margin: 18px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--w-3);
+}
+
+.auth-foot a {
+  color: var(--w-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .auth-in {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- the profile ---- */
+
+.acct {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: clamp(16px, 3vw, 40px);
+  align-items: center;
+  padding: clamp(18px, 2.2vw, 26px);
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  background: var(--raise-1);
+}
+
+.acct-id {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.acct-id img,
+.acct-init {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  object-fit: cover;
+}
+
+.acct-init {
+  display: grid;
+  place-items: center;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--w-1);
+  background: var(--raise-2);
+}
+
+.acct-id p {
+  margin: 0;
+}
+
+.acct-id .mono {
+  margin-top: 4px;
+  color: var(--w-3);
+  overflow-wrap: anywhere;
+}
+
+.acct-meta {
+  display: flex;
+  gap: clamp(16px, 2.5vw, 32px);
+  margin: 0;
+}
+
+.acct-meta dt {
+  color: var(--w-4);
+}
+
+.acct-meta dd {
+  margin: 5px 0 0;
+  font-size: 0.875rem;
+  color: var(--w-1);
+}
+
+.acct-out {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.acct-out p.body {
+  margin: 6px 0 0;
+  max-width: 62ch;
+}
+
+@media (max-width: 900px) {
+  .acct,
+  .acct-out {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* ---- leased instances ---- */
+
+.inst {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-1);
+}
+
+.inst > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.inst .mono {
+  margin: 5px 0 0;
+  color: var(--w-3);
+}
+
+.inst-a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inst-id {
+  color: var(--w-4);
+}
+
+/* ==========================================================================
+   28. Playground
+
+   A catalogue that reads like the rest of the portal, and a console that does
+   not: the console is an instrument panel, so it is denser, monospaced where
+   numbers appear, and it shows its working.
+   ========================================================================== */
+
+.pg-gate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 40px);
+  flex-wrap: wrap;
+  margin-bottom: clamp(24px, 3vw, 36px);
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  background: var(--raise-1);
+}
+
+.pg-gate .mono {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+  color: var(--w-3);
+}
+
+.pg-gate .body {
+  margin: 0;
+  max-width: 74ch;
+}
+
+.pg-gate-lg {
+  display: block;
+  padding: clamp(20px, 2.6vw, 30px);
+}
+
+.pg-gate-lg h2 {
+  margin: 0 0 10px;
+}
+
+.pg-gate-lg .body + .body {
+  margin-top: 12px;
+}
+
+.pg-gate-lg .btn {
+  margin-top: 20px;
+}
+
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pg-card {
+  display: block;
+  height: 100%;
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--raise-1);
+  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.pg-card:hover {
+  border-color: var(--line-3);
+  transform: translateY(-2px);
+}
+
+.pg-card:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+.pg-cv {
+  display: block;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.pg-in {
+  padding: 16px 18px 18px;
+}
+
+.pg-in .mono {
+  color: var(--w-3);
+}
+
+.pg-in h2 {
+  margin: 8px 0 0;
+}
+
+.pg-in .body {
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+}
+
+.pg-cta {
+  margin: 14px 0 0;
+  color: var(--w-1);
+}
+
+/* ---- one demo ---- */
+
+.pgd-h {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(28px, 4vw, 52px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.pgd-light {
+  position: absolute;
+  inset: -30% -20% auto auto;
+  width: 60%;
+  height: 160%;
+  opacity: 0.42;
+  mix-blend-mode: var(--plate-blend);
+  filter: var(--plate-filter);
+  pointer-events: none;
+}
+
+.pgd-h-in {
+  position: relative;
+}
+
+.pgd-h h1 {
+  margin: 14px 0 0;
+}
+
+.pgd-h .lede {
+  margin-top: 12px;
+  max-width: 60ch;
+}
+
+.pgd-h .meta {
+  margin-top: 16px;
+}
+
+.pgd-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(24px, 3.5vw, 52px);
+  align-items: start;
+}
+
+.pgd-brief {
+  position: sticky;
+  top: calc(var(--top-h) + 24px);
+}
+
+.pgd-brief .body {
+  font-size: 0.9375rem;
+}
+
+.pgd-brief .body + .body {
+  margin-top: 12px;
+}
+
+.pgd-learn {
+  margin: 20px 0 0;
+  padding: 18px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--line-1);
+  display: grid;
+  gap: 10px;
+}
+
+.pgd-run {
+  min-width: 0;
+}
+
+@media (max-width: 980px) {
+  .pgd-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pgd-brief {
+    position: static;
+  }
+}
+
+/* ---- the console ---- */
+
+.pgc {
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--panel-solid);
+}
+
+.pgc-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-1);
+  background: var(--raise-1);
+}
+
+.pgc-bar .mono {
+  color: var(--w-2);
+}
+
+.pgc-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line-3);
+}
+
+.pgc-dot.on {
+  background: var(--w-1);
+  border-color: var(--w-1);
+}
+
+.pgc-meta {
+  color: var(--w-4) !important;
+}
+
+.pgc-sp {
+  flex: 1;
+}
+
+.pgc-err {
+  margin: 0;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-1);
+  font-size: 0.8125rem;
+  color: var(--w-1);
+  background: var(--raise-2);
+}
+
+.pgc-body {
+  display: grid;
+}
+
+.pgc-controls {
+  padding: clamp(14px, 1.8vw, 20px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.pgc-field {
+  display: block;
+  margin-bottom: 12px;
+  min-width: 0;
+}
+
+.pgc-field > .mono {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--w-3);
+}
+
+.pgc-field textarea,
+.pgc-field input[type='text'],
+.pgc-field input[type='number'],
+.pgc-field select {
+  display: block;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  background: var(--raise-1);
+  color: var(--w-1);
+  font: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.pgc-field input[type='range'] {
+  width: 100%;
+  accent-color: var(--w-1);
+}
+
+.pgc-field :focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+
+.pgc-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 12px;
+}
+
+.pgc-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  font-size: 0.8125rem;
+  color: var(--w-2);
+}
+
+.pgc-check input {
+  accent-color: var(--w-1);
+}
+
+.pgc-samples {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.pgc-samples .mono {
+  color: var(--w-4);
+}
+
+.pgc-out {
+  padding: clamp(14px, 1.8vw, 20px);
+  min-height: 120px;
+}
+
+.pgc-head {
+  margin: 0 0 14px;
+  font-size: 0.9375rem;
+  color: var(--w-2);
+}
+
+.pgc-head strong {
+  color: var(--w-1);
+  font-weight: 500;
+}
+
+.pgc-note {
+  margin: 0 0 10px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line-3);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--w-2);
+}
+
+.pgc-bar-t {
+  height: 3px;
+  margin: 7px 0;
+  border-radius: 999px;
+  background: var(--tint-2);
+  overflow: hidden;
+}
+
+.pgc-bar-t i {
+  display: block;
+  height: 100%;
+  background: var(--w-1);
+}
+
+.pgc-bar-t i[data-fixed] {
+  background: var(--w-3);
+}
+
+.pgc-hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: hit;
+}
+
+.pgc-hits > li {
+  padding: 14px 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.pgc-hit-h {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.pgc-hit-h .mono:first-child {
+  color: var(--w-4);
+}
+
+.pgc-hit-h .h4 {
+  flex: 1;
+  min-width: 0;
+}
+
+.pgc-hits .body {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+}
+
+.pgc-parts {
+  margin: 8px 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--w-4);
+  overflow-wrap: anywhere;
+}
+
+.pgc-segs {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.pgc-over {
+  color: var(--w-1);
+}
+
+.pgc-under {
+  color: var(--w-3);
+}
+
+.pgc-table {
+  width: 100%;
+  margin: 0 0 16px;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.pgc-table th,
+.pgc-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.pgc-table thead th {
+  font-family: 'Berkeley Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-4);
+  font-weight: 400;
+}
+
+.pgc-table tbody th {
+  font-weight: 500;
+  color: var(--w-1);
+}
+
+.pgc-table td {
+  color: var(--w-2);
+}
+
+.pgc-cases {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pgc-cases > li {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line-1);
+}
+
+.pgc-cases > li > .mono {
+  color: var(--w-1);
+  border-left: 2px solid var(--line-3);
+  padding-left: 8px;
+}
+
+.pgc-cases > li[data-ok] > .mono {
+  color: var(--w-4);
+  border-left-color: var(--line-1);
+}
+
+.pgc-case-b .body {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.pgc-case-b .mono {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.6875rem;
+  color: var(--w-4);
+}
+
+.pgc-ms {
+  margin: 14px 0 0;
+  font-size: 0.6875rem;
+  color: var(--w-4);
+}
+
+@media (min-width: 1100px) {
+  .pgc-body {
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  }
+  .pgc-controls {
+    border-bottom: 0;
+    border-right: 1px solid var(--line-1);
   }
 }

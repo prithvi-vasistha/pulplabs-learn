@@ -129,6 +129,32 @@ export function Terminal({ size = 14 }) {
   )
 }
 
+export function Play({ size = 14 }) {
+  return (
+    <svg {...base} width={size} height={size} viewBox="0 0 16 16">
+      <path d="M6 4.5 11.5 8 6 11.5z" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function Lock({ size = 12 }) {
+  return (
+    <svg {...base} width={size} height={size} viewBox="0 0 16 16">
+      <rect x="3.5" y="7" width="9" height="6.5" rx="1.2" />
+      <path d="M5.6 7V5.2a2.4 2.4 0 0 1 4.8 0V7" />
+    </svg>
+  )
+}
+
+export function Person({ size = 14 }) {
+  return (
+    <svg {...base} width={size} height={size} viewBox="0 0 16 16">
+      <circle cx="8" cy="5.6" r="2.6" />
+      <path d="M2.9 13.6a5.2 5.2 0 0 1 10.2 0" />
+    </svg>
+  )
+}
+
 export function External({ size = 12 }) {
   return (
     <svg {...base} width={size} height={size} viewBox="0 0 16 16">
