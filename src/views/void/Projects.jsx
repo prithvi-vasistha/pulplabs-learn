@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { ProjectCard } from '@/components/learn/cards'
@@ -20,10 +19,7 @@ export default async function Projects() {
   const totalPages = docSets.reduce((total, set) => total + set.pageCount, 0)
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Projects"
           plate="grid-horizon"
@@ -32,7 +28,7 @@ export default async function Projects() {
               What we ship <span className="dim">in the open.</span>
             </>
           }
-          lede="Open-source products and contributions, each with its source and its documentation."
+          lede="We are a services firm with a couple of products. These are them — source and documentation, both public."
           jump={[
             { href: '#catalogue', label: 'Projects', count: projects.length },
             { href: '#documentation', label: 'Documentation', count: totalPages },
@@ -112,9 +108,6 @@ export default async function Projects() {
         </div>
 
         <NextPage href="/field" title="Field" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

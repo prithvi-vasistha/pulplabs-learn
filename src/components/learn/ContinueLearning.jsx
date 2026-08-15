@@ -37,9 +37,9 @@ export default function ContinueLearning({ catalogue, variant = 'home' }) {
     return (
       <div className="panel">
         <p className="mono">Start here</p>
-        <h3 className="d3" style={{ marginTop: 12 }}>
+        <h2 className="d3" style={{ marginTop: 12 }}>
           Nothing in progress yet.
-        </h3>
+        </h2>
         <p className="body" style={{ marginTop: 12, maxWidth: '52ch' }}>
           Pick a path and the reader will keep your place. Progress is stored in this browser — there is no
           account, and nothing is sent anywhere.
@@ -73,9 +73,9 @@ export default function ContinueLearning({ catalogue, variant = 'home' }) {
               </span>
             </div>
 
-            <h3 className="d3" style={{ marginTop: 14 }}>
+            <h2 className="d3" style={{ marginTop: 14 }}>
               <Link href={`/learn/${path.slug}`}>{path.title}</Link>
-            </h3>
+            </h2>
 
             <div style={{ marginTop: 20 }}>
               <Meter value={progress.percent} large />

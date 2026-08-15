@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { ExamList } from '@/components/learn/ExamProgress'
@@ -12,10 +11,7 @@ export default async function Exams() {
   const questionCount = exams.reduce((total, exam) => total + exam.questionCount, 0)
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Mock exams"
           plate="aperture-glow"
@@ -92,9 +88,6 @@ export default async function Exams() {
         </div>
 
         <NextPage href="/projects" title="Projects" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

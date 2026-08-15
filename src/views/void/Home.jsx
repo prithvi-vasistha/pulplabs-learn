@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import Cover from '@/components/void/Cover'
 import Chevron from '@/components/void/Icons'
 import ContinueLearning from '@/components/learn/ContinueLearning'
@@ -40,42 +39,43 @@ export default async function Home() {
   const sorted = [...paths].sort((a, b) => levelRank(a.level) - levelRank(b.level))
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
-        {/* ── A band, not a hero ────────────────────────────────────────────
-            Short on purpose. The courses are the product, so they are on the
-            first screen rather than below a page of introduction. */}
-        <section className="ac-head">
-          <div className="ac-head-cv" aria-hidden="true">
-            <Cover seed="pulplabs-learn-home" ratio="auto" />
+    <AppShell>
+        {/* ── A portal masthead, not a pitch ───────────────────────────────
+            No hero, no call to action, no headline selling a transformation.
+            A reader arriving here is usually somebody we already work with,
+            so the first screen says what this is and gets out of the way. */}
+        <section className="pmast">
+          <div>
+            <p className="mono">PulpLabs Learn</p>
+            <h1 className="pmast-h">Enablement portal</h1>
+            <p className="pmast-l">
+              The material we use to bring teams up to speed on the systems we build for them —
+              {' '}{paths.length} courses, {totalLessons} lessons and {exams.length} papers, plus the
+              projects we ship in the open and the engagements they came out of.
+            </p>
           </div>
 
-          <div className="shell-wide ac-head-in">
+          <dl className="pmast-facts">
             <div>
-              <p className="mono">PulpLabs Learn</p>
-              <h1 className="ac-h">
-                Learn the AI stack <span className="dim">by being tested on it.</span>
-              </h1>
+              <dt className="mono">Courses</dt>
+              <dd className="tnum">{paths.length}</dd>
             </div>
-
-            <div className="ac-head-side">
-              <p className="lede ac-l">
-                {paths.length} certification courses, {totalLessons} lessons and {exams.length} mock
-                papers — every result broken down by topic and pointed back at the lesson behind the gap.
-              </p>
-              <div className="btn-row">
-                <Link href="/learn" className="btn">
-                  Browse courses <Chevron />
-                </Link>
-                <Link href="/practice" className="btn btn-ghost">
-                  Mock papers
-                </Link>
-              </div>
+            <div>
+              <dt className="mono">Lessons</dt>
+              <dd className="tnum">{totalLessons}</dd>
             </div>
-          </div>
+            <div>
+              <dt className="mono">Papers</dt>
+              <dd className="tnum">{exams.length}</dd>
+            </div>
+            <div>
+              <dt className="mono">Reading time</dt>
+              <dd className="tnum">{formatMinutes(totalMinutes)}</dd>
+            </div>
+          </dl>
         </section>
+
+        <ContinueLearning catalogue={catalogue} />
 
         {/* ── Certifications, above the fold ──────────────────────────────── */}
         <section
@@ -85,7 +85,7 @@ export default async function Home() {
         >
           <div className="shell-wide">
             <div className="ac-bar">
-              <h2 className="d3">Certification courses</h2>
+              <h2 className="d3">Courses</h2>
               <span className="mono tnum">
                 {paths.length} courses · {formatMinutes(totalMinutes)}
               </span>
@@ -105,10 +105,6 @@ export default async function Home() {
             </p>
           </div>
         </section>
-
-        {/* Progress belongs after the catalogue: it must never push the
-            courses down for somebody who has not started one. */}
-        <ContinueLearning catalogue={catalogue} />
 
         <div className="flow">
           {/* ── Practice ─────────────────────────────────────────────────── */}
@@ -218,9 +214,6 @@ export default async function Home() {
             </div>
           </section>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

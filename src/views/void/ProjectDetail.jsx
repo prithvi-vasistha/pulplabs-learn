@@ -1,6 +1,6 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
+import Cover from '@/components/void/Cover'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { Badge, Crumbs, JumpBar, MetaRow, SectionHead } from '@/components/learn/ui'
@@ -20,13 +20,10 @@ export default function ProjectDetail({ project, next }) {
   ]
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <section className="phead grid-bg">
           <div className="phead-light" aria-hidden="true">
-            <img src="/void/grid-horizon.webp" alt="" fetchPriority="high" decoding="async" />
+            <Cover seed={project.slug} ratio="auto" />
           </div>
 
           <div className="shell-wide phead-in">
@@ -348,9 +345,6 @@ export default function ProjectDetail({ project, next }) {
         )}
 
         <NextPage href="/projects" title="Projects" label="Back to" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

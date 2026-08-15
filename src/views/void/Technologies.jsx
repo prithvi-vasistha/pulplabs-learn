@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import TechExplorer from '@/components/learn/TechExplorer'
 import { PageHead } from '@/components/learn/ui'
@@ -10,10 +9,7 @@ export default async function Technologies() {
   const [technologies, settings] = await Promise.all([getTechnologies(), getSettings()])
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Learn · Subjects"
           plate="deep-field"
@@ -37,9 +33,6 @@ export default async function Technologies() {
         </section>
 
         <NextPage href="/learn" title="Preparation tracks" label="Back to" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

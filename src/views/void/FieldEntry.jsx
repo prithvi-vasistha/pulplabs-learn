@@ -1,8 +1,7 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
 import Cover from '@/components/void/Cover'
 import Logo from '@/components/void/Logo'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import Prose from '@/components/learn/Prose'
@@ -12,10 +11,7 @@ import { formatDate, formatMinutes } from '@/lib/format'
 
 export default function FieldEntry({ entry, next, fieldNote }) {
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <section className="phead grid-bg">
           <div className="phead-light" aria-hidden="true">
             <Cover seed={entry.slug} ratio="auto" />
@@ -217,9 +213,6 @@ export default function FieldEntry({ entry, next, fieldNote }) {
         )}
 
         <NextPage href="/field" title="Field" label="Back to" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

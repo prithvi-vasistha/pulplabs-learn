@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import Cover from '@/components/void/Cover'
@@ -25,10 +24,7 @@ export default async function Learn() {
   const foundations = exams.find((exam) => exam.slug === 'ai-foundations')
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Courses"
           plate="flare-column"
@@ -37,7 +33,7 @@ export default async function Learn() {
               Courses. <span className="dim">In order, for a reason.</span>
             </>
           }
-          lede="Each track is a sequence, not a pile of videos — it says who it is for and what you will be able to do at the end."
+          lede="The material we use to bring a team up to speed. Each course is a sequence with an exam behind it — it states what it assumes and what you will be able to do at the end."
           jump={[
             { href: '#start', label: 'Where to start' },
             { href: '#catalogue', label: 'Courses', count: paths.length },
@@ -113,8 +109,8 @@ export default async function Learn() {
             <div id="catalogue" style={{ scrollMarginTop: 'calc(var(--nav-h) + 24px)' }}>
               <SectionHead
                 eyebrow={`${paths.length} tracks · ${totalLessons} lessons · ${formatMinutes(totalMinutes)}`}
-                title="The catalogue."
-                lede="Filter by level, or search across every track and every individual lesson."
+                title="All courses"
+                lede="Filter by level, or search across every course and every individual lesson."
                 action={
                   <Link href="/practice" className="link">
                     Practice <Chevron />
@@ -163,9 +159,6 @@ export default async function Learn() {
         </div>
 
         <NextPage href="/practice" title="Practice" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

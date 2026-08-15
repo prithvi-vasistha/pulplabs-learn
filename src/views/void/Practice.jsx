@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import CourseCard, { AUDIENCE } from '@/components/learn/CourseCard'
@@ -15,10 +14,7 @@ export default async function Practice() {
   const questionCount = exams.reduce((total, exam) => total + exam.questionCount, 0)
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Practice"
           plate="aperture-glow"
@@ -42,8 +38,8 @@ export default async function Practice() {
           <div className="shell-wide">
               <SectionHead
                 eyebrow={`${exams.length} papers · ${questionCount} questions`}
-                title="Sit a full paper."
-                lede="Grouped by what they prepare you for, so you are choosing a subject rather than a filename."
+                title="Papers"
+                lede="Grouped by what they cover, so you are choosing a subject rather than a filename."
                 action={
                   <Link href="/learn" className="link">
                     Courses <Chevron />
@@ -135,9 +131,6 @@ export default async function Practice() {
         </div>
 
         <NextPage href="/learn" title="Courses" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

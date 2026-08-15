@@ -65,9 +65,16 @@ export function PathCourseCard({ path, index }) {
   )
 }
 
-/** Academy-style audience lines: who it is for, not what tier it is. */
+/**
+ * What the card says above the title.
+ *
+ * This used to be "Great for people new to the AI stack" — which is how a
+ * course marketplace sells a course. PulpLabs is a consultancy; this material
+ * exists because teams we work with need it. So the line states what the
+ * reader is assumed to know, and lets them decide.
+ */
 export const AUDIENCE = {
-  Beginner: 'Great for people new to the AI stack',
-  Intermediate: 'Great for people who have shipped something',
-  Advanced: 'Great for people designing the system',
+  Beginner: 'Assumes no prior AI work',
+  Intermediate: 'Assumes you have shipped something',
+  Advanced: 'Assumes you are designing the system',
 }

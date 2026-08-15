@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import Chevron, { ChevronLeft, ChevronDown } from '@/components/void/Icons'
 import DocsNav from '@/components/learn/DocsNav'
 import Prose from '@/components/learn/Prose'
@@ -14,10 +13,7 @@ export default function DocsPage({ data }) {
   const headings = tableOfContents(page.body)
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <div className="shell-wide docs-shell">
           <aside className="docs-side" aria-label={`${set.name} navigation`}>
             <DocsNav set={set} currentSlug={page.slug} />
@@ -100,9 +96,6 @@ export default function DocsPage({ data }) {
             <Toc headings={headings} />
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

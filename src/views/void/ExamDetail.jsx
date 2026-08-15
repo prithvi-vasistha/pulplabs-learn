@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import { ExamStart } from '@/components/learn/ExamProgress'
@@ -9,10 +8,7 @@ import { formatCount, padIndex } from '@/lib/format'
 
 export default function ExamDetail({ exam }) {
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <section className="phead grid-bg">
           <div className="phead-light" aria-hidden="true">
             <img src="/void/aperture-glow.webp" alt="" fetchPriority="high" decoding="async" />
@@ -156,9 +152,6 @@ export default function ExamDetail({ exam }) {
           title="Preparation tracks"
           label="Learn it first"
         />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

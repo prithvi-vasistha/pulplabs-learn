@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import Chevron, { ChevronLeft, ChevronDown, Clock } from '@/components/void/Icons'
 import Prose from '@/components/learn/Prose'
 import { renderInline } from '@/components/learn/inline'
@@ -16,12 +15,10 @@ export default function LessonReader({ data }) {
   const headings = tableOfContents(lesson.body)
 
   return (
-    <div className="grain">
-      <Nav />
+    <AppShell wide>
       <LessonVisit pathSlug={path.slug} lessonSlug={lesson.slug} />
 
-      <main id="main">
-        <div className="shell-wide reader">
+      <div className="shell-wide reader">
           <aside className="reader-side" aria-label="Path contents">
             <LessonOutline
               pathSlug={path.slug}
@@ -185,13 +182,10 @@ export default function LessonReader({ data }) {
             </nav>
           </article>
 
-          <div className="reader-toc">
-            <Toc headings={headings} />
-          </div>
+        <div className="reader-toc">
+          <Toc headings={headings} />
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </AppShell>
   )
 }

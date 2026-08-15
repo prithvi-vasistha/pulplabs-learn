@@ -1,5 +1,4 @@
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
+import AppShell from '@/components/void/AppShell'
 import NextPage from '@/components/void/NextPage'
 import Dashboard from '@/components/learn/Dashboard'
 import { PageHead } from '@/components/learn/ui'
@@ -9,10 +8,7 @@ export default async function DashboardView() {
   const [catalogue, exams] = await Promise.all([getProgressCatalogue(), getExamCatalogue()])
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Dashboard"
           plate="deep-field"
@@ -27,9 +23,6 @@ export default async function DashboardView() {
         <Dashboard catalogue={catalogue} exams={exams} />
 
         <NextPage href="/learn" title="Preparation tracks" label="Keep going" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }

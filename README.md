@@ -100,12 +100,23 @@ Two rules shape the code:
 - **Every hover is gated** behind `@media (hover: hover) and (pointer: fine)`, and every animation
   has a `prefers-reduced-motion` branch.
 
-### There is no landing page
+### A portal, not a storefront
 
-`/` is the academy, not a page about it. The band above the catalogue is
-deliberately short and the first section carries no top padding of its own,
-because the certifications are the product: three course cards are readable at
-1280×720 without scrolling.
+The navigation is a **docked sidebar**, grouped *Material / What we build /
+You*. This is somewhere people work rather than a site they pass through, so
+every destination stays visible, the current one is obvious, and the grouping
+says what kind of thing each destination is — which a row of five words across
+the top cannot do. Below 980px it tucks away behind a bar.
+
+`/` is a masthead and a set of counts, not a hero: no pitch, no call to action,
+no headline selling an outcome. Most people arriving here already work with us.
+
+**PulpLabs is a services firm with a couple of products, and the portal says
+so.** The sidebar footer reads "an enablement portal by PulpLabs" and links to
+the main site; the page footer states what this is in one sentence. Card lines
+say what a course *assumes* ("Assumes you have shipped something") rather than
+who it would be *great for* — the first is information, the second is a
+marketplace selling a course.
 
 ### Generated covers, not one photograph
 

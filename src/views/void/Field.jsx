@@ -1,6 +1,5 @@
+import AppShell from '@/components/void/AppShell'
 import Link from 'next/link'
-import Nav from '@/components/void/Nav'
-import Footer from '@/components/void/Footer'
 import NextPage from '@/components/void/NextPage'
 import Chevron from '@/components/void/Icons'
 import FieldGrid from '@/components/learn/FieldGrid'
@@ -12,10 +11,7 @@ export default async function Field() {
   const interviews = entries.filter((e) => e.kind === 'Interview')
 
   return (
-    <div className="grain">
-      <Nav />
-
-      <main id="main">
+    <AppShell>
         <PageHead
           eyebrow="Field"
           plate="hero-bleed"
@@ -26,7 +22,7 @@ export default async function Field() {
               <span className="dim">outside a lesson.</span>
             </>
           }
-          lede="Client case studies, the shape of a PulpLabs engagement, and recorded conversations with the people who build these systems."
+          lede="How this material was earned: client work, the shape of a PulpLabs engagement, and recorded conversations with the people who build these systems."
           jump={[
             { href: '#entries', label: 'All entries', count: entries.length },
             { href: '#interviews', label: 'Interviews', count: interviews.length },
@@ -87,9 +83,6 @@ export default async function Field() {
         </div>
 
         <NextPage href="/projects" title="Projects" />
-      </main>
-
-      <Footer />
-    </div>
+      </AppShell>
   )
 }
