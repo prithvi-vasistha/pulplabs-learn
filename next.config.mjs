@@ -9,6 +9,8 @@ const nextConfig = {
    */
   async redirects() {
     return [
+      // Field notes are the front page now.
+      { source: '/field', destination: '/', permanent: true },
       // Exams are one half of Practice now, not a section of their own.
       { source: '/exams', destination: '/practice', permanent: true },
       { source: '/builds', destination: '/projects', permanent: true },

@@ -1,18 +1,15 @@
-import Home from '@/views/void/Home'
+import Field from '@/views/void/Field'
 
-/* Content lives in Postgres, so this route is rendered on demand: adding a
-   row makes a page appear without a rebuild. Prerendering the whole catalogue
-   at build time would need the database up during `next build` and would go
-   stale the moment anything changed. */
+/* Content lives in Postgres, so this route is rendered on demand. */
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'PulpLabs Learn Lab — prepare, practise, build',
+  title: 'PulpLabs Learn',
   description:
-    'AI certification preparation: structured tracks, mock exams that point at what to study next, technology references, and documentation for the tools PulpLabs builds in the open.',
+    'Client case studies, how a PulpLabs engagement runs, and recorded conversations with the people who build these systems — plus the courses, exams and articles behind them.',
   alternates: { canonical: '/' },
 }
 
 export default function Page() {
-  return <Home />
+  return <Field />
 }

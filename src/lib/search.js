@@ -49,6 +49,7 @@ export function rank(index, terms, limit) {
 
 /** Display order for grouped results — sequenced material first. */
 export const TYPE_ORDER = [
+  'Article',
   'Learning path',
   'Lesson',
   'Technology',

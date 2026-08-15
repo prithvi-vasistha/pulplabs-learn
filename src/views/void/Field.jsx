@@ -13,16 +13,14 @@ export default async function Field() {
   return (
     <AppShell>
         <PageHead
-          eyebrow="Field"
+          eyebrow="PulpLabs Learn"
           plate="hero-bleed"
           title={
             <>
-              What this looks like
-              <br />
-              <span className="dim">outside a lesson.</span>
+              What we built, <span className="dim">and what we learned doing it.</span>
             </>
           }
-          lede="How this material was earned: client work, the shape of a PulpLabs engagement, and recorded conversations with the people who build these systems."
+          lede="PulpLabs is an AI consultancy. This is the client work behind everything else in here — the case studies, how an engagement actually runs, and recorded conversations with the people who build these systems."
           jump={[
             { href: '#entries', label: 'All entries', count: entries.length },
             { href: '#interviews', label: 'Interviews', count: interviews.length },
@@ -82,7 +80,7 @@ export default async function Field() {
           </section>
         </div>
 
-        <NextPage href="/projects" title="Projects" />
+        <NextPage href="/articles" title="Articles" />
       </AppShell>
   )
 }

@@ -55,6 +55,10 @@ const ROUTES = [
   ['GET', '/doc-params', () => content.getAllDocParams()],
   ['GET', '/doc-pages/:set/:page*', (p) => content.getDocPage(p.set, p.page)],
 
+  ['GET', '/articles', () => content.getArticles()],
+  ['GET', '/articles/slugs', () => content.getArticleSlugs()],
+  ['GET', '/articles/:slug', (p) => content.getArticle(p.slug)],
+
   ['GET', '/field', () => content.getFieldEntries()],
   ['GET', '/field/slugs', () => content.getFieldSlugs()],
   ['GET', '/field/:slug', (p) => content.getFieldEntry(p.slug)],

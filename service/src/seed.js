@@ -227,6 +227,25 @@ export async function seed({ prune = false, file } = {}) {
       )
     }
 
+    // ---- articles --------------------------------------------------------
+    for (const [i, a] of (content.articles ?? []).entries()) {
+      await client.query(
+        `insert into articles
+           (slug, title, topic, summary, author, published, minutes, body, related, technologies, position)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+         on conflict (slug) do update set
+           title = excluded.title, topic = excluded.topic, summary = excluded.summary,
+           author = excluded.author, published = excluded.published, minutes = excluded.minutes,
+           body = excluded.body, related = excluded.related,
+           technologies = excluded.technologies, position = excluded.position`,
+        [
+          a.slug, a.title, a.topic, a.summary, a.author ?? null, a.published ?? null,
+          a.minutes ?? 0, JSON.stringify(a.body ?? []), JSON.stringify(a.related ?? []),
+          a.technologies ?? [], i,
+        ]
+      )
+    }
+
     if (prune) {
       await pruneMissing(client, content)
     }
@@ -257,6 +276,7 @@ async function pruneMissing(client, content) {
   await table('projects', slugs(content.projects))
   await table('doc_sets', slugs(content.docSets))
   await table('field_entries', slugs(content.fieldEntries))
+  await table('articles', slugs(content.articles ?? []))
 }
 
 async function countRows() {
@@ -270,7 +290,8 @@ async function countRows() {
       (select count(*) from projects)      as projects,
       (select count(*) from doc_sets)      as doc_sets,
       (select count(*) from doc_pages)     as doc_pages,
-      (select count(*) from field_entries) as field_entries
+      (select count(*) from field_entries) as field_entries,
+      (select count(*) from articles)      as articles
   `)
   return Object.fromEntries(Object.entries(rows[0]).map(([k, v]) => [k, Number(v)]))
 }

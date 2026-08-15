@@ -177,6 +177,26 @@ create table if not exists field_entries (
   position     int    not null default 0
 );
 
+-- --------------------------------------------------------------- articles ---
+-- Writing about the stack. Same block model as lessons and documentation, so
+-- it renders through the same component — but it is not a course: an article
+-- makes one argument and ends.
+create table if not exists articles (
+  slug         text primary key,
+  title        text not null,
+  topic        text not null,
+  summary      text not null,
+  author       text,
+  published    date,
+  minutes      int  not null default 0,
+  body         jsonb  not null default '[]',
+  related      jsonb  not null default '[]',
+  technologies text[] not null default '{}',
+  position     int    not null default 0
+);
+
+create index if not exists articles_published_idx on articles (published desc);
+
 -- ------------------------------------------------------------- attempts -----
 -- Exam attempts were browser-local and stay that way by default. This table
 -- exists so a graded attempt can be persisted when there is an account to

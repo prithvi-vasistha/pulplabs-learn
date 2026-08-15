@@ -5,53 +5,53 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import CommandPalette from '@/components/learn/CommandPalette'
 import ThemeToggle from '@/components/void/ThemeToggle'
-import { Book, Check, Clock, External, Flag, Search, Terminal } from '@/components/void/Icons'
+import { Book, Check, Clock, Flag, Search, Terminal } from '@/components/void/Icons'
 
 /**
- * The portal's primary navigation.
+ * Primary navigation: a top bar that is always there, and a sidebar docked
+ * under it.
  *
- * A sidebar rather than a top bar, because this is a place people work in
- * rather than a site they pass through. Every destination is visible at once,
- * the current one is obvious, and the grouping says what kind of thing each
- * destination is — which a row of five words across the top cannot do.
- *
- * The groups also carry the positioning. "Material" and "What we build" are
- * not a product menu; they are the two halves of what a consultancy has to
- * show a team it is bringing up to speed.
+ * Plain words, in the order somebody would look for them. An earlier pass
+ * grouped these under "Material" and "What we build", which described how we
+ * think about the content rather than what a reader is looking for.
  */
-
 const GROUPS = [
   {
-    items: [{ href: '/', label: 'Home', icon: Home, exact: true }],
+    items: [
+      { href: '/', label: 'Home', icon: HomeIcon, exact: true, match: ['/field'] },
+      { href: '/articles', label: 'Articles', icon: Pencil },
+    ],
   },
   {
-    title: 'Material',
+    title: 'Learn',
     items: [
       { href: '/learn', label: 'Courses', icon: Book },
-      { href: '/technologies', label: 'Subjects', icon: Terminal },
-      { href: '/practice', label: 'Practice', icon: Check, match: ['/exams'] },
+      { href: '/practice', label: 'Exams', icon: Check, match: ['/exams'] },
+      { href: '/technologies', label: 'Topics', icon: Terminal },
     ],
   },
   {
-    title: 'What we build',
+    title: 'More',
     items: [
-      { href: '/projects', label: 'Open source', icon: Terminal },
-      { href: '/field', label: 'Field notes', icon: Flag },
-    ],
-  },
-  {
-    title: 'You',
-    items: [
-      { href: '/dashboard', label: 'Your progress', icon: Clock },
-      { href: '/search', label: 'Search', icon: Search },
+      { href: '/projects', label: 'Our software', icon: Terminal },
+      { href: '/dashboard', label: 'My progress', icon: Clock },
     ],
   },
 ]
 
-function Home({ size = 15 }) {
+function HomeIcon({ size = 15 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
       <path d="M2 6.6 8 2l6 4.6V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6.6Z" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function Pencil({ size = 15 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+      <path d="M11.2 2.4a1.4 1.4 0 0 1 2 2L6 11.6l-2.7.7.7-2.7 7.2-7.2Z" strokeLinejoin="round" />
+      <path d="M9.8 3.8 12.2 6.2" />
     </svg>
   )
 }
@@ -75,15 +75,17 @@ export default function Sidebar() {
   }, [open])
 
   const isCurrent = (item) => {
-    if (item.exact) return pathname === item.href
-    if (pathname === item.href || pathname.startsWith(`${item.href}/`)) return true
+    if (item.exact && pathname === item.href) return true
+    if (!item.exact && (pathname === item.href || pathname.startsWith(`${item.href}/`))) return true
     return (item.match ?? []).some((m) => pathname === m || pathname.startsWith(`${m}/`))
   }
 
   return (
     <>
-      {/* The bar only exists below the breakpoint where the sidebar is docked. */}
-      <div className="app-bar">
+      {/* One bar at every width. Search and the theme switch live at its right
+          end, which is where people reach for them and — unlike the previous
+          arrangement — is visible on a desktop. */}
+      <header className="topbar">
         <button
           type="button"
           className="app-burger"
@@ -96,25 +98,20 @@ export default function Sidebar() {
           <span />
         </button>
 
-        <Link href="/" className="app-mark" aria-label="PulpLabs Learn home">
+        <Link href="/" className="topbar-mark" aria-label="PulpLabs Learn home">
           <Mark />
           <span>PulpLabs Learn</span>
         </Link>
 
-        <div className="app-bar-end">
+        <div className="topbar-end">
           <CommandPalette />
           <ThemeToggle />
         </div>
-      </div>
+      </header>
 
       {open && <button type="button" className="app-scrim" aria-label="Close navigation" onClick={() => setOpen(false)} />}
 
       <nav id="sidebar" className="side" aria-label="Primary" data-open={open || undefined}>
-        <Link href="/" className="side-mark" aria-label="PulpLabs Learn home">
-          <Mark />
-          <span>PulpLabs Learn</span>
-        </Link>
-
         <div className="side-scroll">
           {GROUPS.map((group, i) => (
             <div className="side-group" key={group.title ?? i}>
@@ -135,17 +132,17 @@ export default function Sidebar() {
               </ul>
             </div>
           ))}
-        </div>
 
-        {/* Who runs this, and where the actual business is. The portal is a
-            thing PulpLabs does, not the thing PulpLabs is. */}
-        <div className="side-foot">
-          <a href="https://pulplabs.ai" target="_blank" rel="noreferrer" className="side-org">
-            <span className="mono">An enablement portal by</span>
-            <span className="side-org-n">
-              PulpLabs <External size={11} />
-            </span>
-          </a>
+          <div className="side-group">
+            <ul role="list">
+              <li>
+                <Link href="/search" data-current={pathname === '/search' || undefined} aria-current={pathname === '/search' ? 'page' : undefined}>
+                  <Search size={15} />
+                  Search
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
     </>

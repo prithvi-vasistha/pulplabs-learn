@@ -159,6 +159,20 @@ export async function getDocSetSlugs() {
   return get('/api/doc-sets/slugs', { fallback: [] })
 }
 
+/* -------------------------------------------------------------- articles --- */
+
+export async function getArticles() {
+  return get('/api/articles', { fallback: [] })
+}
+
+export async function getArticle(slug) {
+  return get(`/api/articles/${encode(slug)}`)
+}
+
+export async function getArticleSlugs() {
+  return get('/api/articles/slugs', { fallback: [] })
+}
+
 /* ---------------------------------------------------------------- field --- */
 
 export async function getFieldEntries() {

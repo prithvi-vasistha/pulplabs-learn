@@ -655,6 +655,46 @@ export async function getFieldSlugs() {
   return (await rows('select slug from field_entries order by position')).map((r) => r.slug)
 }
 
+/* -------------------------------------------------------------- articles --- */
+
+function summariseArticle(row) {
+  return {
+    slug: row.slug,
+    title: row.title,
+    topic: row.topic,
+    summary: row.summary,
+    author: row.author,
+    published: row.published ? new Date(row.published).toISOString().slice(0, 10) : null,
+    minutes: Number(row.minutes),
+    technologies: row.technologies ?? [],
+  }
+}
+
+export async function getArticles() {
+  // Newest first — an article is dated writing, not a course in a sequence.
+  return (await rows('select * from articles order by published desc nulls last, position')).map(summariseArticle)
+}
+
+export async function getArticle(slug) {
+  const row = await one('select * from articles where slug = $1', [slug])
+  if (!row) return null
+
+  const techDetail = row.technologies?.length
+    ? await rows('select slug, name, category from technologies where slug = any($1::text[])', [row.technologies])
+    : []
+
+  return {
+    ...summariseArticle(row),
+    body: row.body ?? [],
+    related: await resolveRelated(row.related ?? []),
+    technologyDetail: techDetail,
+  }
+}
+
+export async function getArticleSlugs() {
+  return (await rows('select slug from articles order by position')).map((r) => r.slug)
+}
+
 /* --------------------------------------------------------------- search --- */
 
 export async function getSearchIndex() {
@@ -739,6 +779,18 @@ export async function getSearchIndex() {
       href: `/field/${entry.slug}`,
       meta: `${entry.kind}${entry.client ? ` · ${entry.client}` : ''}`,
       keywords: [entry.kind, entry.sector, entry.client ?? ''].join(' '),
+    })
+  }
+
+  for (const article of await rows('select * from articles order by published desc nulls last')) {
+    entries.push({
+      id: `article:${article.slug}`,
+      type: 'Article',
+      title: article.title,
+      description: article.summary,
+      href: `/articles/${article.slug}`,
+      meta: `${article.topic} · ${article.minutes} min read`,
+      keywords: [article.topic, ...(article.technologies ?? [])].join(' '),
     })
   }
 

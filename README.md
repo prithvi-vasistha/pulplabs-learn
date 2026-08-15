@@ -102,14 +102,16 @@ Two rules shape the code:
 
 ### A portal, not a storefront
 
-The navigation is a **docked sidebar**, grouped *Material / What we build /
-You*. This is somewhere people work rather than a site they pass through, so
-every destination stays visible, the current one is obvious, and the grouping
-says what kind of thing each destination is — which a row of five words across
-the top cannot do. Below 980px it tucks away behind a bar.
+A **top bar** at every width — search and the theme switch at its right end —
+and a **docked sidebar** under it: Home, Articles, then *Learn* (Courses,
+Exams, Topics) and *More* (Our software, My progress, Search). Plain words in
+the order somebody looks for them. Below 980px the sidebar tucks behind the
+bar.
 
-`/` is a masthead and a set of counts, not a hero: no pitch, no call to action,
-no headline selling an outcome. Most people arriving here already work with us.
+**`/` is the field notes**: client case studies, how an engagement runs, and
+recorded conversations. The client work is the reason the rest of the portal
+exists, so it opens the portal. `/field` redirects to it; entries stay at
+`/field/<slug>`.
 
 **PulpLabs is a services firm with a couple of products, and the portal says
 so.** The sidebar footer reads "an enablement portal by PulpLabs" and links to
@@ -117,6 +119,17 @@ the main site; the page footer states what this is in one sentence. Card lines
 say what a course *assumes* ("Assumes you have shipped something") rather than
 who it would be *great for* — the first is information, the second is a
 marketplace selling a course.
+
+### Articles
+
+`/articles` is writing about the stack — what to learn first, which received
+ideas do not survive production, how to read a retrieval failure. They use the
+same block model as lessons and documentation and render through the same
+`Prose`, but they are listed newest-first rather than gridded: a grid implies a
+curriculum, and an article makes one argument and ends.
+
+Distinct from **Our software**, which is source and reference documentation for
+things we ship.
 
 ### Generated covers, not one photograph
 

@@ -11,11 +11,6 @@ import Link from 'next/link'
 export default function PortalFoot() {
   return (
     <footer className="pfoot">
-      <p className="mono">
-        PulpLabs is an AI consultancy. This portal holds the material we use to bring teams up to
-        speed on the systems we build — plus the projects we ship in the open.
-      </p>
-
       <div className="pfoot-row">
         <span className="mono">© {new Date().getFullYear()} PulpLabs</span>
         <span className="mono">Progress is stored in this browser</span>

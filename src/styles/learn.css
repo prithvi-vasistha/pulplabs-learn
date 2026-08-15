@@ -3757,49 +3757,95 @@ mark {
 /* ==========================================================================
    25. Portal shell
 
-   A docked sidebar rather than a top bar. This is somewhere people work, not
-   a site they pass through: every destination stays visible, the current one
-   is obvious, and the grouping says what kind of thing each destination is —
-   which a row of five words across the top cannot do.
+   A bar across the top and a sidebar docked under it. The bar exists at every
+   width — an earlier pass only showed it below 980px, which left a desktop
+   reader with no search and no theme switch at all.
    ========================================================================== */
 
 :root {
-  --side-w: 244px;
+  --side-w: 232px;
+  --top-h: 56px;
 }
 
 .app {
   min-height: 100vh;
 }
 
-.app-main {
-  min-height: 100vh;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 95;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  height: var(--top-h);
+  padding: 0 clamp(14px, 1.6vw, 20px);
+  background: var(--scrim-3);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.topbar-mark {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  color: var(--w-1);
+}
+
+.topbar-mark svg {
+  flex: none;
+}
+
+/* Search and the theme switch, at the right end. */
+.topbar-end {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-burger {
+  display: grid;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  place-content: center;
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.app-burger span {
+  display: block;
+  width: 15px;
+  height: 1.5px;
+  background: var(--w-1);
+}
+
+.app-burger:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
 }
 
 @media (min-width: 981px) {
-  .app-main {
-    margin-left: var(--side-w);
+  .app-burger {
+    display: none;
   }
-}
-
-.app-content {
-  flex: 1;
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: clamp(20px, 2.4vw, 34px) clamp(18px, 2.6vw, 40px) clamp(48px, 6vw, 80px);
-}
-
-.app-content-wide {
-  max-width: none;
 }
 
 /* ---- the sidebar ---- */
 
 .side {
   position: fixed;
-  inset: 0 auto 0 0;
+  top: var(--top-h);
+  bottom: 0;
+  left: 0;
   width: var(--side-w);
   z-index: 90;
   display: flex;
@@ -3808,34 +3854,16 @@ mark {
   border-right: 1px solid var(--line-1);
 }
 
-.side-mark {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 18px;
-  height: 60px;
-  flex: none;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  letter-spacing: -0.018em;
-  color: var(--w-1);
-  border-bottom: 1px solid var(--line-1);
-}
-
-.side-mark svg {
-  flex: none;
-}
-
 .side-scroll {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 14px 12px;
+  padding: 16px 12px;
 }
 
 .side-group + .side-group {
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 18px;
+  padding-top: 14px;
   border-top: 1px solid var(--line-1);
 }
 
@@ -3895,102 +3923,34 @@ mark {
   }
 }
 
-/* Who runs this. The portal is a thing PulpLabs does, not what it is. */
-.side-foot {
-  flex: none;
-  padding: 12px;
-  border-top: 1px solid var(--line-1);
+.app-main {
+  min-height: calc(100vh - var(--top-h));
+  display: flex;
+  flex-direction: column;
 }
 
-.side-org {
-  display: grid;
-  gap: 3px;
-  padding: 9px 10px;
-  border: 1px solid var(--line-1);
-  border-radius: 9px;
-}
-
-.side-org .mono {
-  font-size: 0.5625rem;
-  color: var(--w-4);
-}
-
-.side-org-n {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--w-1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .side-org:hover {
-    border-color: var(--line-2);
+@media (min-width: 981px) {
+  .app-main {
+    margin-left: var(--side-w);
   }
 }
 
-/* ---- the mobile bar ---- */
-
-.app-bar {
-  display: none;
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  align-items: center;
-  gap: 12px;
-  height: 56px;
-  padding: 0 14px;
-  background: var(--scrim-3);
-  backdrop-filter: saturate(160%) blur(18px);
-  -webkit-backdrop-filter: saturate(160%) blur(18px);
-  border-bottom: 1px solid var(--line-1);
+.app-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(20px, 2.4vw, 34px) clamp(18px, 2.6vw, 40px) clamp(48px, 6vw, 80px);
 }
 
-.app-mark {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: -0.016em;
-}
-
-.app-bar-end {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.app-burger {
-  display: grid;
-  gap: 5px;
-  width: 34px;
-  height: 34px;
-  place-content: center;
-  background: transparent;
-  border: 1px solid var(--line-1);
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.app-burger span {
-  display: block;
-  width: 15px;
-  height: 1.5px;
-  background: var(--w-1);
-}
-
-.app-burger:focus-visible {
-  outline: 2px solid var(--signal);
-  outline-offset: 2px;
+.app-content-wide {
+  max-width: none;
 }
 
 .app-scrim {
   display: none;
   position: fixed;
-  inset: 0;
+  inset: var(--top-h) 0 0;
   z-index: 85;
   background: var(--scrim-3);
   border: 0;
@@ -3998,10 +3958,6 @@ mark {
 }
 
 @media (max-width: 980px) {
-  .app-bar {
-    display: flex;
-  }
-
   .side {
     transform: translateX(-100%);
     transition: transform var(--t-panel) var(--ease-out);
@@ -4015,28 +3971,17 @@ mark {
   .app-scrim {
     display: block;
   }
+}
 
-  /* The sidebar's own mark is redundant once the bar carries one. */
-  .side-mark {
+@media (max-width: 560px) {
+  .topbar-mark span {
     display: none;
-  }
-
-  .side-scroll {
-    padding-top: 18px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .side {
     transition: none;
-  }
-}
-
-/* Desktop keeps search and the theme switch in the sidebar's own header row. */
-@media (min-width: 981px) {
-  .side-mark .nv-find,
-  .side-mark .nv-theme {
-    display: none;
   }
 }
 
@@ -4114,7 +4059,6 @@ mark {
   margin-top: clamp(34px, 4vw, 52px);
 }
 
-/* The ambient wash between sections belonged to a scrolling marketing page. */
 .app .flow::before,
 .app .flow::after {
   display: none;
@@ -4217,4 +4161,167 @@ mark {
 /* The reader keeps its three columns but loses the marketing shell's width. */
 .app .reader {
   padding-inline: 0;
+}
+
+/* ==========================================================================
+   26. Articles
+
+   Dated writing, newest first. A list rather than a card grid: a grid implies
+   a curriculum, and an article makes one argument and ends.
+   ========================================================================== */
+
+.art-lead {
+  display: block;
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card);
+  margin-bottom: clamp(22px, 2.6vw, 32px);
+  transition: border-color var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .art-lead:hover,
+  .art-list a:hover {
+    border-color: var(--line-2);
+  }
+}
+
+/* A banner, not a billboard: at full content width a 21:9 cover is nearly
+   500px of gradient before the headline. */
+.art-lead-cv {
+  aspect-ratio: auto;
+  height: clamp(120px, 15vw, 190px);
+}
+
+.art-lead-cv::after {
+  box-shadow: inset 0 -1px 0 var(--line-1);
+}
+
+.art-lead-in {
+  padding: clamp(18px, 2.2vw, 26px);
+  display: grid;
+  gap: 9px;
+}
+
+.art-lead-t {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: -0.026em;
+}
+
+.art-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line-1);
+  border: 1px solid var(--line-1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.art-list a {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) 168px;
+  gap: 20px;
+  align-items: baseline;
+  padding: 18px 20px;
+  background: var(--card);
+  transition: background-color var(--t-hover) var(--ease-out);
+}
+
+.art-topic {
+  color: var(--w-4);
+}
+
+.art-body {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.art-t {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  color: var(--w-1);
+}
+
+.art-meta {
+  color: var(--w-4);
+  text-align: right;
+  font-size: 0.625rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .art-list a:hover {
+    background: var(--raise-1);
+  }
+}
+
+.art-list a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -2px;
+}
+
+@media (max-width: 860px) {
+  .art-list a {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .art-meta {
+    text-align: left;
+  }
+}
+
+/* ---- one article ---- */
+
+.art-head {
+  padding-bottom: clamp(20px, 2.4vw, 28px);
+  margin-bottom: clamp(24px, 3vw, 36px);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.art-h {
+  margin: 16px 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.032em;
+  max-width: 26ch;
+}
+
+.art .lede {
+  margin-top: 14px;
+  max-width: 68ch;
+}
+
+.art-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: clamp(28px, 4vw, 60px);
+  align-items: start;
+}
+
+.art-main {
+  min-width: 0;
+  max-width: 72ch;
+}
+
+.art-side {
+  position: sticky;
+  top: calc(var(--top-h) + 24px);
+}
+
+@media (max-width: 900px) {
+  .art-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .art-side {
+    position: static;
+  }
 }

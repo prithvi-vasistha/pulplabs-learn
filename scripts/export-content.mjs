@@ -25,6 +25,7 @@ const { paths, DISCLOSURE } = await import(`${dataDir}/paths.js`)
 const { exams } = await import(`${dataDir}/exams/index.js`)
 const { projects, CATALOGUE_NOTE } = await import(`${dataDir}/projects.js`)
 const { fieldEntries, FIELD_NOTE, KINDS } = await import(`${dataDir}/field.js`)
+const { articles, ARTICLE_TOPICS } = await import(`${dataDir}/articles.js`)
 const { openlcmDocs } = await import(`${dataDir}/docs/openlcm.js`)
 const { wheatearDocs } = await import(`${dataDir}/docs/wheatear.js`)
 
@@ -39,12 +40,14 @@ const content = {
     fieldNote: FIELD_NOTE,
     fieldKinds: KINDS,
     technologyCategories: CATEGORIES,
+    articleTopics: ARTICLE_TOPICS,
   },
   technologies,
   paths,
   exams,
   projects,
   fieldEntries,
+  articles,
   docSets: [openlcmDocs, wheatearDocs],
 }
 
@@ -63,6 +66,6 @@ console.log(
     `  ${paths.length} paths, ${lessons} lessons`,
     `  ${exams.length} exams, ${questions} questions`,
     `  ${projects.length} projects, ${content.docSets.length} doc sets, ${docPages} doc pages`,
-    `  ${fieldEntries.length} field entries`,
+    `  ${fieldEntries.length} field entries, ${articles.length} articles`,
   ].join('\n')
 )

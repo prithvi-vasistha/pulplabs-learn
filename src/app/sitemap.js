@@ -2,6 +2,7 @@ import {
   getAllDocParams,
   getAllLessonParams,
   getExamSlugs,
+  getArticleSlugs,
   getFieldSlugs,
   getPaths,
   getProjects,
@@ -15,7 +16,7 @@ const BASE = 'https://learn.pulplabs.dev'
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap() {
-  const [paths, lessons, technologies, exams, projects, docPages, fieldSlugs] = await Promise.all([
+  const [paths, lessons, technologies, exams, projects, docPages, fieldSlugs, articleSlugs] = await Promise.all([
     getPaths(),
     getAllLessonParams(),
     getTechnologies(),
@@ -23,6 +24,7 @@ export default async function sitemap() {
     getProjects(),
     getAllDocParams(),
     getFieldSlugs(),
+    getArticleSlugs(),
   ])
 
   const routes = [
@@ -31,7 +33,7 @@ export default async function sitemap() {
     { url: '/technologies', priority: 0.8 },
     { url: '/practice', priority: 0.9 },
     { url: '/projects', priority: 0.7 },
-    { url: '/field', priority: 0.7 },
+    { url: '/articles', priority: 0.8 },
     { url: '/dashboard', priority: 0.4 },
     { url: '/search', priority: 0.4 },
     ...paths.map((p) => ({ url: `/learn/${p.slug}`, priority: 0.8 })),
@@ -41,6 +43,7 @@ export default async function sitemap() {
     ...projects.map((p) => ({ url: `/projects/${p.slug}`, priority: 0.6 })),
     ...docPages.map((d) => ({ url: `/projects/${d.project}/${d.page.join('/')}`, priority: 0.5 })),
     ...fieldSlugs.map((slug) => ({ url: `/field/${slug}`, priority: 0.6 })),
+    ...articleSlugs.map((slug) => ({ url: `/articles/${slug}`, priority: 0.7 })),
   ]
 
   const lastModified = new Date()

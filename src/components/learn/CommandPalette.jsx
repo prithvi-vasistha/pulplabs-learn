@@ -41,10 +41,10 @@ function loadIndex() {
 
 /** Shown before a reader has typed: the four places they can go, with counts. */
 const STARTERS = [
-  { type: 'Learning path', label: 'Preparation tracks', href: '/learn', hint: 'Sequenced, start to finish' },
-  { type: 'Mock exam', label: 'Mock exams', href: '/practice', hint: 'Scored by topic' },
-  { type: 'Project', label: 'Open-source projects', href: '/projects', hint: 'Source and documentation' },
-  { type: 'Field', label: 'Field', href: '/field', hint: 'Case studies and interviews' },
+  { type: 'Article', label: 'Articles', href: '/articles', hint: 'Notes on the stack' },
+  { type: 'Learning path', label: 'Courses', href: '/learn', hint: 'Sequenced, start to finish' },
+  { type: 'Mock exam', label: 'Exams', href: '/practice', hint: 'Scored by topic' },
+  { type: 'Project', label: 'Our software', href: '/projects', hint: 'Source and documentation' },
 ]
 
 export default function CommandPalette() {
