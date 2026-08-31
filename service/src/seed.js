@@ -205,12 +205,15 @@ export async function seed({ prune = false, file } = {}) {
     for (const [i, f] of content.fieldEntries.entries()) {
       await client.query(
         `insert into field_entries
-           (slug, kind, title, client, logo, sector, summary, published, minutes, plate,
+           (slug, kind, title, client, logo, logo_ground, logo_shape, sector, summary,
+            published, minutes, plate,
             video, people, facts, quote, body, learn, technologies, position)
-         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+         values ($1,$2,$3,$4,$5,$19,$20,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
          on conflict (slug) do update set
            kind = excluded.kind, title = excluded.title, client = excluded.client,
-           logo = excluded.logo, sector = excluded.sector, summary = excluded.summary,
+           logo = excluded.logo, logo_ground = excluded.logo_ground,
+           logo_shape = excluded.logo_shape,
+           sector = excluded.sector, summary = excluded.summary,
            published = excluded.published, minutes = excluded.minutes, plate = excluded.plate,
            video = excluded.video, people = excluded.people, facts = excluded.facts,
            quote = excluded.quote, body = excluded.body, learn = excluded.learn,
@@ -223,6 +226,7 @@ export async function seed({ prune = false, file } = {}) {
           f.quote ? JSON.stringify(f.quote) : null,
           JSON.stringify(f.body ?? []), JSON.stringify(f.learn ?? []),
           f.technologies ?? [], i,
+          f.logoGround ?? null, f.logoShape ?? null,
         ]
       )
     }

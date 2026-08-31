@@ -617,6 +617,8 @@ function summariseFieldEntry(row) {
     title: row.title,
     client: row.client,
     logo: row.logo,
+    logoGround: row.logo_ground,
+    logoShape: row.logo_shape,
     sector: row.sector,
     summary: row.summary,
     published: row.published ? new Date(row.published).toISOString().slice(0, 10) : null,

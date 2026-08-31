@@ -268,3 +268,14 @@ create table if not exists attempts (
   result     jsonb not null,
   created_at timestamptz not null default now()
 );
+
+-- ---------------------------------------------------------- later columns ---
+-- `create table if not exists` does nothing to a table that already exists, so
+-- anything added after the first release has to arrive as its own statement.
+-- These are idempotent and run on every boot, like the rest of this file.
+--
+-- A client mark is shown unmodified on the ground it was drawn for, so the
+-- ground travels with the file: the Urban Ethnographers wordmark is navy on
+-- yellow and disappears on both of our themes without it.
+alter table field_entries add column if not exists logo_ground text;
+alter table field_entries add column if not exists logo_shape  text;

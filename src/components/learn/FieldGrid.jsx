@@ -69,8 +69,17 @@ export default function FieldGrid({ entries, kinds }) {
                 <div className="tile-media">
                   <Cover seed={entry.slug} ratio="16 / 9" />
                   {entry.client && (
-                    <span className="tile-logo">
-                      <Logo name={entry.client} src={entry.logo} size="sm" />
+                    <span className={`tile-logo${entry.logo ? ' tile-logo-real' : ''}`}>
+                      {/* The client's name is printed again below the cover, so
+                          the mark here is decorative and carries no alt text. */}
+                      <Logo
+                        name={entry.client}
+                        src={entry.logo}
+                        ground={entry.logoGround}
+                        shape={entry.logoShape}
+                        size="sm"
+                        decorative
+                      />
                     </span>
                   )}
                   <span className="tile-n">{padIndex(i + 1)}</span>

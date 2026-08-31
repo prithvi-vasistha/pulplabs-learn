@@ -34,9 +34,13 @@ export const fieldEntries = [
     kind: 'Case study',
     title: 'Quote turnaround, from two days to twenty minutes',
     client: 'Power & Pack Solutions',
-    // Generated placeholder mark. Drop a real file in public/logos/ and set
-    // logo: '/logos/power-and-pack.svg' to replace it.
-    logo: null,
+    /* The client's own mark, the same file the marketing site shows, on the
+       ground it was drawn for. Never recoloured: a trademark repainted to fit
+       our palette stops being the trademark. `small` because the artwork is
+       143x39 of real detail — scaling it up only produces a bigger blur. */
+    logo: '/logos/client-pps.webp',
+    logoGround: '#f8f8f8',
+    logoShape: 'small',
     sector: 'Manufacturing · Power and packaging',
     summary:
       'A quoting workflow that depended on a handful of people holding the pricing rules in their heads, rebuilt so the rules live in the system and the people review the output.',
@@ -117,7 +121,10 @@ draft quote for review                     ← a person still signs it`,
     kind: 'Case study',
     title: 'Keeping a research coding framework, losing the tagging',
     client: 'Urban Ethnographers',
-    logo: null,
+    // Yellow is the mark's own ground, in both themes — the navy wordmark is
+    // invisible on our black and nearly so on our paper.
+    logo: '/logos/client-ue.webp',
+    logoGround: '#f6c809',
     sector: 'Research · Urban ethnography',
     summary:
       'Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.',

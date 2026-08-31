@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-08-15T10:17:56.269Z",
+  "exportedAt": "2026-08-31T07:04:03.374Z",
   "settings": {
     "disclosure": "Independent preparation material. PulpLabs is not a certification body and is not affiliated with the awarding organisations. Always check the official exam guide for the current format and requirements.",
     "catalogueNote": "Every project here is a public repository. Where the Learn Lab has not written a documentation set yet, the project page links to the repository instead of pretending one exists.",
@@ -6289,7 +6289,9 @@
       "kind": "Case study",
       "title": "Quote turnaround, from two days to twenty minutes",
       "client": "Power & Pack Solutions",
-      "logo": null,
+      "logo": "/logos/client-pps.webp",
+      "logoGround": "#f8f8f8",
+      "logoShape": "small",
       "sector": "Manufacturing · Power and packaging",
       "summary": "A quoting workflow that depended on a handful of people holding the pricing rules in their heads, rebuilt so the rules live in the system and the people review the output.",
       "published": "2026-03-04",
@@ -6382,7 +6384,8 @@
       "kind": "Case study",
       "title": "Keeping a research coding framework, losing the tagging",
       "client": "Urban Ethnographers",
-      "logo": null,
+      "logo": "/logos/client-ue.webp",
+      "logoGround": "#f6c809",
       "sector": "Research · Urban ethnography",
       "summary": "Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.",
       "published": "2026-04-22",

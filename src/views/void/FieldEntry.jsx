@@ -26,7 +26,13 @@ export default function FieldEntry({ entry, next, fieldNote }) {
 
             {entry.client && (
               <div style={{ marginTop: 16 }}>
-                <Logo name={entry.client} src={entry.logo} size="lg" />
+                <Logo
+                  name={entry.client}
+                  src={entry.logo}
+                  ground={entry.logoGround}
+                  shape={entry.logoShape}
+                  size="lg"
+                />
               </div>
             )}
 
