@@ -5403,17 +5403,37 @@ mark {
   border-bottom: 1px solid rgba(var(--accent), 0.45);
 }
 
-/* The head's plate picks up a wash of the accent in the corner — the same
-   treatment, and the same restraint, as the marketing site's Voices. */
-.fe-accent .phead::after {
+/* The atmosphere.
+   
+   This was a radial inside the page head, which meant it was clipped to a
+   1180px column and stopped with a visible vertical edge partway across the
+   window — a rectangle of glow rather than a room with light in it.
+   
+   It is fixed to the reading area instead: pinned below the top bar and right
+   of the sidebar, so it covers the whole page at any scroll position and has
+   no edge to notice. The chrome stays out of it — the nav belongs to us on
+   every page, and only the page belongs to the client. */
+.fe-accent::before {
   content: '';
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  inset: var(--top-h) 0 0 0;
+  z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 88% 12%, rgba(var(--accent), 0.13), transparent 62%);
+  background:
+    radial-gradient(72vw 62vh at 82% -8%, rgba(var(--accent), 0.17), transparent 68%),
+    radial-gradient(55vw 55vh at -10% 108%, rgba(var(--accent), 0.09), transparent 70%);
 }
 
-.fe-accent .phead-in {
+@media (min-width: 981px) {
+  .fe-accent::before {
+    left: var(--side-w);
+  }
+}
+
+/* The overlay sits at z-index 0, so the page has to be lifted above it —
+   unpositioned content would otherwise paint underneath and read through a
+   film of somebody's brand colour. */
+.fe-accent > * {
   position: relative;
   z-index: 1;
 }
@@ -5445,6 +5465,8 @@ mark {
   border-color: rgba(var(--accent), 0.42);
 }
 
-:root[data-theme='light'] .fe-accent .phead::after {
-  background: radial-gradient(circle at 88% 12%, rgba(var(--accent), 0.08), transparent 58%);
+:root[data-theme='light'] .fe-accent::before {
+  background:
+    radial-gradient(72vw 62vh at 82% -8%, rgba(var(--accent), 0.1), transparent 68%),
+    radial-gradient(55vw 55vh at -10% 108%, rgba(var(--accent), 0.05), transparent 70%);
 }
