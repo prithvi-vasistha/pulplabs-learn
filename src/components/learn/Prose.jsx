@@ -94,6 +94,54 @@ function Block({ block }) {
     case 'quote':
       return <blockquote>{renderInline(block.text)}</blockquote>
 
+    /* A client's own words, set beside the paragraph they belong to rather
+       than interrupting it — the margin note of a printed report. It floats,
+       so the prose wraps around it at reading widths and it becomes a plain
+       block on a phone where there is no margin to sit in. */
+    case 'pullquote':
+      return (
+        <aside className="pq">
+          <blockquote>{renderInline(block.text)}</blockquote>
+          {(block.name || block.role) && (
+            <p className="pq-by mono">
+              {block.name}
+              {block.name && block.role ? ' · ' : ''}
+              {block.role}
+            </p>
+          )}
+        </aside>
+      )
+
+    /* The shape of a process, in the words the business uses for it. Not an
+       architecture diagram: nobody deciding whether to hire us needs to know
+       where the queue is. */
+    case 'journey':
+      return (
+        <ol className="journey" aria-label={block.label ?? 'The process'}>
+          {block.steps.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
+      )
+
+    /* Two columns that answer one question — who does what, or what changed.
+       `emphasis` marks the column the reader should end on. */
+    case 'duo':
+      return (
+        <div className="duo">
+          {[block.left, block.right].map((side, i) => (
+            <div key={i} className="duo-col" data-emphasis={block.emphasis === (i === 0 ? 'left' : 'right') || undefined}>
+              <p className="mono duo-h">{side.title}</p>
+              <ul role="list">
+                {side.items.map((item, k) => (
+                  <li key={k}>{renderInline(item)}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )
+
     default:
       return null
   }

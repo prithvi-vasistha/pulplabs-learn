@@ -64,51 +64,125 @@ export const fieldEntries = [
     body: [
       {
         type: 'p',
-        text: 'Quoting was a bottleneck that looked like a staffing problem. Requests arrived in several formats, pricing depended on rules that existed mostly as institutional memory, and every quote waited for one of a small number of people who could apply them correctly.',
+        text: 'Quoting was a bottleneck that looked like a staffing problem. It was not one.',
       },
       {
-        type: 'h2',
-        text: 'What the discovery found',
+        type: 'pullquote',
+        text: 'Quotes that took our team two days now go out in twenty minutes. The PulpLabs team understood our pricing rules better than some of our own hires.',
+        name: 'Name Surname',
+        role: 'Director, Power & Pack Solutions',
+      },
+      { type: 'h2', text: 'The situation' },
+      {
+        type: 'p',
+        text: "Every shipment arrives with its own equipment dimensions, weights, handling requirements and packaging constraints. Turning those details into a crate specification and an accurate quote takes experienced people: somebody has to interpret the customer's request, decide the right materials and construction, and work out what it costs.",
       },
       {
         type: 'p',
-        text: 'The rules were not ambiguous — they were undocumented. Once written down they were largely deterministic, with a smaller set of genuinely judgement-based exceptions. That split is the whole design: the deterministic majority belongs in code, and the model\'s job is reading an unstructured request into the shape those rules expect.',
+        text: 'Much of the knowledge that makes those decisions correct lived in spreadsheets, in past quotes, and in the heads of a few long-serving members of the team. That is not a criticism of how the business was run — it is how most estimating functions grow. It did mean quoting was slow, inconsistent between estimators, and hard to scale beyond the people who held it.',
       },
+      { type: 'h2', text: 'The problem' },
       {
-        type: 'figure',
-        caption: 'Where the model sits, and where it does not',
-        art: `inbound request (email, spreadsheet, PDF)
-        ↓
-extract to a structured requirement        ← model, schema-constrained
-        ↓
-apply pricing rules                        ← ordinary code, deterministic
-        ↓
-flag exceptions for a human                ← rules decide what escalates
-        ↓
-draft quote for review                     ← a person still signs it`,
+        type: 'p',
+        text: 'A request could sit waiting not because the work was hard, but because the one person who could price it confidently was busy with another one. Two customers asking for a similar crate could receive different numbers depending on who answered. Every new estimator had to acquire the rules by apprenticeship, because there was nowhere to read them.',
       },
       {
         type: 'p',
-        text: 'Nothing about this removes the reviewer. The change is that the reviewer starts from a drafted quote with its assumptions listed, rather than from an inbox.',
+        text: 'The cost of that is easy to underrate. It is not only the quotes that go out late; it is the ones never chased, and the senior estimator spending an afternoon on a specification the rules could have priced without them.',
+      },
+      { type: 'h2', text: 'The insight' },
+      {
+        type: 'p',
+        text: '**The rules were not ambiguous. They were undocumented.** Written down with the estimators, most of the work turned out to be deterministic — material selection, construction, handling class, cost build-up — with a much smaller set of genuinely judgement-based exceptions around it.',
       },
       {
-        type: 'h2',
-        text: 'What made it stick',
+        type: 'p',
+        text: 'That split decided the whole design. The deterministic majority belongs in code, where it can be read, versioned and tested. What actually needed intelligence sat earlier: reading an unstructured request — an email, a spreadsheet, a photographed dimension sheet — into the shape those rules expect.',
+      },
+      { type: 'h2', text: 'What we built' },
+      {
+        type: 'p',
+        text: 'Agentic workflows that sit around the existing quoting process rather than replacing it. They read the incoming request, structure it into a requirement, apply the estimating rules, and prepare a draft quote with its assumptions written out. What they cannot decide, they escalate — with the reason attached.',
+      },
+      {
+        type: 'journey',
+        label: 'From request to quote',
+        steps: ['Request', 'Understand', 'Specify', 'Price', 'Review', 'Quote'],
+      },
+      {
+        type: 'p',
+        text: 'Nothing here removes the reviewer. The change is where the reviewer starts: from a drafted quote with its assumptions listed, rather than from an inbox and an empty spreadsheet.',
+      },
+      { type: 'h2', text: 'Who does what' },
+      {
+        type: 'duo',
+        emphasis: 'right',
+        left: {
+          title: 'The workflow handles',
+          items: [
+            'Reading requests in whatever format they arrive in',
+            'Extracting dimensions, weights and handling requirements',
+            'Applying the documented estimating rules',
+            'Building the cost line by line, with each rule cited',
+            'Flagging what it could not decide, and why',
+            'Drafting the quote for review',
+          ],
+        },
+        right: {
+          title: 'The estimators handle',
+          items: [
+            'The exceptions the rules deliberately escalate',
+            'Judgement on unusual construction and handling',
+            'The customer relationship and the negotiation',
+            'Deciding when a rule itself needs to change',
+            'Signing the quote — every one of them',
+          ],
+        },
+      },
+      { type: 'h2', text: 'What changed' },
+      {
+        type: 'duo',
+        emphasis: 'right',
+        left: {
+          title: 'Before',
+          items: [
+            'Request arrives in one of several formats',
+            'Waits for an estimator who can price it',
+            'Details re-keyed from an email into a spreadsheet',
+            'Rules applied from memory and past quotes',
+            'The number varies with who answered',
+            'Quote goes out',
+          ],
+        },
+        right: {
+          title: 'After',
+          items: [
+            'Request arrives in one of several formats',
+            'Details are extracted and structured immediately',
+            'Documented rules are applied the same way every time',
+            'Exceptions are raised with the reason attached',
+            'A drafted quote reaches an estimator, assumptions listed',
+            'An estimator reviews, adjusts and signs',
+          ],
+        },
+      },
+      { type: 'h2', text: 'What it was worth' },
+      {
+        type: 'p',
+        text: 'The client reports quotes that took two days going out in twenty minutes. Beyond the turnaround, the estimating rules are now something the business owns outright: written down, versioned, and testable independently of anything we built. A new estimator can read them.',
       },
       {
         type: 'list',
         items: [
-          '**The rules became an artefact.** Written down, versioned, and testable independently of the model.',
-          '**Extraction was validated at the boundary.** A requirement that does not satisfy the schema is escalated, not guessed at.',
-          '**Exceptions were designed first.** The interesting cases were the ones the old process handled by asking someone — those became explicit escalation paths.',
-          '**It runs inside their estate.** Deployment matters to a business whose pricing is competitive information.',
+          '**The rules became an artefact.** Written down, versioned, and testable on their own.',
+          '**Extraction is validated at the boundary.** A requirement that does not satisfy the schema never reaches the pricing rules.',
+          '**Escalation is a rule, not a feeling.** What the workflow refuses to decide is defined in the same place as everything else it does.',
+          '**A person still signs every quote.** The workflow drafts; it does not send.',
         ],
       },
       {
-        type: 'callout',
-        kind: 'note',
-        title: 'The lesson that generalises',
-        text: 'Most "AI workflow" projects are two projects: writing down a process nobody had written down, and then automating the deterministic part of it. The second is easy once the first is done.',
+        type: 'p',
+        text: 'The technology is the least interesting part of the outcome. What changed is that knowledge which used to live with a few people now lives in the business, and those people spend their time on the quotes that actually need them.',
       },
     ],
     learn: [
@@ -120,9 +194,9 @@ draft quote for review                     ← a person still signs it`,
   },
 
   {
-    slug: 'research-coding',
+    slug: 'enquiry-to-engagement',
     kind: 'Case study',
-    title: 'Keeping a research coding framework, losing the tagging',
+    title: 'Turning inbound enquiries into qualified engagements',
     client: 'Urban Ethnographers',
     // Yellow is the mark's own ground, in both themes — the navy wordmark is
     // invisible on our black and nearly so on our paper.
@@ -131,60 +205,156 @@ draft quote for review                     ← a person still signs it`,
     logoAccent: '246, 200, 9',
     sector: 'Research · Urban ethnography',
     summary:
-      'Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.',
+      'Good opportunities did not always arrive as good briefs. Experienced researchers were spending their time interpreting enquiries and chasing missing detail, rather than doing the work only they can do.',
     published: '2026-04-22',
-    minutes: 5,
+    minutes: 6,
     plate: 'deep-field',
     video: null,
     facts: [
       { k: 'Engagement', v: 'Discovery, then build' },
-      { k: 'Shape', v: 'Research acceleration' },
-      { k: 'Constraint', v: 'The framework must not drift' },
+      { k: 'Shape', v: 'Lead to engagement' },
+      { k: 'Constraint', v: 'The relationship stays human' },
     ],
-    quote: {
-      text: 'Our researchers stopped tagging transcripts and started interpreting them. The coding framework is still ours — the machine just keeps up with it now.',
-      name: 'Name Surname',
-      role: 'Principal, Urban Ethnographers',
-    },
+    /* No quote here yet. The testimony Urban Ethnographers have published is
+       about transcript coding, and attaching it to a story about qualifying
+       enquiries would put words in their mouth about work it does not
+       describe. The margin slot is ready for a line about this engagement
+       when they give us one. */
+    quote: null,
     body: [
       {
         type: 'p',
-        text: 'A qualitative coding framework is a research instrument. It is developed deliberately, it evolves slowly, and its consistency is what makes findings comparable across a study. Any system that quietly reinterprets it is worse than no system.',
+        text: 'The problem was never a shortage of enquiries. It was the amount of manual work between an enquiry arriving and an engagement beginning.',
       },
+      { type: 'h2', text: 'The situation' },
       {
-        type: 'h2',
-        text: 'The constraint that shaped everything',
+        type: 'p',
+        text: 'Good opportunities do not always arrive as good briefs. An enquiry might describe a research question precisely, or it might describe a business worry and leave the research question to be discovered. It might name a timeline, a budget and a population, or none of the three. Two enquiries of equal value can look nothing like each other.',
       },
       {
         type: 'p',
-        text: 'The framework had to remain the researchers\'. That ruled out an approach where the model invents its own categories from the data, and it made the codebook the specification rather than the training data — the categories, their definitions, and their boundary cases are the prompt.',
+        text: 'Before any of them can become an engagement, somebody has to read what arrived, work out what is really being asked, decide whether it is a fit, notice what is missing, ask for it, and keep the conversation moving while the answers come back.',
+      },
+      { type: 'h2', text: 'The problem' },
+      {
+        type: 'p',
+        text: 'That reading and chasing was being done by the people whose judgement the firm sells. Interpreting an ambiguous enquiry is genuinely expert work; collecting a missing sample size and following it up twice is not, and both were landing on the same desks.',
       },
       {
-        type: 'h2',
-        text: 'How drift was kept visible',
+        type: 'p',
+        text: 'This is a capacity and process problem rather than a staffing one. Hiring another researcher adds capacity to the part that was never the constraint, and adds another person to the operational work around it. Meanwhile opportunities move at the speed of whoever last had time to look at them, and what is happening across all of them is hard to see at a glance.',
+      },
+      { type: 'h2', text: 'The insight' },
+      {
+        type: 'p',
+        text: '**Their expertise was not the bottleneck. Getting to it was.** Every enquiry had to pass through hours of interpretation, structuring and chasing before an expert could apply the thing the client is actually paying for.',
+      },
+      {
+        type: 'p',
+        text: 'That is the point at which this becomes an AI problem rather than a hiring one. The groundwork is repetitive, high-volume and rule-shaped; the judgement at the end of it is neither.',
+      },
+      { type: 'h2', text: 'What we built' },
+      {
+        type: 'p',
+        text: 'Custom agentic workflows that sit around the existing lead-to-engagement process. They do not replace a stage of it — they do the preparation each stage used to require, so a person arrives at a decision already able to make it.',
+      },
+      {
+        type: 'journey',
+        label: 'From enquiry to engagement',
+        steps: ['Enquiry', 'Understand', 'Qualify', 'Prepare', 'Progress', 'Engagement'],
+      },
+      {
+        type: 'p',
+        text: 'An enquiry arriving in any shape is read and organised into the same structure as every other. What is missing is identified as missing rather than discovered three emails later. Fit is assessed against the firm\'s own criteria, and the opportunity arrives at a researcher as a picture rather than a thread.',
+      },
+      { type: 'h2', text: 'Who does what' },
+      {
+        type: 'p',
+        text: 'We did not automate the relationship. We automated everything around it.',
+      },
+      {
+        type: 'duo',
+        emphasis: 'right',
+        left: {
+          title: 'The workflows handle',
+          items: [
+            'Understanding what an incoming enquiry is asking for',
+            'Structuring it the same way every time',
+            'Identifying what is missing before anyone chases it',
+            'Assessing fit against the firm’s own criteria',
+            'Coordinating the next step and keeping it moving',
+            'Keeping every open opportunity visible',
+          ],
+        },
+        right: {
+          title: 'The researchers handle',
+          items: [
+            'Judgement about what is worth doing',
+            'The client relationship, start to finish',
+            'Research expertise and method',
+            'Deciding the right approach for the question',
+            'Shaping the engagement',
+            'Every final decision',
+          ],
+        },
+      },
+      { type: 'h2', text: 'What changed' },
+      {
+        type: 'duo',
+        emphasis: 'right',
+        left: {
+          title: 'Before',
+          items: [
+            'Enquiry arrives',
+            'An expert reads and interprets it',
+            'Information is gathered by hand',
+            'Follow-ups are repeated until answers come back',
+            'Expert time is spent on coordination',
+            'The opportunity progresses',
+          ],
+        },
+        right: {
+          title: 'After',
+          items: [
+            'Enquiry arrives',
+            'It is understood and organised on arrival',
+            'Gaps are identified and requested',
+            'The opportunity is qualified against real criteria',
+            'The team receives a clearer picture',
+            'Experts join for the conversation that needs them',
+            'The opportunity progresses',
+          ],
+        },
+      },
+      { type: 'h2', text: 'What it was worth' },
+      {
+        type: 'p',
+        text: 'We are not putting numbers on this one. What the firm reports is operational: enquiries move faster from arrival to a decision about them, qualification is consistent rather than dependent on who read it first, and there is far less repetitive work sitting between an enquiry and the person who should see it.',
       },
       {
         type: 'list',
         items: [
-          '**Every applied code carries the passage it came from**, so a researcher can check the application rather than trust it.',
-          '**A held-out set of researcher-coded transcripts** is the evaluation set. Agreement with the humans is the metric, per code, not overall.',
-          '**Codebook changes re-run the set.** A refined definition that improves one code and degrades two is visible before it is adopted.',
-          '**Disagreements are surfaced, not resolved.** Where the model and the codebook are in tension, that is a finding about the codebook.',
+          '**Less depends on individuals.** Routine processing no longer waits for a particular person to be free.',
+          '**Qualification is consistent.** The same criteria are applied to every enquiry, in the same order.',
+          '**Opportunities are visible.** What is open, and what each one is waiting for, can be seen without assembling it from inboxes.',
+          '**Expert time moved.** It is spent on client conversations and research rather than on chasing detail.',
         ],
       },
       {
-        type: 'callout',
-        kind: 'warning',
-        title: 'What this deliberately does not do',
-        text: 'It does not discover themes, and it does not merge codes it judges similar. Both are research decisions, and a system that made them would be making claims the researchers had not.',
+        type: 'p',
+        text: 'The result is a lead-to-engagement process that scales with the volume of enquiries rather than with the number of experienced people available to read them — which is what makes growth a decision rather than a hiring problem.',
+      },
+      {
+        type: 'p',
+        text: '**The technology became invisible. The expertise became more available.** That was the whole objective, and it is the only part of this the client should have to care about.',
       },
     ],
     learn: [
-      { label: 'Prompt engineering', href: '/technologies/prompt-engineering' },
-      { label: 'Measuring retrieval separately', href: '/learn/rag-systems-specialist/rag-evaluation' },
-      { label: 'Evaluation', href: '/technologies/evaluation' },
+      { label: 'Structured output', href: '/technologies/structured-output' },
+      { label: 'Agent loops', href: '/technologies/agent-loops' },
+      { label: 'Orchestration', href: '/technologies/orchestration' },
     ],
-    technologies: ['prompt-engineering', 'evaluation', 'structured-output'],
+    technologies: ['structured-output', 'agent-loops', 'orchestration', 'evaluation'],
   },
 
   {

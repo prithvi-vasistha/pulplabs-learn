@@ -11,6 +11,10 @@ const nextConfig = {
     return [
       // Field notes are the front page now.
       { source: '/field', destination: '/', permanent: true },
+      /* The Urban Ethnographers entry was rewritten from a transcript-coding
+         story to the lead-to-engagement engagement it actually describes, so
+         its slug no longer matched its subject. */
+      { source: '/field/research-coding', destination: '/field/enquiry-to-engagement', permanent: true },
       // Progress is part of a profile, not a section of its own.
       { source: '/dashboard', destination: '/profile', permanent: true },
       // Exams are one half of Practice now, not a section of their own.
