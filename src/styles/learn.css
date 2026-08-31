@@ -5381,3 +5381,70 @@ mark {
 .pg-card-soon .h4 {
   color: var(--w-2);
 }
+
+/* ==========================================================================
+   30. A client's accent, on that client's own page
+
+   §1 keeps this interface black and white. The single exception, already
+   established on the marketing site's testimonial section, is that a client's
+   brand may appear where the client is the subject — their mark, their words,
+   their engagement. This is that exception, scoped to one entry.
+
+   It tints hairlines; it does not replace them. A rule at 45% of a brand
+   colour still reads as the hairline it is (§6). A solid coloured border
+   would be chrome carrying hue, which is what the rule actually forbids —
+   and every one of these is decorative, so nothing's contrast depends on it.
+
+   `--accent` is an "r, g, b" triple set inline from the entry's own data, so
+   removing the value removes every rule below with it.
+   ========================================================================== */
+
+.fe-accent .phead {
+  border-bottom: 1px solid rgba(var(--accent), 0.45);
+}
+
+/* The head's plate picks up a wash of the accent in the corner — the same
+   treatment, and the same restraint, as the marketing site's Voices. */
+.fe-accent .phead::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 88% 12%, rgba(var(--accent), 0.13), transparent 62%);
+}
+
+.fe-accent .phead-in {
+  position: relative;
+  z-index: 1;
+}
+
+.fe-accent .rail-list > li,
+.fe-accent .people > li {
+  border-color: rgba(var(--accent), 0.4);
+}
+
+.fe-accent .field-quote {
+  border-left-color: rgba(var(--accent), 0.55);
+}
+
+.fe-accent .anchored,
+.fe-accent .related-list > li + li {
+  border-top-color: rgba(var(--accent), 0.35);
+}
+
+/* Paper takes a tint far more readily than black does: the same alpha that
+   glows on the dark ground turns into a wash of colour here. Hairlines are
+   carried slightly further, because a light rule on white needs it — and the
+   corner wash is pulled well back, because it does not. */
+:root[data-theme='light'] .fe-accent .phead {
+  border-bottom-color: rgba(var(--accent), 0.55);
+}
+
+:root[data-theme='light'] .fe-accent .rail-list > li,
+:root[data-theme='light'] .fe-accent .people > li {
+  border-color: rgba(var(--accent), 0.42);
+}
+
+:root[data-theme='light'] .fe-accent .phead::after {
+  background: radial-gradient(circle at 88% 12%, rgba(var(--accent), 0.08), transparent 58%);
+}

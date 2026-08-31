@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-08-31T10:36:14.976Z",
+  "exportedAt": "2026-08-31T10:43:59.090Z",
   "settings": {
     "disclosure": "Independent preparation material. PulpLabs is not a certification body and is not affiliated with the awarding organisations. Always check the official exam guide for the current format and requirements.",
     "catalogueNote": "Every project here is a public repository. Where we have not written a documentation set yet, the project page links to the repository instead of pretending one exists.",
@@ -6292,6 +6292,7 @@
       "logo": "/logos/client-pps.webp",
       "logoGround": "#f8f8f8",
       "logoShape": "small",
+      "logoAccent": "222, 0, 13",
       "sector": "Manufacturing · Power and packaging",
       "summary": "A quoting workflow that depended on a handful of people holding the pricing rules in their heads, rebuilt so the rules live in the system and the people review the output.",
       "published": "2026-03-04",
@@ -6386,6 +6387,7 @@
       "client": "Urban Ethnographers",
       "logo": "/logos/client-ue.webp",
       "logoGround": "#f6c809",
+      "logoAccent": "246, 200, 9",
       "sector": "Research · Urban ethnography",
       "summary": "Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.",
       "published": "2026-04-22",

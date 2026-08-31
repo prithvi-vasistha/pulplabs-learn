@@ -602,6 +602,7 @@ function summariseFieldEntry(row) {
     logo: row.logo,
     logoGround: row.logo_ground,
     logoShape: row.logo_shape,
+    logoAccent: row.logo_accent,
     sector: row.sector,
     summary: row.summary,
     published: row.published ? new Date(row.published).toISOString().slice(0, 10) : null,

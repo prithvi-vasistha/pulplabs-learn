@@ -284,3 +284,8 @@ alter table field_entries add column if not exists logo_shape  text;
 -- coming-soon card and the service refuses to lease an instance for one, so
 -- the state cannot be bypassed by typing the URL.
 alter table playground_demos add column if not exists status text not null default 'live';
+
+-- The client's own accent, as an "r, g, b" triple so it composes with alpha.
+-- Used only on that client's own page (see FieldEntry) — §1 of the design
+-- system allows a client's colour where the page is about that client.
+alter table field_entries add column if not exists logo_accent text;

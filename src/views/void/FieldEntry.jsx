@@ -10,8 +10,28 @@ import { Badge, Crumbs, MetaRow, SectionHead } from '@/components/learn/ui'
 import { formatDate, formatMinutes } from '@/lib/format'
 
 export default function FieldEntry({ entry, next, fieldNote }) {
+  /*
+   * A client's own colour, on the client's own page.
+   *
+   * §1 keeps the interface black and white, and the marketing site already
+   * carries the one exception this follows: where a client is the subject —
+   * their mark, their words — their brand is allowed in, because that section
+   * is somebody else speaking. It is scoped to this entry and nothing else:
+   * the shell, the nav and every other page stay monochrome.
+   *
+   * It tints hairlines rather than replacing them. A rule at 45% of a brand
+   * colour still reads as the site's hairline (§6) and cannot be mistaken for
+   * a status; a solid coloured border would be chrome carrying hue, which is
+   * the thing §1 actually forbids.
+   */
+  const accent = entry.logoAccent ?? null
+
   return (
     <AppShell>
+      <div
+        className={accent ? 'fe fe-accent' : 'fe'}
+        style={accent ? { '--accent': accent } : undefined}
+      >
         <section className="phead grid-bg">
           <div className="phead-light" aria-hidden="true">
             <Cover seed={entry.slug} ratio="auto" />
@@ -219,6 +239,7 @@ export default function FieldEntry({ entry, next, fieldNote }) {
         )}
 
         <NextPage href="/field" title="Field" label="Back to" />
-      </AppShell>
+      </div>
+    </AppShell>
   )
 }

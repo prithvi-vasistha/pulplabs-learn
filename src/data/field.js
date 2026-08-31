@@ -41,6 +41,9 @@ export const fieldEntries = [
     logo: '/logos/client-pps.webp',
     logoGround: '#f8f8f8',
     logoShape: 'small',
+    // Sampled from the artwork, not guessed — the same value the marketing
+    // site's clients.js carries, so one company reads the same on both.
+    logoAccent: '222, 0, 13',
     sector: 'Manufacturing · Power and packaging',
     summary:
       'A quoting workflow that depended on a handful of people holding the pricing rules in their heads, rebuilt so the rules live in the system and the people review the output.',
@@ -125,6 +128,7 @@ draft quote for review                     ← a person still signs it`,
     // invisible on our black and nearly so on our paper.
     logo: '/logos/client-ue.webp',
     logoGround: '#f6c809',
+    logoAccent: '246, 200, 9',
     sector: 'Research · Urban ethnography',
     summary:
       'Qualitative researchers were spending their time applying a coding framework to transcripts by hand. The framework stayed theirs; the repetitive application did not.',
