@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "exportedAt": "2026-08-31T07:04:03.374Z",
+  "exportedAt": "2026-08-31T07:14:30.021Z",
   "settings": {
     "disclosure": "Independent preparation material. PulpLabs is not a certification body and is not affiliated with the awarding organisations. Always check the official exam guide for the current format and requirements.",
-    "catalogueNote": "Every project here is a public repository. Where the Learn Lab has not written a documentation set yet, the project page links to the repository instead of pretending one exists.",
+    "catalogueNote": "Every project here is a public repository. Where we have not written a documentation set yet, the project page links to the repository instead of pretending one exists.",
     "fieldNote": "Client entries reproduce only what PulpLabs already publishes. Interview recordings appear here once they are released.",
     "fieldKinds": [
       "Case study",
@@ -7524,8 +7524,8 @@
       "slug": "openlcm",
       "name": "OpenLCM",
       "tagline": "Unbounded memory. Bounded context.",
-      "version": "Learn Lab guide",
-      "versionNote": "Written by the Learn Lab as a conceptual guide. Check the repository README for exact signatures, options and the current release.",
+      "version": "PulpLabs guide",
+      "versionNote": "Written by PulpLabs as a conceptual guide. Check the repository README for exact signatures, options and the current release.",
       "repository": "https://github.com/akshay-eng/OpenLCM",
       "groups": [
         {
@@ -7990,8 +7990,8 @@
       "slug": "wheatear",
       "name": "Wheatear",
       "tagline": "Migrating agents between orchestration platforms without a rebuild.",
-      "version": "Learn Lab guide",
-      "versionNote": "Written by the Learn Lab as a conceptual guide. Check the repository for current platform coverage, CLI flags and IR schema.",
+      "version": "PulpLabs guide",
+      "versionNote": "Written by PulpLabs as a conceptual guide. Check the repository for current platform coverage, CLI flags and IR schema.",
       "repository": "https://github.com/akshay-eng/Wheatear",
       "groups": [
         {

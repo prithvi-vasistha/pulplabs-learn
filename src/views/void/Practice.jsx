@@ -16,14 +16,14 @@ export default async function Practice() {
   return (
     <AppShell>
         <PageHead
-          eyebrow="Practice"
+          eyebrow="Exams"
           plate="aperture-glow"
           title={
             <>
               Find the gaps. <span className="dim">Then close them.</span>
             </>
           }
-          lede="Every result breaks down by topic and links each weak area to the lesson that covers it."
+          lede="Mock papers, grouped by what they prepare you for. Every result breaks down by topic and links each weak area to the lesson that covers it, so a score is a reading list rather than a verdict."
           jump={[
             ...families.map((f) => ({
               href: `#${slugify(f.name)}`,

@@ -73,7 +73,7 @@ export default function DocsNav({ set, currentSlug }) {
           </p>
           <p className="body" style={{ marginTop: 10 }}>
             <Link href="/search" className="link-quiet">
-              Search the whole Learn Lab →
+              Search everything →
             </Link>
           </p>
         </div>

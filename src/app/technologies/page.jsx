@@ -7,7 +7,7 @@ import Technologies from '@/views/void/Technologies'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Technologies',
+  title: 'Topics',
   description:
     'The AI stack the certifications test — models, interfaces, context, retrieval, agents, evaluation and safety.',
   alternates: { canonical: '/technologies' },

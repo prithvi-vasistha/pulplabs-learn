@@ -1,5 +1,5 @@
 /**
- * Documentation for Wheatear, written by the Learn Lab.
+ * Documentation for Wheatear, written by PulpLabs.
  *
  * Conceptual guide. The repository — and its PRODUCT.md — is the authority on
  * the current platform coverage and CLI surface.
@@ -9,9 +9,9 @@ export const wheatearDocs = {
   slug: 'wheatear',
   name: 'Wheatear',
   tagline: 'Migrating agents between orchestration platforms without a rebuild.',
-  version: 'Learn Lab guide',
+  version: 'PulpLabs guide',
   versionNote:
-    'Written by the Learn Lab as a conceptual guide. Check the repository for current platform coverage, CLI flags and IR schema.',
+    'Written by PulpLabs as a conceptual guide. Check the repository for current platform coverage, CLI flags and IR schema.',
   repository: 'https://github.com/akshay-eng/Wheatear',
   groups: [
     {

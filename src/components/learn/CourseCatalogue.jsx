@@ -91,7 +91,7 @@ export default function CourseCatalogue({ paths, catalogue }) {
           title="Nothing matches that."
           body={`No track or lesson matches “${query.trim()}”${
             level !== 'All levels' ? ` at ${level.toLowerCase()} level` : ''
-          }. Try a broader term, or search the whole Learn Lab.`}
+          }. Try a broader term, or search everything.`}
           actions={
             <>
               <button

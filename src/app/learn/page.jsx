@@ -7,7 +7,7 @@ import Learn from '@/views/void/Learn'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Preparation tracks',
+  title: 'Courses',
   description:
     'Structured preparation tracks for AI certifications — architecture, developer, retrieval and agent systems — each an ordered sequence with prerequisites, outcomes and time estimates.',
   alternates: { canonical: '/learn' },

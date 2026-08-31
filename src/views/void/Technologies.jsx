@@ -11,7 +11,7 @@ export default async function Technologies() {
   return (
     <AppShell>
         <PageHead
-          eyebrow="Learn · Subjects"
+          eyebrow="Topics"
           plate="deep-field"
           title={
             <>

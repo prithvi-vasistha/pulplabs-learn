@@ -4,11 +4,11 @@
  * These are real repositories. `repository` is the canonical link and is what
  * the UI surfaces; where a field cannot be verified from the repository it is
  * left out rather than guessed. Where a project has no documentation set in
- * the Learn Lab, `docs` is null and the UI says so instead of linking nowhere.
+ * this portal, `docs` is null and the UI says so instead of linking nowhere.
  */
 
 export const CATALOGUE_NOTE =
-  'Every project here is a public repository. Where the Learn Lab has not written a documentation set yet, the project page links to the repository instead of pretending one exists.'
+  'Every project here is a public repository. Where we have not written a documentation set yet, the project page links to the repository instead of pretending one exists.'
 
 export const projects = [
   {

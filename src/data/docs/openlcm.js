@@ -1,5 +1,5 @@
 /**
- * Documentation for OpenLCM, written by the Learn Lab.
+ * Documentation for OpenLCM, written by PulpLabs.
  *
  * This is a conceptual guide: what the pieces are, why they exist, and how to
  * reason about them. The repository is the authority on exact API signatures
@@ -10,9 +10,9 @@ export const openlcmDocs = {
   slug: 'openlcm',
   name: 'OpenLCM',
   tagline: 'Unbounded memory. Bounded context.',
-  version: 'Learn Lab guide',
+  version: 'PulpLabs guide',
   versionNote:
-    'Written by the Learn Lab as a conceptual guide. Check the repository README for exact signatures, options and the current release.',
+    'Written by PulpLabs as a conceptual guide. Check the repository README for exact signatures, options and the current release.',
   repository: 'https://github.com/akshay-eng/OpenLCM',
   groups: [
     {

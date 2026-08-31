@@ -203,7 +203,7 @@ export default function CommandPalette() {
             className="cmd"
             role="dialog"
             aria-modal="true"
-            aria-label="Search the Learn Lab"
+            aria-label="Search PulpLabs Learn"
             ref={panel}
           >
             <div className="cmd-field">

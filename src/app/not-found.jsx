@@ -57,7 +57,7 @@ export default function NotFound() {
 
             <div className="btn-row" style={{ marginTop: 32 }}>
               <Link href="/" className="btn">
-                Back to the Learn Lab <Chevron />
+                Back to the front page <Chevron />
               </Link>
             </div>
           </div>

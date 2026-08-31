@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <p className="d3 ft-line">learn.pulplabs.ai</p>
             <p className="body ft-blurb">
-              The PulpLabs Learn Lab: certification preparation, mock exams, and the documentation behind the
+              PulpLabs Learn: case studies, courses, mock exams, and the documentation behind the
               tools we build in the open.
             </p>
           </div>

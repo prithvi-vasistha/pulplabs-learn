@@ -21,7 +21,7 @@ export default async function Projects() {
   return (
     <AppShell>
         <PageHead
-          eyebrow="Projects"
+          eyebrow="Our software"
           plate="grid-horizon"
           title={
             <>

@@ -78,7 +78,7 @@ export default function TechExplorer({ technologies, categories }) {
             title="Nothing matches that filter."
             body={`No technology matches “${query.trim()}”${
               category !== 'All' ? ` in ${category}` : ''
-            }. Try a broader category, or search the whole Learn Lab instead.`}
+            }. Try a broader category, or search everything instead.`}
             actions={
               <>
                 <button

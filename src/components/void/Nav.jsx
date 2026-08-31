@@ -51,7 +51,7 @@ export default function Nav() {
   return (
     <header className="nv" data-scrolled={scrolled || undefined} data-open={open || undefined}>
       <nav className="nv-in" aria-label="Primary">
-        <Link href="/" className="nv-brand" aria-label="PulpLabs Learn Lab home">
+        <Link href="/" className="nv-brand" aria-label="PulpLabs Learn home">
           {/* The mark is a stroke, not a picture. On black, geometry reads as
               engineered where an illustration reads as decoration. */}
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">

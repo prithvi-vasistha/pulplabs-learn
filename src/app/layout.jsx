@@ -4,7 +4,7 @@ import { THEME_SCRIPT } from '@/lib/theme'
 
 /* void.css is a byte-for-byte copy of the marketing site's stylesheet — the
    two are kept in sync by copying the file, never by editing this one.
-   learn.css is everything the Learn Lab adds on top. */
+   learn.css is everything the portal adds on top. */
 import '@/styles/void.css'
 import '@/styles/learn.css'
 
