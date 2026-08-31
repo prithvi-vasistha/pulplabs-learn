@@ -293,6 +293,26 @@ button {
   }
 }
 
+/* The row also has to stack when the *column* is narrow, not only when the
+   window is. On a topic page at around 1024px the rail leaves the main column
+   about 360px wide — the 52px + 280px fixed tracks no longer fit, `minmax(0,
+   1fr)` gives up as it is designed to, and the title wraps one word per line.
+   A viewport media query cannot see that; a container query can. */
+.index {
+  container-type: inline-size;
+}
+
+@container (max-width: 620px) {
+  .index-row {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .index-m {
+    grid-column: 2;
+  }
+}
+
 /* --------------------------------------------------------------------------
    3. Panels, cards, rails
    -------------------------------------------------------------------------- */
@@ -5542,15 +5562,19 @@ mark {
   white-space: nowrap;
 }
 
-/* The arrow belongs between steps, so it is drawn by the gap rather than by
-   an element nobody can select or read out. */
-.prose .journey > li + li::before {
-  content: '';
-  width: 18px;
-  height: 1px;
-  margin: 0 10px 0 -12px;
-  background: var(--line-3);
-  flex: none;
+.prose .journey > li {
+  gap: 9px;
+}
+
+.journey-n {
+  color: var(--w-4);
+}
+
+/* A heading must never sit beside a margin quote: `.prose h2` carries a rule
+   above it, and a float narrows the heading's box, so the rule stopped dead
+   at the quote's edge and read as a broken line. */
+.prose h2 {
+  clear: both;
 }
 
 .prose .journey > li:last-child {

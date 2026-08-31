@@ -9,7 +9,7 @@
 export const openlcmDocs = {
   slug: 'openlcm',
   name: 'OpenLCM',
-  tagline: 'Unbounded memory. Bounded context.',
+  tagline: 'Working with the store, the policies, and what gets recalled into a prompt.',
   version: 'PulpLabs guide',
   versionNote:
     'Written by PulpLabs as a conceptual guide. Check the repository README for exact signatures, options and the current release.',

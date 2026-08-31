@@ -118,8 +118,14 @@ function Block({ block }) {
     case 'journey':
       return (
         <ol className="journey" aria-label={block.label ?? 'The process'}>
-          {block.steps.map((step) => (
-            <li key={step}>{step}</li>
+          {block.steps.map((step, i) => (
+            <li key={step}>
+              {/* Numbered rather than joined by connectors: a rule drawn
+                  between steps strands itself at the start of every wrapped
+                  row, and the number says "sequence" without the artefact. */}
+              <span className="journey-n mono tnum">{String(i + 1).padStart(2, '0')}</span>
+              {step}
+            </li>
           ))}
         </ol>
       )

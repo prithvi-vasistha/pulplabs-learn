@@ -8,7 +8,7 @@
 export const wheatearDocs = {
   slug: 'wheatear',
   name: 'Wheatear',
-  tagline: 'Migrating agents between orchestration platforms without a rebuild.',
+  tagline: 'How the intermediate representation works, and what survives a move between platforms.',
   version: 'PulpLabs guide',
   versionNote:
     'Written by PulpLabs as a conceptual guide. Check the repository for current platform coverage, CLI flags and IR schema.',
