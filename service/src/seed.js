@@ -255,18 +255,19 @@ export async function seed({ prune = false, file } = {}) {
       await client.query(
         `insert into playground_demos
            (slug, title, tagline, kind, engine, summary, minutes, brief, controls, learn,
-            spec, technologies, position)
-         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+            spec, technologies, position, status)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
          on conflict (slug) do update set
            title = excluded.title, tagline = excluded.tagline, kind = excluded.kind,
            engine = excluded.engine, summary = excluded.summary, minutes = excluded.minutes,
            brief = excluded.brief, controls = excluded.controls, learn = excluded.learn,
-           spec = excluded.spec, technologies = excluded.technologies, position = excluded.position`,
+           spec = excluded.spec, technologies = excluded.technologies, position = excluded.position,
+           status = excluded.status`,
         [
           d.slug, d.title, d.tagline, d.kind ?? 'Sandbox', d.engine, d.summary, d.minutes ?? 0,
           JSON.stringify(d.brief ?? []), JSON.stringify(d.controls ?? {}),
           JSON.stringify(d.learn ?? []), JSON.stringify(d.spec ?? {}),
-          d.technologies ?? [], i,
+          d.technologies ?? [], i, d.status ?? 'live',
         ]
       )
     }

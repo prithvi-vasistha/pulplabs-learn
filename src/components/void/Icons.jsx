@@ -129,6 +129,21 @@ export function Terminal({ size = 14 }) {
   )
 }
 
+/* "Being built". A ring drawn as five dashes with the work part-finished —
+   progress without a progress bar, and no hue to say it (§1). Distinct from
+   Clock, which means duration, and from Lock, which means "you cannot". */
+export function Soon({ size = 13 }) {
+  return (
+    <svg {...base} width={size} height={size} viewBox="0 0 16 16">
+      <path d="M8 2a6 6 0 0 1 5.2 3" />
+      <path d="M14 8a6 6 0 0 1-1.6 4.1" />
+      <path d="M10.4 14.4a6 6 0 0 1-5 0" opacity="0.45" />
+      <path d="M3.6 12.1A6 6 0 0 1 2 8" opacity="0.45" />
+      <path d="M2.8 5A6 6 0 0 1 8 2" opacity="0.45" />
+    </svg>
+  )
+}
+
 export function Play({ size = 14 }) {
   return (
     <svg {...base} width={size} height={size} viewBox="0 0 16 16">

@@ -22,7 +22,7 @@ const MAX_ACTIVE = 4
 /* ---------------------------------------------------------------- demos --- */
 
 const PUBLIC_COLS = `slug, title, tagline, kind, engine, summary, minutes, brief, controls, learn,
-                     technologies, spec -> 'preview' as preview, position`
+                     technologies, status, spec -> 'preview' as preview, position`
 
 export async function getDemos() {
   return rows(`select ${PUBLIC_COLS} from playground_demos order by position`)
@@ -53,8 +53,10 @@ async function sweep() {
 }
 
 export async function startSession(userId, slug) {
-  const demo = await one('select slug from playground_demos where slug = $1', [slug])
+  const demo = await one('select slug, status from playground_demos where slug = $1', [slug])
   if (!demo) throw notFound('No such demo')
+  // The card is not a link, but the URL is guessable. Refuse here too.
+  if (demo.status !== 'live') throw badRequest('That demo is not built yet')
 
   await sweep()
 
@@ -112,8 +114,9 @@ export async function run(userId, slug, { sessionId, input } = {}) {
   if (new Date(session.expires_at) <= new Date()) throw forbidden('That instance has expired — start a new one')
   if (session.runs >= RUN_QUOTA) throw tooMany('This instance has used its run quota')
 
-  const demo = await one('select slug, engine, spec, controls from playground_demos where slug = $1', [slug])
+  const demo = await one('select slug, engine, spec, controls, status from playground_demos where slug = $1', [slug])
   if (!demo) throw notFound('No such demo')
+  if (demo.status !== 'live') throw badRequest('That demo is not built yet')
 
   const engine = ENGINES[demo.engine]
   if (!engine) throw badRequest(`No engine for ${demo.engine}`)

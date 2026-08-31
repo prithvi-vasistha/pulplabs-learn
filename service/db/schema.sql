@@ -279,3 +279,8 @@ create table if not exists attempts (
 -- yellow and disappears on both of our themes without it.
 alter table field_entries add column if not exists logo_ground text;
 alter table field_entries add column if not exists logo_shape  text;
+
+-- A demo that is announced but not built. `planned` rows render as a
+-- coming-soon card and the service refuses to lease an instance for one, so
+-- the state cannot be bypassed by typing the URL.
+alter table playground_demos add column if not exists status text not null default 'live';

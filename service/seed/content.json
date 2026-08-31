@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-08-31T07:14:30.021Z",
+  "exportedAt": "2026-08-31T10:36:14.976Z",
   "settings": {
     "disclosure": "Independent preparation material. PulpLabs is not a certification body and is not affiliated with the awarding organisations. Always check the official exam guide for the current format and requirements.",
     "catalogueNote": "Every project here is a public repository. Where we have not written a documentation set yet, the project page links to the repository instead of pretending one exists.",
@@ -7193,6 +7193,7 @@
   "playground": [
     {
       "slug": "retrieval-lab",
+      "status": "live",
       "title": "Retrieval lab",
       "tagline": "Watch a retriever succeed, and watch it fail for reasons you can name.",
       "kind": "Sandbox",
@@ -7200,8 +7201,8 @@
       "summary": "A small corpus and a BM25 ranker. Query it, change the ranking parameters, and see the scores that produced the answer — including the queries where lexical matching has nothing to offer.",
       "minutes": 8,
       "technologies": [
-        "retrieval-augmented-generation",
-        "vector-databases"
+        "retrieval",
+        "embeddings"
       ],
       "brief": [
         "Most retrieval bugs are not model bugs. They are a query whose terms do not appear in the corpus, a chunk that split a definition away from its term, or a ranker whose length normalisation is fighting the document mix.",
@@ -7220,8 +7221,8 @@
           "href": "/articles/retrieval-failures"
         },
         {
-          "label": "Retrieval-augmented generation",
-          "href": "/technologies/retrieval-augmented-generation"
+          "label": "Retrieval",
+          "href": "/technologies/retrieval"
         }
       ],
       "spec": {
@@ -7361,6 +7362,7 @@
     },
     {
       "slug": "context-budget",
+      "status": "live",
       "title": "Context budget planner",
       "tagline": "Decide what to cut before the model decides for you.",
       "kind": "Lab",
@@ -7369,7 +7371,7 @@
       "minutes": 6,
       "technologies": [
         "prompt-engineering",
-        "large-language-models"
+        "context-engineering"
       ],
       "brief": [
         "A context window is a budget with a hard ceiling and no overdraft. Every token spent on a system prompt is a token unavailable for retrieved context, and every token spent on context is one unavailable for the answer.",
@@ -7403,6 +7405,7 @@
     },
     {
       "slug": "router-evals",
+      "status": "live",
       "title": "Routing eval harness",
       "tagline": "Write a classifier as rules, then find out what it costs you.",
       "kind": "Lab",
@@ -7410,8 +7413,8 @@
       "summary": "Twelve real-shaped support tickets with held-back labels. Write keyword rules, run them, and read accuracy, per-label recall, and every case you got wrong.",
       "minutes": 10,
       "technologies": [
-        "evaluation-and-observability",
-        "large-language-models"
+        "evaluation",
+        "guardrails"
       ],
       "brief": [
         "Before a routing problem is worth a model, it is worth a baseline. A keyword rule takes ten minutes and sets the number any model has to beat — and the exercise of writing it tells you whether your labels mean anything.",
@@ -7433,8 +7436,8 @@
           "href": "/articles/evals-from-production"
         },
         {
-          "label": "Evaluation and observability",
-          "href": "/technologies/evaluation-and-observability"
+          "label": "Evaluation",
+          "href": "/technologies/evaluation"
         }
       ],
       "spec": {
@@ -7517,6 +7520,81 @@
           "note": "Ticket text is shown before you run; the label for each one is revealed with your result."
         }
       }
+    },
+    {
+      "slug": "chunking-lab",
+      "title": "Chunking lab",
+      "tagline": "Split the same document five ways and watch which answers survive.",
+      "kind": "Sandbox",
+      "engine": "chunking",
+      "status": "planned",
+      "summary": "Fixed windows, sentence boundaries, headings, recursive splits and semantic grouping over one document — with the retrieval scores each strategy produces side by side.",
+      "minutes": 10,
+      "technologies": [
+        "retrieval",
+        "embeddings"
+      ],
+      "brief": [
+        "Most retrieval failures are decided at chunk time, long before anything is ranked. This will let you make that decision badly on purpose and see what it costs."
+      ],
+      "controls": {},
+      "learn": [
+        {
+          "label": "Retrieval",
+          "href": "/technologies/retrieval"
+        }
+      ],
+      "spec": {}
+    },
+    {
+      "slug": "tool-schema-sandbox",
+      "title": "Tool schema sandbox",
+      "tagline": "Write a tool definition, then see which calls it invites and which it forbids.",
+      "kind": "Lab",
+      "engine": "tools",
+      "status": "planned",
+      "summary": "A schema editor with a validator behind it: required fields, enums, defaults and descriptions, checked against a set of calls a model would plausibly attempt.",
+      "minutes": 12,
+      "technologies": [
+        "tool-use",
+        "structured-output"
+      ],
+      "brief": [
+        "A tool is a contract written for a reader that does not ask questions. This will show which parts of yours are ambiguous before a model finds out for you."
+      ],
+      "controls": {},
+      "learn": [
+        {
+          "label": "Tool use",
+          "href": "/technologies/tool-use"
+        }
+      ],
+      "spec": {}
+    },
+    {
+      "slug": "guardrail-bench",
+      "title": "Guardrail bench",
+      "tagline": "Run a policy against the prompts that are meant to break it.",
+      "kind": "Lab",
+      "engine": "guardrails",
+      "status": "planned",
+      "summary": "A written policy, a set of adversarial prompts, and a report of what got through — the same shape as the routing eval harness, pointed at safety rather than accuracy.",
+      "minutes": 12,
+      "technologies": [
+        "guardrails",
+        "evaluation"
+      ],
+      "brief": [
+        "A guardrail nobody has attacked is a guardrail nobody has tested. This will attack yours with the prompts that usually work."
+      ],
+      "controls": {},
+      "learn": [
+        {
+          "label": "Guardrails",
+          "href": "/technologies/guardrails"
+        }
+      ],
+      "spec": {}
     }
   ],
   "docSets": [

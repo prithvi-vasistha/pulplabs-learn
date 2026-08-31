@@ -779,7 +779,7 @@ export async function getSearchIndex() {
     })
   }
 
-  for (const demo of await rows('select * from playground_demos order by position')) {
+  for (const demo of await rows(`select * from playground_demos where status = 'live' order by position`)) {
     entries.push({
       id: `playground:${demo.slug}`,
       type: 'Playground',

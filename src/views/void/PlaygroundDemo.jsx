@@ -2,7 +2,7 @@ import Link from 'next/link'
 import AppShell from '@/components/void/AppShell'
 import Cover from '@/components/void/Cover'
 import NextPage from '@/components/void/NextPage'
-import { Lock } from '@/components/void/Icons'
+import { Lock, Soon } from '@/components/void/Icons'
 import PlaygroundConsole from '@/components/learn/PlaygroundConsole'
 import { Crumbs, MetaRow } from '@/components/learn/ui'
 import { currentUser } from '@/lib/auth'
@@ -16,6 +16,7 @@ import { currentUser } from '@/lib/auth'
  */
 export default async function PlaygroundDemo({ demo }) {
   const user = await currentUser()
+  const planned = demo.status === 'planned'
 
   return (
     <AppShell>
@@ -33,7 +34,7 @@ export default async function PlaygroundDemo({ demo }) {
             />
             <h1 className="d2">{demo.title}</h1>
             <p className="lede">{demo.tagline}</p>
-            <MetaRow items={[demo.kind, `${demo.minutes} min`, `runs on our server`]} />
+            <MetaRow items={[demo.kind, `${demo.minutes} min`, planned ? 'not built yet' : 'runs on our server']} />
           </div>
         </header>
 
@@ -60,7 +61,26 @@ export default async function PlaygroundDemo({ demo }) {
             </div>
 
             <div className="pgd-run">
-              {user ? (
+              {planned ? (
+                /* Reachable only by typing the URL — the card that would link
+                   here is not a link. It still gets a real page rather than a
+                   404, because "we are building this" is information and a 404
+                   is not. */
+                <div className="pg-gate pg-gate-lg">
+                  <p className="mono">
+                    <Soon size={12} /> Being built
+                  </p>
+                  <h2 className="h4">This one does not exist yet</h2>
+                  <p className="body">{demo.summary}</p>
+                  <p className="body">
+                    It will work the way the others do: deterministic, computed on our own server, and
+                    showing the numbers that produced the result. We are not claiming a date for it.
+                  </p>
+                  <Link href="/playground" className="btn">
+                    The three that do run
+                  </Link>
+                </div>
+              ) : user ? (
                 <PlaygroundConsole demo={demo} />
               ) : (
                 <div className="pg-gate pg-gate-lg">

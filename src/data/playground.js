@@ -22,6 +22,7 @@ export const PLAYGROUND_NOTE =
 export const demos = [
   {
     slug: 'retrieval-lab',
+    status: 'live',
     title: 'Retrieval lab',
     tagline: 'Watch a retriever succeed, and watch it fail for reasons you can name.',
     kind: 'Sandbox',
@@ -155,6 +156,7 @@ export const demos = [
 
   {
     slug: 'context-budget',
+    status: 'live',
     title: 'Context budget planner',
     tagline: 'Decide what to cut before the model decides for you.',
     kind: 'Lab',
@@ -192,6 +194,7 @@ export const demos = [
 
   {
     slug: 'router-evals',
+    status: 'live',
     title: 'Routing eval harness',
     tagline: 'Write a classifier as rules, then find out what it costs you.',
     kind: 'Lab',
@@ -247,6 +250,68 @@ export const demos = [
         note: 'Ticket text is shown before you run; the label for each one is revealed with your result.',
       },
     },
+  },
+  /*
+   * Planned. These are rows like any other, marked `planned`, so the service
+   * refuses to lease an instance for one and the card does not pretend to be a
+   * link. Announcing them is deliberate: the playground is three demos today,
+   * and a reader deciding whether this portal is worth returning to should be
+   * able to see where it is going. Nothing here claims a date, because we do
+   * not have one.
+   */
+  {
+    slug: 'chunking-lab',
+    title: 'Chunking lab',
+    tagline: 'Split the same document five ways and watch which answers survive.',
+    kind: 'Sandbox',
+    engine: 'chunking',
+    status: 'planned',
+    summary:
+      'Fixed windows, sentence boundaries, headings, recursive splits and semantic grouping over one document — with the retrieval scores each strategy produces side by side.',
+    minutes: 10,
+    technologies: ['retrieval', 'embeddings'],
+    brief: [
+      'Most retrieval failures are decided at chunk time, long before anything is ranked. This will let you make that decision badly on purpose and see what it costs.',
+    ],
+    controls: {},
+    learn: [{ label: 'Retrieval', href: '/technologies/retrieval' }],
+    spec: {},
+  },
+  {
+    slug: 'tool-schema-sandbox',
+    title: 'Tool schema sandbox',
+    tagline: 'Write a tool definition, then see which calls it invites and which it forbids.',
+    kind: 'Lab',
+    engine: 'tools',
+    status: 'planned',
+    summary:
+      'A schema editor with a validator behind it: required fields, enums, defaults and descriptions, checked against a set of calls a model would plausibly attempt.',
+    minutes: 12,
+    technologies: ['tool-use', 'structured-output'],
+    brief: [
+      'A tool is a contract written for a reader that does not ask questions. This will show which parts of yours are ambiguous before a model finds out for you.',
+    ],
+    controls: {},
+    learn: [{ label: 'Tool use', href: '/technologies/tool-use' }],
+    spec: {},
+  },
+  {
+    slug: 'guardrail-bench',
+    title: 'Guardrail bench',
+    tagline: 'Run a policy against the prompts that are meant to break it.',
+    kind: 'Lab',
+    engine: 'guardrails',
+    status: 'planned',
+    summary:
+      'A written policy, a set of adversarial prompts, and a report of what got through — the same shape as the routing eval harness, pointed at safety rather than accuracy.',
+    minutes: 12,
+    technologies: ['guardrails', 'evaluation'],
+    brief: [
+      'A guardrail nobody has attacked is a guardrail nobody has tested. This will attack yours with the prompts that usually work.',
+    ],
+    controls: {},
+    learn: [{ label: 'Guardrails', href: '/technologies/guardrails' }],
+    spec: {},
   },
 ]
 

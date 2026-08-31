@@ -45,7 +45,11 @@ export default async function sitemap() {
     ...docPages.map((d) => ({ url: `/projects/${d.project}/${d.page.join('/')}`, priority: 0.5 })),
     ...fieldSlugs.map((slug) => ({ url: `/field/${slug}`, priority: 0.6 })),
     ...articleSlugs.map((slug) => ({ url: `/articles/${slug}`, priority: 0.7 })),
-    ...demos.map((demo) => ({ url: `/playground/${demo.slug}`, priority: 0.6 })),
+    /* Only the demos that exist. A page whose whole content is "not yet" is
+       not something to invite a crawler to. */
+    ...demos
+      .filter((demo) => demo.status !== 'planned')
+      .map((demo) => ({ url: `/playground/${demo.slug}`, priority: 0.6 })),
   ]
 
   /* /login and /profile are deliberately absent: both are noindex, and a
