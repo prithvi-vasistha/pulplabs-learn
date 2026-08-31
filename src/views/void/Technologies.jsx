@@ -18,7 +18,7 @@ export default async function Technologies() {
               What should <span className="dim">I learn?</span>
             </>
           }
-          lede="Every subject page gathers each lesson, exam, project, guide and case study that touches it — one place per subject, whatever type the material happens to be."
+          lede="One page per subject: what it is, why it matters, and everything we have published on it. Where a subject is worth learning properly, the page points at the course that teaches it."
           actions={
             <Link href="/learn" className="btn btn-ghost">
               Preparation tracks

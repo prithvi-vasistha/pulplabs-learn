@@ -74,9 +74,9 @@ export function TechCell({ tech, index }) {
     <li className="lift stretch" data-r style={{ '--rd': `${Math.min(index, 5) * 55}ms` }}>
       <div className="card-top">
         <p className="mono">{tech.category}</p>
-        {/* How much there is to read is the question a browser is actually
-            asking, so answer it on the card instead of behind a click. */}
-        <span className="mono tnum">{tech.materialCount}</span>
+        {/* How much we have written on it is the question a browser is
+            actually asking, so answer it on the card. */}
+        <span className="mono tnum">{tech.articleCount || '—'}</span>
       </div>
       <h3 className="h4">
         <Link href={`/technologies/${tech.slug}`} className="stretch-l">

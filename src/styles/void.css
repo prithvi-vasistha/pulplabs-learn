@@ -443,10 +443,18 @@ canvas {
   transform: none;
 }
 
+/* Reduced motion means no animation — it does not mean no content.
+   This block used to drop the transform and keep `opacity: 0`, leaving the
+   reveal to a script that swept the attribute once on mount. Anything
+   rendered after that sweep — a client-side navigation, streamed content —
+   stayed invisible permanently, so a reader who asks for less motion got a
+   blank column. CSS owns the visible state here; nothing has to run. */
 @media (prefers-reduced-motion: reduce) {
-  [data-r] {
+  [data-r],
+  [data-r='1'] {
+    opacity: 1;
     transform: none;
-    transition: opacity 300ms var(--ease-out);
+    transition: none;
   }
 }
 

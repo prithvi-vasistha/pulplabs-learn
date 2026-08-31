@@ -116,8 +116,8 @@ export default function TechExplorer({ technologies, categories }) {
               <p className="body">{tech.tagline}</p>
 
               <p className="mono tnum" style={{ marginTop: 4 }}>
-                {tech.pathCount > 0 ? `${formatCount(tech.pathCount, 'path')}` : 'Overview only'}
-                {tech.examCount > 0 ? ` · ${formatCount(tech.examCount, 'exam')}` : ''}
+                {tech.articleCount > 0 ? formatCount(tech.articleCount, 'article') : 'Overview only'}
+                {tech.demoCount > 0 ? ` · ${formatCount(tech.demoCount, 'demo')}` : ''}
               </p>
             </li>
           ))}

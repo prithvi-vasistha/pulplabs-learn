@@ -171,8 +171,20 @@ export async function getAllLessonParams() {
  * before — a lesson knows its topics, a field entry declares its technologies,
  * a doc set belongs to a project that declares its own.
  */
+/**
+ * What a topic page is made of.
+ *
+ * A topic is an editorial surface: our writing on a subject, and the way in
+ * for somebody who arrived from a search engine. It used to re-list every
+ * lesson, exam, project, doc page and case study that touched the subject,
+ * which meant the topic pages republished the course catalogue — one thing
+ * described twice, in two sections, with two names.
+ *
+ * So it joins three things now: the articles written about it, the one course
+ * that teaches it properly, and any demo that lets you try it.
+ */
 async function technologyJoins(tech) {
-  const [techPaths, techExams, techProjects, field] = await Promise.all([
+  const [paths, articles, demos] = await Promise.all([
     tech.path_slugs.length
       ? rows(
           `select p.*, coalesce(sum(l.minutes),0) as minutes, count(l.slug) as lesson_count
@@ -181,43 +193,21 @@ async function technologyJoins(tech) {
           [tech.path_slugs]
         )
       : [],
-    tech.exam_slugs.length
-      ? rows(`select * from exams where slug = any($1::text[]) order by position`, [tech.exam_slugs])
-      : [],
-    tech.project_slugs.length
-      ? rows(`select * from projects where slug = any($1::text[]) order by position`, [tech.project_slugs])
-      : [],
-    rows(`select * from field_entries where $1 = any(technologies) order by position`, [tech.slug]),
+    rows(
+      `select slug, title, topic, summary, author, published, minutes
+         from articles where $1 = any(technologies)
+        order by published desc nulls last`,
+      [tech.slug]
+    ),
+    rows(
+      `select slug, title, tagline, kind, minutes
+         from playground_demos where $1 = any(technologies)
+        order by position`,
+      [tech.slug]
+    ),
   ])
 
-  const docSlugs = techProjects.map((p) => p.docs).filter(Boolean)
-  const docSets = docSlugs.length
-    ? await rows(
-        `select d.*, coalesce(count(p.slug), 0) as page_count
-           from doc_sets d left join doc_pages p on p.set_slug = d.slug
-          where d.slug = any($1::text[]) group by d.slug order by d.position`,
-        [docSlugs]
-      )
-    : []
-
-  const lessons = tech.path_slugs.length
-    ? await rows(
-        `select l.*, p.title as path_title
-           from lessons l join paths p on p.slug = l.path_slug
-          where l.path_slug = any($1::text[])
-          order by p.position, l.position`,
-        [tech.path_slugs]
-      )
-    : []
-
-  const matched = lessons.filter((l) =>
-    (l.topics ?? []).some((t) => {
-      const s = t.toLowerCase()
-      return s.includes(tech.name.toLowerCase()) || s.includes(tech.slug.replace(/-/g, ' '))
-    })
-  )
-
-  return { paths: techPaths, exams: techExams, projects: techProjects, docSets, field, lessons: matched }
+  return { paths, articles, demos }
 }
 
 function summariseTechnology(tech, joins) {
@@ -227,15 +217,10 @@ function summariseTechnology(tech, joins) {
     category: tech.category,
     level: tech.level,
     tagline: tech.tagline,
+    articleCount: joins.articles.length,
+    demoCount: joins.demos.length,
+    // Kept because Courses asks which subjects no course covers yet.
     pathCount: joins.paths.length,
-    examCount: joins.exams.length,
-    lessonCount: joins.lessons.length,
-    projectCount: joins.projects.length,
-    docCount: joins.docSets.length,
-    fieldCount: joins.field.length,
-    materialCount:
-      joins.paths.length + joins.lessons.length + joins.exams.length +
-      joins.projects.length + joins.docSets.length + joins.field.length,
   }
 }
 
@@ -254,10 +239,6 @@ export async function getTechnology(slug) {
   const pick = async (table, slugs, cols) =>
     slugs?.length ? rows(`select ${cols} from ${table} where slug = any($1::text[])`, [slugs]) : []
 
-  const owners = joins.docSets.length
-    ? await rows('select slug, docs from projects where docs = any($1::text[])', [joins.docSets.map((d) => d.slug)])
-    : []
-
   return {
     ...summariseTechnology(tech, joins),
     what: tech.what,
@@ -266,23 +247,25 @@ export async function getTechnology(slug) {
     facts: tech.facts ?? [],
     prerequisites: await pick('technologies', tech.prerequisites, 'slug, name, tagline'),
     related: await pick('technologies', tech.related, 'slug, name, category'),
-    paths: joins.paths.map((r) => summarisePath(r, r.minutes, r.lesson_count)),
-    exams: joins.exams.map(summariseExam),
-    projects: joins.projects.map(summariseProject),
-    lessons: joins.lessons.map((l) => ({
-      ...toLessonSummary(l),
-      pathSlug: l.path_slug,
-      pathTitle: l.path_title,
+    // Our writing on the subject, newest first.
+    articles: joins.articles.map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      topic: a.topic,
+      summary: a.summary,
+      author: a.author,
+      published: a.published ? new Date(a.published).toISOString().slice(0, 10) : null,
+      minutes: Number(a.minutes),
     })),
-    docSets: joins.docSets.map((d) => ({
+    demos: joins.demos.map((d) => ({
       slug: d.slug,
-      name: d.name,
-      version: d.version,
+      title: d.title,
       tagline: d.tagline,
-      projectSlug: owners.find((o) => o.docs === d.slug)?.slug ?? d.slug,
-      pageCount: Number(d.page_count),
+      kind: d.kind,
+      minutes: Number(d.minutes),
     })),
-    field: joins.field.map(summariseFieldEntry),
+    // One course, as a way out to the material — not a catalogue reprinted.
+    paths: joins.paths.map((r) => summarisePath(r, r.minutes, r.lesson_count)),
   }
 }
 

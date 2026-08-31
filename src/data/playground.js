@@ -29,7 +29,7 @@ export const demos = [
     summary:
       'A small corpus and a BM25 ranker. Query it, change the ranking parameters, and see the scores that produced the answer — including the queries where lexical matching has nothing to offer.',
     minutes: 8,
-    technologies: ['retrieval-augmented-generation', 'vector-databases'],
+    technologies: ['retrieval', 'embeddings'],
     brief: [
       'Most retrieval bugs are not model bugs. They are a query whose terms do not appear in the corpus, a chunk that split a definition away from its term, or a ranker whose length normalisation is fighting the document mix.',
       'This lab makes that visible. Every result carries the term-by-term contribution that produced its score, so a bad answer has an explanation rather than a shrug.',
@@ -43,7 +43,7 @@ export const demos = [
     },
     learn: [
       { label: 'Reading a retrieval system’s failure modes', href: '/articles/retrieval-failures' },
-      { label: 'Retrieval-augmented generation', href: '/technologies/retrieval-augmented-generation' },
+      { label: 'Retrieval', href: '/technologies/retrieval' },
     ],
     spec: {
       synonyms: {
@@ -162,7 +162,7 @@ export const demos = [
     summary:
       'Paste a prompt, set a window and a reserve, and see the arithmetic: what fits, what is evicted, and how much of the window the instructions are quietly eating.',
     minutes: 6,
-    technologies: ['prompt-engineering', 'large-language-models'],
+    technologies: ['prompt-engineering', 'context-engineering'],
     brief: [
       'A context window is a budget with a hard ceiling and no overdraft. Every token spent on a system prompt is a token unavailable for retrieved context, and every token spent on context is one unavailable for the answer.',
       'This lab does the arithmetic in front of you. Nothing here is a model call — it is counting, which is precisely the part teams skip.',
@@ -199,7 +199,7 @@ export const demos = [
     summary:
       'Twelve real-shaped support tickets with held-back labels. Write keyword rules, run them, and read accuracy, per-label recall, and every case you got wrong.',
     minutes: 10,
-    technologies: ['evaluation-and-observability', 'large-language-models'],
+    technologies: ['evaluation', 'guardrails'],
     brief: [
       'Before a routing problem is worth a model, it is worth a baseline. A keyword rule takes ten minutes and sets the number any model has to beat — and the exercise of writing it tells you whether your labels mean anything.',
       'The labels are held on the server until you run. You are grading a real prediction against a real key, not marking your own homework.',
@@ -216,7 +216,7 @@ export const demos = [
     },
     learn: [
       { label: 'Your evaluation set should come from production', href: '/articles/evals-from-production' },
-      { label: 'Evaluation and observability', href: '/technologies/evaluation-and-observability' },
+      { label: 'Evaluation', href: '/technologies/evaluation' },
     ],
     spec: {
       labels: ['billing', 'bug', 'access', 'feature'],

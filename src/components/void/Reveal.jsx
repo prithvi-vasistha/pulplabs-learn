@@ -11,12 +11,12 @@ import { useEffect } from 'react'
  */
 export default function Reveal() {
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (reduced) {
-      document.querySelectorAll('[data-r]').forEach((el) => el.setAttribute('data-r', '1'))
-      return
-    }
+    /* Reduced motion is handled in CSS, which cannot miss an element the way
+       a one-time sweep did: this effect runs once, and every [data-r] added
+       afterwards by a navigation stayed at opacity 0 for the rest of the
+       session. Nothing to observe here — the stylesheet has already made them
+       visible. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const io = new IntersectionObserver(
       (entries) => {
