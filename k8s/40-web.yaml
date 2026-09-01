@@ -53,7 +53,7 @@ spec:
           # NEXT_PUBLIC_SITE_URL and NEXT_PUBLIC_MAIN_SITE_URL are compiled
           # into this image at build time. They are build args, not env vars:
           # setting them here would do nothing.
-          image: ghcr.io/prithvi-vasistha/pulplabs-learn-web:v1
+          image: ak3hay/pulplabs-learn-web:v1
           ports:
             - name: http
               containerPort: 3000

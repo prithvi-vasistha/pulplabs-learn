@@ -28,7 +28,7 @@ web bundle, so they are build arguments — setting them in the Deployment does
 nothing.
 
 ```bash
-REG=ghcr.io/prithvi-vasistha
+REG=ak3hay
 
 VERSION=v1
 
@@ -47,15 +47,15 @@ nothing to roll back to, and Kubernetes defaults a `:latest` tag to
 `imagePullPolicy: Always`, which quietly ignores any image you loaded onto the
 node yourself.
 
-**1a. If the registry is private, give the cluster a pull secret.** A new GHCR
-package is private by default, and the failure looks like `ImagePullBackOff`
-with `denied` in the events:
+**1a. Only if the repositories are private.** They are public on Docker Hub, so
+this step is not needed — but if you make them private, the failure is an
+`ImagePullBackOff` with `denied` in the events, and this is the fix:
 
 ```bash
-kubectl -n pulplabs-learn create secret docker-registry ghcr \
-  --docker-server=ghcr.io \
-  --docker-username=prithvi-vasistha \
-  --docker-password=<a PAT with read:packages>
+kubectl -n pulplabs-learn create secret docker-registry dockerhub \
+  --docker-server=https://index.docker.io/v1/ \
+  --docker-username=ak3hay \
+  --docker-password=<an access token>
 ```
 
 Then add this to the pod spec in `30-service.yaml`, `40-web.yaml` and
@@ -63,12 +63,12 @@ Then add this to the pod spec in `30-service.yaml`, `40-web.yaml` and
 
 ```yaml
       imagePullSecrets:
-        - name: ghcr
+        - name: dockerhub
 ```
 
-Or make both packages public on GHCR and skip it. Nothing in these images is
-secret — the credentials all arrive as environment variables — so public is a
-reasonable choice.
+Nothing in these images is secret — every credential arrives as an environment
+variable at run time, which was checked before they were pushed — so public is
+a reasonable choice and one less thing to configure on the server.
 
 **2. Fill in the Secret.**
 
@@ -173,8 +173,8 @@ Recreate that cluster in about two minutes:
 ```bash
 kind create cluster --name learn --config k8s/kind-cluster.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.3/deploy/static/provider/kind/deploy.yaml
-kind load docker-image ghcr.io/prithvi-vasistha/pulplabs-learn-service:v1 --name learn
-kind load docker-image ghcr.io/prithvi-vasistha/pulplabs-learn-web:v1 --name learn
+kind load docker-image ak3hay/pulplabs-learn-service:v1 --name learn
+kind load docker-image ak3hay/pulplabs-learn-web:v1 --name learn
 # then the apply sequence above, and:
 curl -k -H 'Host: learn.pulplabs.ai' https://localhost:8448/
 ```

@@ -47,7 +47,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: service
-          image: ghcr.io/prithvi-vasistha/pulplabs-learn-service:v1
+          image: ak3hay/pulplabs-learn-service:v1
           ports:
             - name: http
               containerPort: 4000
