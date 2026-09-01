@@ -1,0 +1,43 @@
+# =============================================================================
+# learn.pulplabs.ai
+#
+# Two headers decide whether this application works behind a proxy:
+#
+#   x-forwarded-proto   whether the session cookie gets the Secure flag
+#   x-forwarded-host    the origin the Google redirect URI is built from
+#
+# ingress-nginx sets both. If you swap in another controller, check that it
+# does too — without them you get an insecure cookie and Google redirecting to
+# an address nobody can reach.
+#
+# TLS assumes cert-manager with a ClusterIssuer named letsencrypt-prod. If you
+# terminate TLS elsewhere, drop the annotation and the tls: block.
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: learn-web
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/part-of: pulplabs-learn
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 2m
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - learn.pulplabs.ai
+      secretName: learn-tls
+  rules:
+    - host: learn.pulplabs.ai
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: learn-web
+                port:
+                  number: 3000

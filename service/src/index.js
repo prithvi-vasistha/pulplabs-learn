@@ -222,8 +222,15 @@ async function start() {
   // The schema is idempotent and so is the seed, so both run on every boot.
   // A fresh container and a restart take the same path, which means the path
   // that runs in production is the one that gets exercised in development.
-  await query(readFileSync(resolvePath(here, '../db/schema.sql'), 'utf8'))
-  console.log('[service] schema ready')
+  /* One container running everything applies its own schema on boot, which is
+     what makes `docker run` work with no setup. Under an orchestrator that is
+     wrong: two replicas starting together would run the same DDL and the same
+     seed transaction at once. There, a Job runs `src/migrate.js` first and the
+     server is told to skip both. */
+  if (process.env.SKIP_SCHEMA !== '1') {
+    await query(readFileSync(resolvePath(here, '../db/schema.sql'), 'utf8'))
+    console.log('[service] schema ready')
+  }
 
   if (process.env.SKIP_SEED !== '1') {
     await seed({ prune: process.env.SEED_PRUNE === '1' })

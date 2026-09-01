@@ -11,3 +11,6 @@ npm-debug.log*
 !.env.example
 next-env.d.ts
 .vercel
+
+# Filled-in copy of k8s/01-secrets.example.yaml — never committed.
+k8s/01-secrets.yaml

@@ -1,0 +1,95 @@
+# =============================================================================
+# Postgres.
+#
+# A StatefulSet with one replica, because this is a database on one server, not
+# a cluster: it wants a stable name, a stable volume, and no second copy of
+# itself. If you move to a managed instance later, delete this file and point
+# DATABASE_URL at the new host — nothing else changes.
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-postgres
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: pulplabs-learn
+spec:
+  # Headless: the StatefulSet wants stable DNS, not load balancing.
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: learn-postgres
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: pulplabs-learn
+spec:
+  serviceName: learn-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/part-of: pulplabs-learn
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: learn
+            - name: POSTGRES_USER
+              value: learn
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: learn-secrets
+                  key: POSTGRES_PASSWORD
+            # A subdirectory, so initdb is never handed a volume root that
+            # already contains lost+found.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ['pg_isready', '-U', 'learn', '-d', 'learn']
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ['pg_isready', '-U', 'learn', '-d', 'learn']
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        # k3s: local-path. Anything else: name your own class.
+        # storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi

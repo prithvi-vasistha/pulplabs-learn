@@ -1,0 +1,93 @@
+# =============================================================================
+# The UI.
+#
+# Server-rendered: it reads the session cookie, renders every content page on
+# demand, and handles sign-in in its own route handlers. There is no static
+# bundle to put on a CDN — this is the front end, and it is a Node process.
+#
+# It never opens a database connection. Everything it shows comes from the
+# content service over CONTENT_API_URL.
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-web
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/part-of: pulplabs-learn
+spec:
+  selector:
+    app.kubernetes.io/name: web
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learn-web
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/part-of: pulplabs-learn
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/part-of: pulplabs-learn
+    spec:
+      containers:
+        - name: web
+          # NEXT_PUBLIC_SITE_URL and NEXT_PUBLIC_MAIN_SITE_URL are compiled
+          # into this image at build time. They are build args, not env vars:
+          # setting them here would do nothing.
+          image: ghcr.io/prithvi-vasistha/pulplabs-learn-web:latest
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: PORT
+              value: '3000'
+            - name: CONTENT_API_URL
+              value: http://learn-service:4000
+            # Left unset on purpose. The app derives the Google redirect URI
+            # from x-forwarded-host, which the Ingress sets — and the bare
+            # origin https://learn.pulplabs.ai is already registered on the
+            # OAuth client. Set this only if you register a callback path.
+            # - name: GOOGLE_REDIRECT_URI
+            #   value: https://learn.pulplabs.ai/api/auth/google/callback
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 768Mi
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']

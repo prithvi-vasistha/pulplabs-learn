@@ -10,7 +10,14 @@ COPY jsconfig.json next.config.mjs ./
 COPY public ./public
 COPY src ./src
 
-ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* values are compiled into the bundle, so they are build
+# arguments rather than environment variables — setting them at run time in a
+# Deployment does nothing. Both default to the production hosts.
+ARG NEXT_PUBLIC_SITE_URL=https://learn.pulplabs.ai
+ARG NEXT_PUBLIC_MAIN_SITE_URL=https://pulplabs.ai
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
+    NEXT_PUBLIC_MAIN_SITE_URL=$NEXT_PUBLIC_MAIN_SITE_URL \
+    NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 FROM node:22-alpine

@@ -1,0 +1,50 @@
+# =============================================================================
+# Schema and seed, once per release.
+#
+# The single-container image does this on boot, which is what makes `docker
+# run` work with no setup. Here it is a Job, because two service replicas
+# applying the same DDL and the same seed transaction at the same time is a
+# race — and because a migration that fails should stop the rollout somewhere
+# visible rather than crash-looping a web pod.
+#
+# Re-run it after every content change:
+#   kubectl -n pulplabs-learn delete job learn-migrate --ignore-not-found
+#   kubectl -n pulplabs-learn apply -f k8s/20-migrate-job.yaml
+#
+# `--prune` removes rows the export no longer contains. Leave it off unless you
+# have deliberately deleted content.
+# =============================================================================
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: learn-migrate
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: migrate
+    app.kubernetes.io/part-of: pulplabs-learn
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: migrate
+        app.kubernetes.io/part-of: pulplabs-learn
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: ghcr.io/prithvi-vasistha/pulplabs-learn-service:latest
+          command: ['node', 'src/migrate.js']
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: learn-secrets
+                  key: DATABASE_URL
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
