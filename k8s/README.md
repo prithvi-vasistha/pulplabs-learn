@@ -47,6 +47,29 @@ nothing to roll back to, and Kubernetes defaults a `:latest` tag to
 `imagePullPolicy: Always`, which quietly ignores any image you loaded onto the
 node yourself.
 
+**1a. If the registry is private, give the cluster a pull secret.** A new GHCR
+package is private by default, and the failure looks like `ImagePullBackOff`
+with `denied` in the events:
+
+```bash
+kubectl -n pulplabs-learn create secret docker-registry ghcr \
+  --docker-server=ghcr.io \
+  --docker-username=prithvi-vasistha \
+  --docker-password=<a PAT with read:packages>
+```
+
+Then add this to the pod spec in `30-service.yaml`, `40-web.yaml` and
+`20-migrate-job.yaml`, at the same level as `containers:`:
+
+```yaml
+      imagePullSecrets:
+        - name: ghcr
+```
+
+Or make both packages public on GHCR and skip it. Nothing in these images is
+secret — the credentials all arrive as environment variables — so public is a
+reasonable choice.
+
 **2. Fill in the Secret.**
 
 ```bash
