@@ -30,17 +30,22 @@ nothing.
 ```bash
 REG=ghcr.io/prithvi-vasistha
 
-docker build -f service/Dockerfile -t $REG/pulplabs-learn-service:latest .
-docker build -f web.Dockerfile     -t $REG/pulplabs-learn-web:latest \
+VERSION=v1
+
+docker build -f service/Dockerfile -t $REG/pulplabs-learn-service:$VERSION .
+docker build -f web.Dockerfile     -t $REG/pulplabs-learn-web:$VERSION \
   --build-arg NEXT_PUBLIC_SITE_URL=https://learn.pulplabs.ai \
   --build-arg NEXT_PUBLIC_MAIN_SITE_URL=https://pulplabs.ai .
 
-docker push $REG/pulplabs-learn-service:latest
-docker push $REG/pulplabs-learn-web:latest
+docker push $REG/pulplabs-learn-service:$VERSION
+docker push $REG/pulplabs-learn-web:$VERSION
 ```
 
-Tag with a version rather than `latest` if you want rollbacks to mean anything;
-`kubectl rollout undo` cannot help you if both revisions point at the same tag.
+The manifests pin `:v1`. Bump the tag on both the images and the manifests for
+each release — with `:latest` on every revision `kubectl rollout undo` has
+nothing to roll back to, and Kubernetes defaults a `:latest` tag to
+`imagePullPolicy: Always`, which quietly ignores any image you loaded onto the
+node yourself.
 
 **2. Fill in the Secret.**
 
@@ -116,18 +121,49 @@ Put that on a schedule before you have anything you would miss. Accounts are in
 there — encrypted, but only recoverable with the same `AUTH_SECRET`, so back up
 the Secret somewhere separate too or the rows are unreadable.
 
-## What has not been verified
+## Verified on a real cluster
 
-These manifests were written without a cluster to hand: no `kubectl`, so no
-`--dry-run=server` and no admission-webhook check. What *was* verified, by
-running the identical topology in Docker:
+Applied to a throwaway kind cluster (Kubernetes v1.31.2) with ingress-nginx,
+using these files unmodified apart from the Secret:
 
-- the migration Job applies schema and seed and exits 0
-- the service runs with `SKIP_SCHEMA=1 SKIP_SEED=1`, as uid 1000, with a
-  read-only root filesystem
-- the web image runs as uid 1000 and serves `/api/health` and every page
-- the web container reaches the service by DNS name and renders from it
-- names, ports, labels and Secret keys agree across the manifests
+- migration Job completes and exits 0; 15 technologies, 4 courses, 24 lessons,
+  6 exams, 66 questions, 7 field entries, 5 articles, 6 demos seeded
+- the two service replicas start with **no** schema or seed in their logs — the
+  Job owns both, so a rollout cannot race itself
+- every route answers 200 through the Ingress, with content rendering
+- **the session cookie comes back `Secure`** and the Google `redirect_uri` is
+  built as `https://learn.pulplabs.ai` — both derived from the headers
+  ingress-nginx sets, and that URI is already registered on the OAuth client
+- register → lease a playground instance → run a demo works end to end through
+  the Ingress, and a `planned` demo is still refused
+- **rolling restart under load: 140 requests, 0 failures.** Without the
+  `preStop` sleep it was 2 failures in 120 — a terminating pod stops accepting
+  connections before the Service removes it from its endpoints. That sleep is
+  the fix, and it is measured rather than assumed.
+- deleting `learn-postgres-0` loses nothing: both accounts and all 7 field
+  entries came back with the pod, and the site served 200 throughout
+- no restarts, no crash loops, no warning events beyond a readiness probe
+  correctly failing while Node was still starting
 
-Storage class, Ingress class and the cert-manager issuer are the parts most
-likely to need changing for your cluster — they are named in the files.
+Recreate that cluster in about two minutes:
+
+```bash
+kind create cluster --name learn --config k8s/kind-cluster.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.3/deploy/static/provider/kind/deploy.yaml
+kind load docker-image ghcr.io/prithvi-vasistha/pulplabs-learn-service:v1 --name learn
+kind load docker-image ghcr.io/prithvi-vasistha/pulplabs-learn-web:v1 --name learn
+# then the apply sequence above, and:
+curl -k -H 'Host: learn.pulplabs.ai' https://localhost:8448/
+```
+
+## What is still cluster-specific
+
+Three things were satisfied by kind's defaults and may differ on your server —
+each is named in the files:
+
+- **storage class**: the PVC uses the default. k3s calls it `local-path`.
+- **ingress class**: `nginx`. Another controller must still send
+  `x-forwarded-proto` and `x-forwarded-host` or sign-in breaks both ways.
+- **cert-manager**: the Ingress asks for a `letsencrypt-prod` ClusterIssuer.
+  The test cluster had none, so nginx served its own self-signed certificate —
+  TLS termination itself was exercised, the certificate issuing was not.

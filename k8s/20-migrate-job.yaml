@@ -34,7 +34,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrate
-          image: ghcr.io/prithvi-vasistha/pulplabs-learn-service:latest
+          image: ghcr.io/prithvi-vasistha/pulplabs-learn-service:v1
           command: ['node', 'src/migrate.js']
           env:
             - name: DATABASE_URL
