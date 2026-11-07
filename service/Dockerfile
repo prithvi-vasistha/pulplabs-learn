@@ -3,8 +3,8 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY service/package.json ./
-RUN npm install --omit=dev --no-audit --no-fund
+COPY service/package.json service/package-lock.json ./
+RUN npm ci --omit=dev --no-audit --no-fund
 
 COPY service ./
 

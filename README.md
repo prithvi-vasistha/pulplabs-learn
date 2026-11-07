@@ -441,3 +441,7 @@ the marketing site at matching viewports:
   with per-term contributions, a budget 178 tokens over an 8k window, and a routing eval opening at
   75% with three failing cases to fix. Ending a lease from the profile removes it.
 - Redirect coverage after the move: `/dashboard → /profile`, `/field → /`, `/exams → /practice`.
+
+## Continuous delivery
+
+See [CI/CD to the home lab](docs/CICD.md) for the main → Actions → GHCR → Argo CD pipeline and rollback instructions.

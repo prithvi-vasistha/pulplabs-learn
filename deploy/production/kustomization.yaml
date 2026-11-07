@@ -1,0 +1,22 @@
+{
+  "apiVersion": "kustomize.config.k8s.io/v1beta1",
+  "kind": "Kustomization",
+  "namespace": "pulplabs-learn",
+  "resources": [
+    "app.yaml",
+    "scaling.yaml",
+    "migration.yaml"
+  ],
+  "images": [
+    {
+      "name": "learn-service",
+      "newName": "docker.io/ak3hay/pulplabs-learn-service",
+      "digest": "sha256:36ee7aa9d9b512322356d68ad099b43df39529bf8c35d4300ba3f17d1b751b47"
+    },
+    {
+      "name": "learn-web",
+      "newName": "docker.io/ak3hay/pulplabs-learn-web",
+      "digest": "sha256:e262cdfc6b00b104a6b2d02ffbe7bb5ef1f1e1c31e856b2d8e87e43fe2daf4d8"
+    }
+  ]
+}

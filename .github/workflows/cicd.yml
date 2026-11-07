@@ -1,0 +1,171 @@
+name: Build and deploy
+'on':
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: cicd-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    name: Validate schema, content and API
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: learn
+          POSTGRES_PASSWORD: ci-only
+          POSTGRES_DB: learn
+        ports:
+        - 5432:5432
+        options: --health-cmd "pg_isready -U learn -d learn" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://learn:ci-only@127.0.0.1:5432/learn
+      AUTH_SECRET: ci-only-not-a-production-secret-0123456789
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: '22'
+        cache: npm
+    - run: 'npm ci --ignore-scripts
+
+        npm ci --prefix service --ignore-scripts
+
+        npm run export:content
+
+        node service/src/migrate.js
+
+        '
+    - name: Smoke-test migrated content service
+      shell: bash
+      run: "set -euo pipefail\nSKIP_SCHEMA=1 SKIP_SEED=1 node service/src/index.js > \"$RUNNER_TEMP/service.log\" 2>&1 &\nservice_pid=$!\ntrap 'kill \"$service_pid\" 2>/dev/null || true' EXIT\nnode --input-type=module <<'SCRIPT'\nimport assert from 'node:assert/strict'\nlet ready=false\nfor(let i=0;i<30;i++) {\n  try { if((await fetch('http://127.0.0.1:4000/health')).ok) {ready=true;break} } catch {}\n  await new Promise(r=>setTimeout(r,1000))\n}\nassert.ok(ready,'Content service did not become ready')\nfor(const path of ['/paths','/technologies','/exams','/projects']) {\n  const response=await fetch('http://127.0.0.1:4000'+path)\n  assert.equal(response.status,200,path)\n  assert.ok((await response.json()).length>0,path+' must contain seeded content')\n}\nSCRIPT\n"
+  build:
+    name: Build ${{ matrix.component }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+        - component: service
+          key: learn-service
+          file: service/Dockerfile
+          suffix: -service
+        - component: web
+          key: learn-web
+          file: web.Dockerfile
+          suffix: -web
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: '22'
+        cache: npm
+    - name: Prepare current service content
+      if: matrix.component == 'service'
+      run: 'npm ci --ignore-scripts
+
+        npm run export:content
+
+        '
+    - name: Choose immutable image name
+      id: image
+      shell: bash
+      run: 'image="ghcr.io/${GITHUB_REPOSITORY,,}${{ matrix.suffix }}"
+
+        printf "name=%s\n" "$image" >> "$GITHUB_OUTPUT"
+
+        '
+    - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
+    - name: Log in to GHCR
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and publish
+      id: build
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8
+      with:
+        context: .
+        file: ${{ matrix.file }}
+        platforms: linux/amd64
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+        labels: 'org.opencontainers.image.source=https://github.com/${{ github.repository }}
+
+          org.opencontainers.image.revision=${{ github.sha }}'
+        build-args: 'NEXT_PUBLIC_SITE_URL=https://learn.pulplabs.ai
+
+          NEXT_PUBLIC_MAIN_SITE_URL=https://pulplabs.ai'
+        cache-from: type=gha,scope=${{ matrix.component }}
+        cache-to: type=gha,mode=max,scope=${{ matrix.component }}
+        provenance: mode=min
+    - name: Record image digest
+      if: github.event_name != 'pull_request'
+      env:
+        IMAGE_NAME: ${{ steps.image.outputs.name }}
+        IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+        IMAGE_KEY: ${{ matrix.key }}
+      run: 'python3 - <<''SCRIPT''
+
+        import json,os,pathlib
+
+        p=pathlib.Path(os.environ[''RUNNER_TEMP''])/''image-digests'';p.mkdir(exist_ok=True)
+
+        (p/(os.environ[''IMAGE_KEY'']+''.json'')).write_text(json.dumps({''name'':os.environ[''IMAGE_KEY''],''image'':os.environ[''IMAGE_NAME''],''digest'':os.environ[''IMAGE_DIGEST'']}))
+
+        SCRIPT
+
+        '
+    - name: Upload digest
+      if: github.event_name != 'pull_request'
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: digest-${{ matrix.component }}
+        path: ${{ runner.temp }}/image-digests/*.json
+        retention-days: 7
+        if-no-files-found: error
+    needs:
+    - validate
+  release:
+    name: Publish GitOps release
+    if: github.event_name != 'pull_request'
+    needs:
+    - build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        fetch-depth: 0
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        pattern: digest-*
+        merge-multiple: true
+        path: ${{ runner.temp }}/image-digests
+    - name: Verify cluster can pull every image
+      env:
+        DIGEST_DIR: ${{ runner.temp }}/image-digests
+      run: python3 .github/scripts/check-image-access.py
+    - name: Update deployment branch
+      env:
+        DIGEST_DIR: ${{ runner.temp }}/image-digests
+      run: python3 .github/scripts/publish-release.py
