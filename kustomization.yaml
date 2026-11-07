@@ -11,12 +11,12 @@
     {
       "name": "learn-service",
       "newName": "ghcr.io/prithvi-vasistha/pulplabs-learn-service",
-      "digest": "sha256:585f5256f4f46343ec06ca3f7247f3ad742a2f4f41aaf65cee41ecb9d9440627"
+      "digest": "sha256:0f873382923ead9e3ba90f4980311d83e825422ac9dd60fe1443830e0f11c58e"
     },
     {
       "name": "learn-web",
       "newName": "ghcr.io/prithvi-vasistha/pulplabs-learn-web",
-      "digest": "sha256:1b4fa88b79e92bc0aa283d30fcb6421e9fe98f1f84cea0082da5b2bbe431c865"
+      "digest": "sha256:3a5a4696235a1d9a4411a0b2f5241eef785e77e1c7d972766c7647bef2257bda"
     }
   ]
 }
