@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: learn-migrate
+  namespace: pulplabs-learn
+  labels:
+    app.kubernetes.io/name: migrate
+    app.kubernetes.io/part-of: pulplabs-learn
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: migrate
+        app.kubernetes.io/part-of: pulplabs-learn
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: migrate
+        image: learn-service
+        command:
+        - node
+        - src/migrate.js
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: learn-secrets
+              key: DATABASE_URL
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      automountServiceAccountToken: false
+      nodeSelector:
+        workload: apps
+  activeDeadlineSeconds: 180
