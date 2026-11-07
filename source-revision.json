@@ -1,1 +1,5 @@
-{"bootstrap": true, "description": "Adopt the existing running application image; data and secrets are not managed by this branch"}
+{
+  "commit": "11e67e4ce5fa332dad55b5d8aa17fc7213625f03",
+  "repository": "prithvi-vasistha/pulplabs-learn",
+  "run": "42346239499"
+}

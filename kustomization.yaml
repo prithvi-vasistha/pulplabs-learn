@@ -10,13 +10,13 @@
   "images": [
     {
       "name": "learn-service",
-      "newName": "docker.io/ak3hay/pulplabs-learn-service",
-      "digest": "sha256:36ee7aa9d9b512322356d68ad099b43df39529bf8c35d4300ba3f17d1b751b47"
+      "newName": "ghcr.io/prithvi-vasistha/pulplabs-learn-service",
+      "digest": "sha256:585f5256f4f46343ec06ca3f7247f3ad742a2f4f41aaf65cee41ecb9d9440627"
     },
     {
       "name": "learn-web",
-      "newName": "docker.io/ak3hay/pulplabs-learn-web",
-      "digest": "sha256:e262cdfc6b00b104a6b2d02ffbe7bb5ef1f1e1c31e856b2d8e87e43fe2daf4d8"
+      "newName": "ghcr.io/prithvi-vasistha/pulplabs-learn-web",
+      "digest": "sha256:1b4fa88b79e92bc0aa283d30fcb6421e9fe98f1f84cea0082da5b2bbe431c865"
     }
   ]
 }
